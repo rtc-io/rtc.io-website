@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+<title>rtc.io</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css" />
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+<!-- responsive -->
+<link rel="stylesheet" media="screen and (max-width: 960px)" href="css/tablet.css" />
+<link rel="stylesheet" media="screen and (max-width: 710px)" href="css/phone.css" />
+<link rel="stylesheet" type="text/css" href="fonts/source-sans/stylesheet.css" />
+</head>
+<body>
+
+<a class="scroll-point pt-top" name="top"></a>
+<header>
+<a href="https://github.com/rtc-io"><img id="fork-us" style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub" /></a>
+<a class="scroll-point pt-top" name="top"></a>
+<div class="site">
+    <hgroup>
+    <h1><a href="#top">rtc.io</a></h1>
+    <h2><a href="#top">OpenSource WebRTC</a></h2>
+    </hgroup>
+    <nav>
+      <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#checkit">Try It</a></li>
+      <li><a href="#contribute">Contribute</a></li>
+      <li><a href="#mailing-list">Stay Informed</a></li>
+      </ul>
+    </nav>
+</div>
+<div class="shadow"></div>
+</header>
+<div role="content"><h1>rtc</h1>
+<p>The <code>rtc</code> package is a convenience layer for working with the rtc.io toolkit.
+Consider it a boxed set of lego of the most common pieces required to build
+the front-end component of a WebRTC application.</p>
+<p><a href="https://nodei.co/npm/rtc/"><img src="https://nodei.co/npm/rtc.png" alt="NPM" /></a></p>
+<p><a href="https://ci.testling.com/rtc-io/rtc"><img src="https://ci.testling.com/rtc-io/rtc.png" alt="browser support" /></a></p>
+<h2>Getting Started</h2>
+<p>TO BE COMPLETED.</p>
+<h2>Factories</h2>
+<h3>createConnection(opts?, constraints?)</h3>
+<p>Create a new <code>RTCPeerConnection</code> auto generating default opts as required.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">conn</span><span class="p">;</span>
+
+<span class="c1">// this is ok</span>
+<span class="nx">conn</span> <span class="o">=</span> <span class="nx">rtc</span><span class="p">.</span><span class="nx">createConnection</span><span class="p">();</span>
+
+<span class="c1">// and so is this</span>
+<span class="nx">conn</span> <span class="o">=</span> <span class="nx">rtc</span><span class="p">.</span><span class="nx">createConnection</span><span class="p">({</span>
+  <span class="nx">iceServers</span><span class="o">:</span> <span class="p">[]</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>rtc/couple</h2>
+<h3>couple(pc, targetAttr, signaller, opts?)</h3>
+<p>Couple a WebRTC connection with another webrtc connection via a
+signalling scope.  The <code>targetAttr</code> argument specifies the criteria that
+are passed onto a <code>/request</code> command when looking for remote peer
+to couple and exchange messages with.</p>
+<h3>Example Usage</h3>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">couple</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc/couple&#39;</span><span class="p">);</span>
+</pre></div>
+
+<p>couple(new RTCPeerConnection(), { id: &#39;test&#39; }, signaller);</p>
+<h3>Using Filters</h3>
+<p>In certain instances you may wish to modify the raw SDP that is provided
+by the <code>createOffer</code> and <code>createAnswer</code> calls.  This can be done by passing
+a <code>sdpfilter</code> function (or array) in the options.  For example:</p>
+<div class="highlight"><pre><span class="c1">// run the sdp from through a local tweakSdp function.</span>
+<span class="nx">couple</span><span class="p">(</span><span class="nx">pc</span><span class="p">,</span> <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;blah&#39;</span> <span class="p">},</span> <span class="nx">signaller</span><span class="p">,</span> <span class="p">{</span> <span class="nx">sdpfilter</span><span class="o">:</span> <span class="nx">tweakSdp</span> <span class="p">});</span>
+</pre></div>
+
+<h2>rtc/detect</h2>
+<p>Provide the <a href="https://github.com/rtc-io/rtc-core#detect">rtc-core/detect</a> 
+functionality.</p>
+<h2>rtc/generators</h2>
+<p>The generators package provides some utility methods for generating
+constraint objects and similar constructs.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">generators</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc/generators&#39;</span><span class="p">);</span>
+</pre></div>
+
+<h3>generators.config(config)</h3>
+<p>Generate a configuration object suitable for passing into an W3C 
+RTCPeerConnection constructor first argument, based on our custom config.</p>
+<h3>generators.mediaConstraints(flags, context)</h3>
+<p>Generate mediaConstraints appropriate for the context in which they are 
+being called (i.e. either constructing an RTCPeerConnection object, or
+on the <code>createOffer</code> or <code>createAnswer</code> calls).</p>
+<h3>parseFlags(opts)</h3>
+<p>This is a helper function that will extract known flags from a generic 
+options object.</p>
+<h2>rtc/media</h2>
+<p>Provide the core <a href="https://github.com/rtc-io/rtc-media">rtc-media</a> for
+convenience.</p>
+<h2>rtc/monitor</h2>
+<p>In most current implementations of <code>RTCPeerConnection</code> it is quite
+difficult to determine whether a peer connection is active and ready
+for use or not.  The monitor provides some assistance here by providing
+a simple function that provides an <code>EventEmitter</code> which gives updates
+on a connections state.</p>
+<h3>monitor(pc) -&gt; EventEmitter</h3>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">monitor</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc/monitor&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">pc</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RTCPeerConnection</span><span class="p">(</span><span class="nx">config</span><span class="p">);</span>
+
+<span class="c1">// watch pc and when active do something</span>
+<span class="nx">monitor</span><span class="p">(</span><span class="nx">pc</span><span class="p">).</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;active&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// active and ready to go</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>Events provided by the monitor are as follows:</p>
+<ul>
+<li><code>active</code>: triggered when the connection is active and ready for use</li>
+<li><code>stable</code>: triggered when the connection is in a stable signalling state</li>
+<li><code>unstable</code>: trigger when the connection is renegotiating.</li>
+</ul>
+<p>It should be noted, that the monitor does a check when it is first passed
+an <code>RTCPeerConnection</code> object to see if the <code>active</code> state passes checks.
+If so, the <code>active</code> event will be fired in the next tick.</p>
+<p>If you require a synchronous check of a connection&#39;s &quot;openness&quot; then
+use the <code>monitor.isActive</code> test outlined below.</p>
+<h3>monitor.getState(pc)</h3>
+<p>Provides a unified state definition for the RTCPeerConnection based
+on a few checks.</p>
+<p>In emerging versions of the spec we have various properties such as
+<code>readyState</code> that provide a definitive answer on the state of the 
+connection.  In older versions we need to look at things like
+<code>signalingState</code> and <code>iceGatheringState</code> to make an educated guess 
+as to the connection state.</p>
+<h3>monitor.isActive(pc) -&gt; Boolean</h3>
+<p>Test an <code>RTCPeerConnection</code> to see if it&#39;s currently open.  The test for
+&quot;openness&quot; looks at a combination of current <code>signalingState</code> and
+<code>iceGatheringState</code>.</p>
+<h2>rtc/signaller</h2>
+<p>Provide the core <a href="https://github.com/rtc-io/rtc-signaller">rtc-signaller</a>
+for convenience.</p>
+<h2>Internal RTC Helper Libraries</h2>
+<p>The RTC library uses a number of helper modules that are contained within
+the <code>lib/</code> folder of the <code>rtc-io/rtc</code> repository.  While these are designed
+primarily for internal use, they can be accessed by directly requiring
+the modules, e.g. <code>require(&#39;rtc/lib/helpermodule&#39;)</code></p>
+<h2>rtc/lib/listen</h2>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">listen</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc/lib/listen&#39;</span><span class="p">);</span>
+
+<span class="c1">// listen for negotiation needed events</span>
+<span class="nx">listen</span><span class="p">(</span><span class="nx">pc</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;negotiationneeded&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">evt</span><span class="p">)</span> <span class="p">{</span>
+
+<span class="p">});</span>
+</pre></div>
+
+<p>The <code>listen</code> helper provides an event emitter for a peer connection object
+that will bind to each of the core events WebRTC events (unless overriden
+by providing the listen function additional arguments).</p>
+<h3>inbound()</h3>
+<p>The inbound function creates a pull-stream sink that will accept the 
+outbound messages from the signaller and route them to the server.</p>
+<h3>outbound()</h3>
+<p>The outbound function creates a pull-stream source that will be fed into 
+the signaller input.  The source will be populated as messages are received
+from the websocket and closed if the websocket connection is closed.</p>
+</div>
+<footer>
+  <p class="license">Project source code is licensed under the <a href="https://github.com/rtc-io/rtc/blob/master/LICENSE">Apache 2.0</a>.</p>
+  <a class="closing" href="#top"></a>
+</footer>
+</body>
+<!-- 3rd-party scripts -->
+</html>
+

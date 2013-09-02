@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+<title>rtc.io</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css" />
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+<!-- responsive -->
+<link rel="stylesheet" media="screen and (max-width: 960px)" href="css/tablet.css" />
+<link rel="stylesheet" media="screen and (max-width: 710px)" href="css/phone.css" />
+<link rel="stylesheet" type="text/css" href="fonts/source-sans/stylesheet.css" />
+</head>
+<body>
+
+<a class="scroll-point pt-top" name="top"></a>
+<header>
+<a href="https://github.com/rtc-io"><img id="fork-us" style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub" /></a>
+<a class="scroll-point pt-top" name="top"></a>
+<div class="site">
+    <hgroup>
+    <h1><a href="#top">rtc.io</a></h1>
+    <h2><a href="#top">OpenSource WebRTC</a></h2>
+    </hgroup>
+    <nav>
+      <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#checkit">Try It</a></li>
+      <li><a href="#contribute">Contribute</a></li>
+      <li><a href="#mailing-list">Stay Informed</a></li>
+      </ul>
+    </nav>
+</div>
+<div class="shadow"></div>
+</header>
+<div role="content"><h1>rtc-media</h1>
+<p>Simple <a href="http://dev.w3.org/2011/webrtc/editor/getusermedia.html">getUserMedia</a>
+cross-browser wrappers.  Part of the <a href="http://rtc.io/">rtc.io</a> suite, which is
+sponsored by <a href="http://opennicta.com">NICTA</a> and released under an
+<a href="/LICENSE">Apache 2.0 license</a>.</p>
+<p><a href="https://nodei.co/npm/rtc-media/"><img src="https://nodei.co/npm/rtc-media.png" alt="NPM" /></a></p>
+<p><a href="http://github.com/hughsk/stability-badges"><img src="http://hughsk.github.io/stability-badges/dist/unstable.svg" alt="unstable" /></a></p>
+<h2>Example Usage</h2>
+<p>Capturing media on your machine is as simple as:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">)();</span>
+</pre></div>
+
+<p>While this will in fact start the user media capture process, it won&#39;t 
+do anything with it.  Lets take a look at a more realistic example:</p>
+<div class="highlight"><pre><span class="c1">// require the media capture helper from rtc.io</span>
+<span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
+
+<span class="c1">// capture video and render it to the document body</span>
+<span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+</pre></div>
+
+<p><a href="http://requirebin.com/?gist=6085450">run on requirebin</a></p>
+<p>In the code above, we are creating a new instance of our userMedia wrapper
+using the <code>media()</code> call and then telling it to render to the
+<code>document.body</code> once video starts streaming.  We can further expand the
+code out to the following to aid our understanding of what is going on:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">Media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">userMedia</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Media</span><span class="p">({</span> <span class="nx">start</span><span class="o">:</span> <span class="kc">true</span> <span class="p">});</span>
+
+<span class="nx">userMedia</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+</pre></div>
+
+<p>The code above is written in a more traditional JS style, but feel free
+to use the first style as it&#39;s quite safe (thanks to some checks in the
+code).</p>
+<h3>Media Events</h3>
+<p>If you want to know when media is captured (and you probably do), then
+you can tap into the <code>capture</code> event of the created media object:</p>
+<div class="highlight"><pre><span class="nx">media</span><span class="p">().</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;capture&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// stream references underlying media stream that was captured</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>Reference</h2>
+<h3>media(opts?)</h3>
+<p>Capture media using the underlying
+<a href="http://www.w3.org/TR/mediacapture-streams/">getUserMedia</a> API.</p>
+<p>The function accepts a single argument which can be either be:</p>
+<ul>
+<li>a. An options object (see below), or;</li>
+<li>b. An existing
+<a href="http://www.w3.org/TR/mediacapture-streams/#mediastream">MediaStream</a> that
+the media object will bind to and provide you some DOM helpers for.</li>
+</ul>
+<p>The function supports the following options:</p>
+<ul>
+<li><p><code>capture</code> - Whether capture should be initiated automatically. Defaults
+to true, but toggled to false automatically if an existing stream is
+provided.</p>
+</li>
+<li><p><code>muted</code> - Whether the video element created for this stream should be
+muted.  Default is true but is set to false when an existing stream is
+passed.</p>
+</li>
+<li><p><code>constraints</code> - The constraint option allows you to specify particular
+media capture constraints which can allow you do do some pretty cool
+tricks.  By default, the contraints used to request the media are 
+fairly standard defaults:</p>
+<div class="highlight"><pre>  <span class="p">{</span>
+    <span class="nx">video</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">mandatory</span><span class="o">:</span> <span class="p">{},</span>
+      <span class="nx">optional</span><span class="o">:</span> <span class="p">[]</span>
+    <span class="p">},</span>
+    <span class="nx">audio</span><span class="o">:</span> <span class="kc">true</span>
+  <span class="p">}</span>
+</pre></div>
+
+</li>
+</ul>
+<h3>capture(constraints, callback)</h3>
+<p>Capture media.  If constraints are provided, then they will 
+override the default constraints that were used when the media object was 
+created.</p>
+<h3>render(targets, opts?, callback?)</h3>
+<p>Render this media element to elements matching the specified selector or
+specific targets.  If the targets are regular DOM elements rather than 
+<code>video</code> or <code>audio</code> elements, then new <code>video</code> or <code>audio</code> elements are 
+created to accept the media stream once started.</p>
+<p>In all cases, an array of video/audio elements (either created or 
+existing) from the render call and can be manipulated as required by 
+your application.  It is important to note, however, that the elements
+may not yet have streams associated with them due to the async nature
+of the underlying <code>getUserMedia</code> API (requesting permission, etc).</p>
+<p>A simple example of requesting default media capture and rendering to the 
+document body is shown below:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span> <span class="c1">// or require(&#39;rtc/media&#39;)</span>
+
+<span class="c1">// start the stream and render to the document body once active</span>
+<span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+</pre></div>
+
+<p>You may optionally provide a callback to this function, which is 
+will be triggered once each of the media elements has started playing
+the stream:</p>
+<div class="highlight"><pre><span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">elements</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;captured and playing&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3>stop()</h3>
+<p>Stop the media stream</p>
+<h2>Debugging Tips</h2>
+<p>Chrome and Chromium can both be started with the following flag:</p>
+<pre><code>--use-fake-device-for-media-stream</code></pre>
+<p>This uses a fake stream for the getUserMedia() call rather than attempting
+to capture the actual camera.  This is useful when doing automated testing
+and also if you want to test connectivity between two browser instances and
+want to distinguish between the two local videos.</p>
+<h2>Internal Methods</h2>
+<p>There are a number of internal methods that are used in the <code>rtc-media</code>
+implementation. These are outlined below, but not expected to be of
+general use.</p>
+<h3>_prepareElements(opts, element)</h3>
+<p>The prepareElements function is used to prepare DOM elements that will
+receive the media streams once the stream have been successfully captured.</p>
+<h3>_bindStream(stream)</h3>
+<p>Bind a stream to previously prepared DOM elements.</p>
+<h3>_unbind()</h3>
+<p>Gracefully detach elements that are using the stream from the 
+current stream.</p>
+<h3>_createObjectUrl(stream)</h3>
+<p>This method is used to create an object url that can be attached to a video
+or audio element.  Object urls are cached to ensure only one is created
+per stream.</p>
+<h3>_handleSuccess(stream)</h3>
+<p>Handle the success condition of a <code>getUserMedia</code> call.</p>
+<h3>_handleFail(evt)</h3>
+<p>Handle the failure condition of a <code>getUserMedia</code> call.</p>
+<h2>License(s)</h2>
+<h3>Apache 2.0</h3>
+<p>Copyright 2013 National ICT Australia Limited (NICTA)</p>
+<p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at</p>
+<pre><code> http://www.apache.org/licenses/LICENSE-2.0</code></pre>
+<p>   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.</p>
+</div>
+<footer>
+  <p class="license">Project source code is licensed under the <a href="https://github.com/rtc-io/rtc/blob/master/LICENSE">Apache 2.0</a>.</p>
+  <a class="closing" href="#top"></a>
+</footer>
+</body>
+<!-- 3rd-party scripts -->
+</html>
+
