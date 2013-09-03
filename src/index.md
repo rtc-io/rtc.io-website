@@ -1,3 +1,5 @@
+# What is WebRTC?
+
 WebRTC is enabling a revolution of web communications, but it can be tricky
 to get started.
 

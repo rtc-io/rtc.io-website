@@ -121,7 +121,7 @@ header nav li a:hover {
 
 .main ol,
 .main ul {
-  margin: 10px 0 0 30px;
+  margin: 10px 0 10px 30px;
 }
 
 .main li {
@@ -131,13 +131,13 @@ header nav li a:hover {
 .main h1 {
   font-size: 40px;
   font-weight: normal;
-  margin: 10px 0px 10px 0px;
+  margin: 10px 0px 16px 0px;
 }
 
 .main h2 {
   font-size: 30px;
   font-weight: normal;
-  margin: 10px 0px 10px 0px;
+  margin: 20px 0px 10px 0px;
 }
 
 .main.icon {

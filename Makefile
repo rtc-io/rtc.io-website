@@ -1,7 +1,9 @@
 rtcmods = rtc rtc-media rtc-signaller
 blockdown = `npm bin`/blockdown
+injectcode = `npm bin`/injectcode
 outputfiles = $(filter-out template.html,$(wildcard *.html))
 sourcedocs = $(patsubst %.md,%.html,$(subst src/,,$(wildcard src/*.md)))
+tutorials = $(patsubst %.md,tutorial-%.html,$(subst tutorials/,,$(wildcard tutorials/*.md)))
 
 default: build
 
@@ -18,6 +20,9 @@ $(rtcmods):
 
 	@echo "- [$@](module-$@.html)" >> build/modules.md
 
+tutorial-%.html:
+	cat tutorials/$(patsubst tutorial-%.html,%.md,$@) | $(injectcode) | $(blockdown) template.html > $@
+
 %.html:
 	$(blockdown) template.html < build/$(patsubst %.html,%.md,$@) > $@
 
@@ -26,4 +31,4 @@ prepare:
 	@mkdir -p build/
 	@cp src/*.md build/
 
-build: clean prepare fetch $(sourcedocs)
+build: clean prepare fetch $(sourcedocs) $(tutorials)

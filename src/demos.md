@@ -1,3 +1,2 @@
-# rtc.io demos
+# WebRTC Demos
 
-Hello

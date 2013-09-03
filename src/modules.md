@@ -1,4 +1,4 @@
-# rtc.io modules
+# rtc.io Module Reference
 
 The rtc.io suite is made up of a number of modules, which you can use either
 individually or through the [rtc](/module-rtc.html) module which bundles

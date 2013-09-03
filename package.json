@@ -22,6 +22,6 @@
   },
   "dependencies": {
     "blockdown": "~0.2.0",
-    "jade": "~0.35.0"
+    "injectcode": "~0.1.0"
   }
 }
