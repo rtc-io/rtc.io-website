@@ -27,6 +27,7 @@ function renderMedia(stream) {
   // create a video element
   var video = document.createElement('video');
   video.setAttribute('autoplay', true);
+  video.setAttribute('muted', true);
 
   // if we have mozilla specific attributes, update the mozSrcObject
   if (typeof video.mozSrcObject != 'undefined') {
