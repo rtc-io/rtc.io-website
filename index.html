@@ -47,6 +47,14 @@ to get started.</p>
 <li>set up a signalling server</li>
 </ul>
 <p>You get to pick and choose as needed.</p>
+<h2>Cherry picking the functionality you need</h2>
+<p>When browsing through the <a href="demos.html">demos</a> you will probable notice that
+the <code>rtc</code> module is referenced mostly.  By using <a href="https://github.com/substack/browserify">browserify</a> only the functionality you need will be built into the final application code.</p>
+<p>If, however, you want to make absolutely sure then you can manually pull in only the modules that you want.  You can use the following list as a guide to help map from the <code>rtc/specific</code> require statement to the relevant standalone module:</p>
+<ul>
+<li><code>rtc/media</code> can be sourced from <a href="module-rtc-media.html">rtc-media</a></li>
+<li><code>rtc/signaller</code> can be sourced from <a href="module-rtc-signaller.html">rtc-signaller</a></li>
+</ul>
 </div>
 
 <footer>

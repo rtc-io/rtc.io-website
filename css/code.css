@@ -1,15 +1,14 @@
 .highlight {
+}
+
+pre {
+  padding: 1em 20px;
+  line-height: 1.6em;
   background: #eee;
   margin: 10px 0;
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
   border-radius: 8px;
-}
-
-.highlight pre {
-  padding: 1em 20px;
-  line-height: 1.6em
-
 }
 
 /* github pygments style */

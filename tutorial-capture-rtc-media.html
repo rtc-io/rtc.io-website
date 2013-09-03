@@ -38,9 +38,8 @@
 <div class="main" role="content"><h1>Using rtc-media for WebRTC media capture</h1>
 <p>In the our <a href="tutorial-capture-media.html">previous tutorial</a> we looked at what was involved with capturing media in the browser using the vanilla <code>getUserMedia</code> API.</p>
 <p>In this tutorial we will make use of the <a href="/module-rtc-media.html">rtc-media</a> module to do most of the heavy lifting for us.  Consider the following code example:</p>
-<div class="highlight"><pre><span class="c1">// include the rtc-media module, if you are using the rtc module you can </span>
-<span class="c1">// substitute this with a rtc/media require statement</span>
-<span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
+<div class="highlight"><pre><span class="c1">// include the rtc/media module</span>
+<span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc/media&#39;</span><span class="p">);</span>
 
 <span class="c1">// now capture media, and once available render to the document body</span>
 <span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>

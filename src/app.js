@@ -1,5 +1,4 @@
 var qsa = require('cog/qsa');
-var runsam = require('runsam');
 var reStatusOK = /^(2|3)\d{2}$/;
 
 function initSample(anchor) {
@@ -12,7 +11,6 @@ function initSample(anchor) {
     xhr.open('get', anchor.dataset.sample, true);
     xhr.onload = function() {
       if (reStatusOK.test(this.status)) {
-        runsam.prepare(this.response, { cdn: 'http://wzrd.in' });
       }
     };
 

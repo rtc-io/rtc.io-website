@@ -1,19 +1,20 @@
-rtcmods = rtc rtc-media rtc-signaller rtc-core
+rtcmods = rtc rtc-media rtc-core rtc-signaller rtc-signaller-socket.io
 blockdown = `npm bin`/blockdown
 injectcode = `npm bin`/injectcode
 outputfiles = $(filter-out template.html,$(wildcard *.html))
 sourcedocs = $(patsubst %.md,%.html,$(subst src/,,$(wildcard src/*.md)))
 tutorials = $(patsubst %.md,tutorial-%.html,$(subst src/tutorials/,,$(wildcard src/tutorials/*.md)))
+samples = $(subst code/,js/samples/,$(wildcard code/*.js))
 
 default: build
 
 clean:
-	@rm $(outputfiles)
+	@rm -f $(outputfiles)
+	@rm -rf js/samples/
 
 fetch: $(rtcmods)
 
 app:
-	@mkdir -p js
 	browserify --debug src/app.js > js/app.js
 
 $(rtcmods):
@@ -24,6 +25,9 @@ $(rtcmods):
 
 	@echo "- [$@](module-$@.html)" >> build/modules.md
 
+js/samples/%.js:
+	browserify --debug $(subst js/samples/,code/,$@) > $@
+
 tutorial-%.html:
 	cat src/tutorials/$(patsubst tutorial-%.html,%.md,$@) | $(injectcode) | $(blockdown) template.html > $@
 
@@ -32,7 +36,9 @@ tutorial-%.html:
 
 prepare:
 	@rm -rf build/
+	@mkdir -p js/samples/
 	@mkdir -p build/
 	@cp src/*.md build/
+	echo $(samples)
 
-build: clean prepare app fetch $(sourcedocs) $(tutorials)
+build: clean prepare app fetch $(sourcedocs) $(tutorials) $(samples)
