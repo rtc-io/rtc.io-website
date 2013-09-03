@@ -6,4 +6,6 @@ In this tutorial we will make use of the [rtc-media](/module-rtc-media.html) mod
 
 <<< code/capture-rtc-media.js
 
-This example performs exactly the same functionality (with a few additional smarts) as the code in our previous example.
+This example performs exactly the same functionality (with a few additional smarts) as the code in our [previous example](tutorial-capture-media.html).
+
+<a class="sample" data-sample="capture-rtc-media" href="#">Run Sample</a>
