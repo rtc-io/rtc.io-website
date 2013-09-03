@@ -23,5 +23,8 @@
   "dependencies": {
     "blockdown": "~0.2.0",
     "injectcode": "~0.1.0"
+  },
+  "devDependencies": {
+    "injectcode": "~0.2.0"
   }
 }

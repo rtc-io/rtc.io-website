@@ -9,5 +9,6 @@ The following tutorials are designed to help you "dip your toe" in with
 WebRTC.  We will cover capturing media and establishing communication with 
 a remote peer using the rtc.io signaller.
 
-- [Capturing Media](tutorial-capture-media.html)
+- [WebRTC Media Capture Tutorial](tutorial-capture-media.html)
+- [Using rtc-media for WebRTC media capture](tutorial-capture-rtc-media.html)
 - [Establishing an RTCPeerConnection](tutorial-simple-connection.html)

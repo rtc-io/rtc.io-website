@@ -98,6 +98,7 @@ at the moment, you can do this manually if you prefer but in this tutorial we wi
 
 <p>In our sample above, the <code>renderMedia</code> function simply creates a new <code>&lt;video&gt;</code> element and marks it to <code>autoplay</code> and then adds it to the DOM.  One point of note here is the different ways in which the browsers differ on how to associate the live stream with the video element.</p>
 <p>Chrome uses a <a href="http://www.w3.org/TR/FileAPI/#url">blob URL</a> whereas Mozilla uses the <code>mozSrcObject</code> to feed the media stream directly into the video element.</p>
+<p>As you can see it takes a bit of code to capture media, using the standard browser APIs (even with a bit of detection help from <code>rtc-core</code>).  In our <a href="/tutorial-capture-rtc-media.html">next tutorial</a> we will look at using the <code>rtc-media</code> module to take care of this functionality for us.</p>
 </div>
 
 <footer>
