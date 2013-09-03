@@ -12,31 +12,35 @@
 <link rel="stylesheet" media="screen and (max-width: 960px)" href="css/tablet.css" />
 <link rel="stylesheet" media="screen and (max-width: 710px)" href="css/phone.css" />
 <link rel="stylesheet" type="text/css" href="fonts/source-sans/stylesheet.css" />
+<link rel="stylesheet" type="text/css" href="css/code.css" />
 </head>
 <body>
 
 <a class="scroll-point pt-top" name="top"></a>
 <header>
-<a href="https://github.com/rtc-io"><img id="fork-us" style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub" /></a>
+<a href="https://github.com/rtc-io"><img class="fork" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub" /></a>
 <a class="scroll-point pt-top" name="top"></a>
 <div class="site">
-    <hgroup>
-    <h1><a href="index.html">rtc.io</a></h1>
-    <h2><a href="index.html">OpenSource WebRTC</a></h2>
-    </hgroup>
-    <nav>
-      <ul>
-      <li><a href="#about">About</a></li>
-      <li><a href="modules.html">Modules</a></li>
-      <li><a href="#contribute">Contribute</a></li>
-      <li><a href="#mailing-list">Stay Informed</a></li>
-      </ul>
-    </nav>
+  <div class="logo" data-subtext="OpenSource WebRTC">
+    <a href="index.html">rtc.io</a>
+  </div>
+  <nav>
+    <ul>
+    <li><a href="index.html">About</a></li>
+    <li><a href="modules.html">Modules</a></li>
+    <li><a href="demos.html">Demos</a></li>
+    <li><a href="#mailing-list">Stay Informed</a></li>
+    </ul>
+  </nav>
 </div>
 <div class="shadow"></div>
 </header>
 <div class="main" role="content"><h1>rtc.io modules</h1>
-<p>There are a number of modules included, as listed below:</p>
+<p>The rtc.io suite is made up of a number of modules, which you can use either
+individually or through the <a href="/module-rtc.html">rtc</a> module which bundles
+the most commonly required functionality together in one convenient place.</p>
+<p>The full list of modules is shown below.  For more details on each of the
+modules, click the link to view the module reference docs:</p>
 <ul>
 <li><a href="module-rtc.html">rtc</a></li>
 <li><a href="module-rtc-media.html">rtc-media</a></li>

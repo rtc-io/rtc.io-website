@@ -1,6 +1,6 @@
 rtcmods = rtc rtc-media rtc-signaller
 blockdown = `npm bin`/blockdown
-outputfiles = $(filter-out index.html,$(wildcard *.html))
+outputfiles = $(filter-out template.html,$(wildcard *.html))
 sourcedocs = $(patsubst %.md,%.html,$(subst src/,,$(wildcard src/*.md)))
 
 default: build
@@ -14,12 +14,12 @@ $(rtcmods):
 	@mkdir -p modules
 	@echo "fetching $@ module readme"
 	@curl -s https://raw.github.com/rtc-io/$@/master/README.md | \
-		$(blockdown) index.html > module-$@.html
+		$(blockdown) template.html > module-$@.html
 
 	@echo "- [$@](module-$@.html)" >> build/modules.md
 
 %.html:
-	$(blockdown) index.html < build/$(patsubst %.html,%.md,$@) > $@
+	$(blockdown) template.html < build/$(patsubst %.html,%.md,$@) > $@
 
 prepare:
 	@rm -rf build/
