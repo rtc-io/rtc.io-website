@@ -3,7 +3,7 @@ blockdown = `npm bin`/blockdown
 injectcode = `npm bin`/injectcode
 outputfiles = $(filter-out template.html,$(wildcard *.html))
 sourcedocs = $(patsubst %.md,%.html,$(subst src/,,$(wildcard src/*.md)))
-tutorials = $(patsubst %.md,tutorial-%.html,$(subst tutorials/,,$(wildcard tutorials/*.md)))
+tutorials = $(patsubst %.md,tutorial-%.html,$(subst src/tutorials/,,$(wildcard src/tutorials/*.md)))
 
 default: build
 
@@ -11,6 +11,10 @@ clean:
 	@rm $(outputfiles)
 
 fetch: $(rtcmods)
+
+app:
+	@mkdir -p js
+	browserify --debug src/app.js > js/app.js
 
 $(rtcmods):
 	@mkdir -p modules
@@ -21,7 +25,7 @@ $(rtcmods):
 	@echo "- [$@](module-$@.html)" >> build/modules.md
 
 tutorial-%.html:
-	cat tutorials/$(patsubst tutorial-%.html,%.md,$@) | $(injectcode) | $(blockdown) template.html > $@
+	cat src/tutorials/$(patsubst tutorial-%.html,%.md,$@) | $(injectcode) | $(blockdown) template.html > $@
 
 %.html:
 	$(blockdown) template.html < build/$(patsubst %.html,%.md,$@) > $@
@@ -31,4 +35,4 @@ prepare:
 	@mkdir -p build/
 	@cp src/*.md build/
 
-build: clean prepare fetch $(sourcedocs) $(tutorials)
+build: clean prepare app fetch $(sourcedocs) $(tutorials)

@@ -57,21 +57,6 @@ RTCPeerConnection is available (<code>webkitRTCPeerConnection</code>,
 <h3>REQCHAN</h3>
 <p>This error condition is encountered when a peer connection is used without
 being assigned a valid signalling channel to start with.</p>
-<h2>Peer prototype reference</h2>
-<p>The <code>Peer</code> prototype is a simple data type that helps the browser interface
-with the streaming interfaces used by the signaller transports.</p>
-<h3>close()</h3>
-<p>Close the current peer outbound sources</p>
-<h3>inbound()</h3>
-<p>The inbound function is used to return a pull-stream sink that represents 
-inbound data for the peer.  As data is fed into the sink, data events are 
-emitted and if the stream ends we get a &#39;disconnect&#39; event for the peer.</p>
-<h3>outbound()</h3>
-<p>The outbound function is used to return a pull-stream source that will
-supply messages that need to be sent out from the peer.</p>
-<h3>reset()</h3>
-<p>Reset the message backlog</p>
-<h3>send(data)</h3>
 </div>
 
 <footer>
@@ -79,6 +64,7 @@ supply messages that need to be sent out from the peer.</p>
   <a class="closing" href="#top"></a>
 </footer>
 </body>
+<script src="js/app.js"></script>
 <!-- 3rd-party scripts -->
 </html>
 

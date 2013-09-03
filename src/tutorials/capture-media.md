@@ -29,3 +29,5 @@ In our sample above, the `renderMedia` function simply creates a new `<video>` e
 Chrome uses a [blob URL](http://www.w3.org/TR/FileAPI/#url) whereas Mozilla uses the `mozSrcObject` to feed the media stream directly into the video element.
 
 As you can see it takes a bit of code to capture media, using the standard browser APIs (even with a bit of detection help from `rtc-core`).  In our [next tutorial](/tutorial-capture-rtc-media.html) we will look at using the `rtc-media` module to take care of this functionality for us.
+
+<a class="sample" data-sample="code/capture-media.js" href="#">Run Sample</a>
