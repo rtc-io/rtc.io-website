@@ -74,7 +74,11 @@ function initSample(anchor) {
       doc.body.appendChild(script);
 
       var style = doc.createElement('style');
-      style.innerHTML = 'body { width: 820px; margin: 5px auto 0; }';
+      style.innerHTML = [
+        'body { width: 820px; margin: 5px auto 0; }',
+        'body video { width: 100% }'
+      ].join('\n');
+      
       doc.head.appendChild(style);
 
       // associate the code frame with the frame
