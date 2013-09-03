@@ -18,7 +18,6 @@ app:
 	browserify --debug src/app.js > js/app.js
 
 $(rtcmods):
-	@mkdir -p modules
 	@echo "fetching $@ module readme"
 	@curl -s https://raw.github.com/rtc-io/$@/master/README.md | \
 		$(blockdown) template.html > module-$@.html
