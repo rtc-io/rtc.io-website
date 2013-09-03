@@ -75,6 +75,7 @@ function initSample(anchor) {
 
       var style = doc.createElement('style');
       style.innerHTML = [
+        'html { overflow: hidden; }',
         'body { width: 820px; margin: 5px auto 0; }',
         'body video { width: 100% }'
       ].join('\n');
