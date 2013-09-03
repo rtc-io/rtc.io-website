@@ -36,9 +36,68 @@
 <div class="shadow"></div>
 </header>
 <div class="main" role="content"><h1>WebRTC Media Capture Tutorial</h1>
-<div class="highlight"><pre><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">);</span>
+<p>This is a simple tutorial that looks at how to capture media from within
+your browser using the <a href="http://www.w3.org/TR/mediacapture-streams/#dom-navigator-getusermedia">getUserMedia</a> API.</p>
+<p>The first thing we will do is work around the browser prefixing that exists
+at the moment, you can do this manually if you prefer but in this tutorial we will make use of the <a href="/modules-rtc-core.html">rtc-core</a> helper module:</p>
+<div class="highlight"><pre><span class="c1">// include the rtc-core detection helpers to assist with finding</span>
+<span class="c1">// the correct browser variant of getUserMedia</span>
+<span class="kd">var</span> <span class="nx">detect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-core/detect&#39;</span><span class="p">);</span>
+
+<span class="c1">// go find the browser specific version of getUserMedia and patch into navigator</span>
+<span class="nx">navigator</span><span class="p">.</span><span class="nx">getUserMedia</span> <span class="o">=</span> <span class="nx">detect</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">navigator</span><span class="p">,</span> <span class="s1">&#39;getUserMedia&#39;</span><span class="p">);</span>
+
+<span class="c1">// patch window url for creating blob urls</span>
+<span class="nb">window</span><span class="p">.</span><span class="nx">URL</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">URL</span> <span class="o">||</span> <span class="nx">detect</span><span class="p">(</span><span class="s1">&#39;URL&#39;</span><span class="p">);</span>
 </pre></div>
 
+<p>Once we have everything ready to go, we can then make the request to capture the media:</p>
+<div class="highlight"><pre><span class="c1">// initialise the constraints we will pass to the getUserMedia call</span>
+<span class="kd">var</span> <span class="nx">constraints</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">video</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">mandatory</span><span class="o">:</span> <span class="p">{},</span> <span class="nx">optional</span><span class="o">:</span> <span class="p">[]</span>
+  <span class="p">},</span>
+
+  <span class="nx">audio</span><span class="o">:</span> <span class="kc">true</span>
+<span class="p">};</span>
+
+<span class="c1">// make the getUserMedia request</span>
+<span class="c1">// 1st arg constraints, 2nd success callback and 3rd failure callback</span>
+<span class="nx">navigator</span><span class="p">.</span><span class="nx">getUserMedia</span><span class="p">(</span><span class="nx">constraints</span><span class="p">,</span> <span class="nx">renderMedia</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;could not capture media: &#39;</span><span class="p">,</span> <span class="nx">err</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>As outlined in the code comments, the <code>getUserMedia</code> function takes three arguments:</p>
+<ol>
+<li><p>A constraints object which tells the browser the kind of media we are interested in.  This information can include specific requests such as video resolution.</p>
+</li>
+<li><p>A success callback that will be triggered if the request is successful.</p>
+</li>
+<li><p>A failure callback that is triggered if the request fails.</p>
+</li>
+</ol>
+<p>In our case we want to handle the success callback in our <code>renderMedia</code> function:</p>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">renderMedia</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// create a video element</span>
+  <span class="kd">var</span> <span class="nx">video</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;video&#39;</span><span class="p">);</span>
+  <span class="nx">video</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;autoplay&#39;</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+
+  <span class="c1">// if we have mozilla specific attributes, update the mozSrcObject</span>
+  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">video</span><span class="p">.</span><span class="nx">mozSrcObject</span> <span class="o">!=</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">video</span><span class="p">.</span><span class="nx">mozSrcObject</span> <span class="o">=</span> <span class="nx">stream</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">video</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">URL</span><span class="p">.</span><span class="nx">createObjectURL</span><span class="p">(</span><span class="nx">stream</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="c1">// add the video element to the document</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">video</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>In our sample above, the <code>renderMedia</code> function simply creates a new <code>&lt;video&gt;</code> element and marks it to <code>autoplay</code> and then adds it to the DOM.  One point of note here is the different ways in which the browsers differ on how to associate the live stream with the video element.</p>
+<p>Chrome uses a <a href="http://www.w3.org/TR/FileAPI/#url">blob URL</a> whereas Mozilla uses the <code>mozSrcObject</code> to feed the media stream directly into the video element.</p>
 </div>
 
 <footer>
