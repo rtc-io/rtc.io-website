@@ -1,4 +1,4 @@
-rtcmods = rtc rtc-media rtc-signaller
+rtcmods = rtc rtc-media rtc-signaller rtc-core
 blockdown = `npm bin`/blockdown
 injectcode = `npm bin`/injectcode
 outputfiles = $(filter-out template.html,$(wildcard *.html))
