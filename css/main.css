@@ -230,6 +230,11 @@ footer .license {
   float: right;
 }
 
+footer img {
+  height: 50px;
+  padding-right: 5px;
+}
+
 .list-container.quick-links {
   width: 40%;
   float: left;
