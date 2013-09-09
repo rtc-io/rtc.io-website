@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+<title>rtc.io</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css" />
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+<!-- responsive -->
+<link rel="stylesheet" media="screen and (max-width: 960px)" href="css/tablet.css" />
+<link rel="stylesheet" media="screen and (max-width: 710px)" href="css/phone.css" />
+<link rel="stylesheet" type="text/css" href="fonts/source-sans/stylesheet.css" />
+<link rel="stylesheet" type="text/css" href="css/code.css" />
+</head>
+<body>
+
+<a class="scroll-point pt-top" name="top"></a>
+<header>
+<a href="https://github.com/rtc-io"><img class="fork" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub" /></a>
+<a class="scroll-point pt-top" name="top"></a>
+<div class="site">
+  <div class="logo" data-subtext="OpenSource WebRTC">
+    <a href="index.html">rtc.io</a>
+  </div>
+  <nav>
+    <ul>
+    <li><a href="index.html">About</a></li>
+    <li><a href="tutorials.html">Tutorials</a></li>
+    <li><a href="demos.html">Demos</a></li>
+    <li><a href="modules.html">Modules</a></li>
+    </ul>
+  </nav>
+</div>
+<div class="shadow"></div>
+</header>
+<div class="main" role="content"><h1>Establishing an RTCPeerConnection</h1>
+<p>There are a number of steps involved with establishing a successful <code>RTCPeerConnection</code> between two hosts on different networks.  In many of the WebRTC demos around the place, this is done quite transparently but we think it&#39;s worth taking you through the overall process so you are well armed for diagnosing connectivity problems.</p>
+<p><strong>NOTE:</strong> This demo uses <code>rtc.io</code> specific libraries as opposed to a general implementation.  See the other articles at the end of this tutorial for alternative resources using different approaches.</p>
+<p>Essentially there are three phases when connecting two peers:</p>
+<h2>Peer Discovery</h2>
+<p>The first step in having two (or more) peers connect with one another is the discovery phase.  In simple cases, this is done in the rtc.io stack using a <a href="module-rtc-signaller.html">signaller</a>:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">rtc</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc&#39;</span><span class="p">);</span>
+
+<span class="c1">// create a websocket connection (using socket.io) on our signalling server</span>
+<span class="kd">var</span> <span class="nx">socket</span> <span class="o">=</span> <span class="nx">io</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="s1">&#39;http://rtcjs.io:50001&#39;</span><span class="p">);</span>
+
+<span class="c1">// create a signalling instance using our messaging layer (socket.io)</span>
+<span class="c1">// as the socket uses &#39;message&#39; for &#39;data&#39; event and &#39;connect&#39; for &#39;open&#39;</span>
+<span class="c1">// we need to tell the signaller what to look for</span>
+<span class="kd">var</span> <span class="nx">signaller</span> <span class="o">=</span> <span class="nx">rtc</span><span class="p">.</span><span class="nx">signaller</span><span class="p">(</span><span class="nx">socket</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">dataEvent</span><span class="o">:</span> <span class="s1">&#39;message&#39;</span><span class="p">,</span>
+  <span class="nx">openEvent</span><span class="o">:</span> <span class="s1">&#39;connect&#39;</span>
+<span class="p">});</span>
+
+<span class="c1">// announce myself on the signalling channel</span>
+<span class="nx">signaller</span><span class="p">.</span><span class="nx">announce</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Bob&#39;</span> <span class="p">});</span>
+</pre></div>
+
+<p>You can see in the above code that we have announced ourselves and provided some simple data. Supplying this data is completely optional, and is only provided as a means to help other clients on the same &quot;broadcast network&quot; find us.</p>
+<p>Additionally, it&#39;s worth noting that if an <code>id</code> data attribute if not provided a generic <code>UUID</code> will be generated and supplied to represent this client id.</p>
+<p>Here is what <a href="https://socket.io">socket.io</a> broadcast for us on the connected socket in response to the code above:</p>
+<pre><code>3:::/announce|{&quot;id&quot;:&quot;27b340b8-8472-4b38-ab3e-7d2fe56716a6&quot;,&quot;name&quot;:&quot;Bob&quot;}</code></pre>
+<p>Here we can see that we have issued an <code>/announce</code> command with a JSON payload containing the data about our client.  Depending on the server implementation, this message will then be passed onto other clients on the same broadcast channel.</p>
+<h2>Peer Handshaking</h2>
+<p>Handshaking with another peer is done in the <code>rtc.io</code> suite using a <code>/request</code> command that is issued by the signaller.  Additionally, some higher level functions have been provided to make the job of &quot;coupling&quot; one <code>RTCPeerConnection</code> to another via a signalling channel simple.</p>
+<p>Consider the following example, where we are attempting to get in touch with a client that has the name of &quot;Sue&quot;:</p>
+<div class="highlight"><pre><span class="c1">// create a new peer connection (with default constraints)</span>
+<span class="c1">// that will be used for our peer connection with sue</span>
+<span class="kd">var</span> <span class="nx">connection</span> <span class="o">=</span> <span class="nx">rtc</span><span class="p">.</span><span class="nx">createConnection</span><span class="p">();</span>
+
+<span class="c1">// ok let&#39;s try and create this connection</span>
+<span class="kd">var</span> <span class="nx">coupling</span> <span class="o">=</span> <span class="nx">rtc</span><span class="p">.</span><span class="nx">couple</span><span class="p">(</span><span class="nx">connection</span><span class="p">,</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Sue&#39;</span> <span class="p">},</span> <span class="nx">signaller</span><span class="p">);</span>
+</pre></div>
+
+<p>So the first thing that is happening here is that we are using the <code>createConnection</code> factory function to create our <code>RTCPeerConnection</code> object using a default set of contraints and standard options.  This takes the amount of code we need to write down quite a bit.</p>
+<p>We then issue a <code>/request</code> command through calling using the <a href="https://github.com/rtc-io/rtc/blob/master/couple.js">couple</a> module within <code>rtc</code> package.</p>
+<p>If one of the connected clients acknowledges this request (the behaviour is automatic within the signaller, i.e. no additional code is required) then the internal <code>rtc</code> module code will continue with joining our local peer connection with the remote, discovered connection.</p>
+<p><strong>NOTE:</strong> At the present point in time this method does not return &quot;failure&quot; (or we couldn&#39;t find your requested peer) states.  As such is currently advised that the <code>rtc.couple</code> function only be used after the local signaller has &quot;announced&quot; the remote connection.  This is on the <a href="https://github.com/rtc-io/rtc/issues/2">todo</a> list.</p>
+<p>In the instance that Sue is online and connected to the broadcast channel, then we will be able to track the progress of the network negotiation and signalling state using the returned <code>coupling</code> (which is a node-style <a href="http://nodejs.org/api/events.html#events_class_events_eventemitter">EventEmitter</a>)</p>
+<h2>Signalling (via SDP)</h2>
+<p>To be completed.</p>
+<h2>Network Negotiation (using ICE)</h2>
+<p>To be completed.</p>
+<p><a class="sample" data-sample="connect" href="#">Run Sample</a></p>
+</div>
+
+<footer>
+  <p>
+    <a href="http://nicta.com.au">
+      <img src="images/nicta-logo.gif" alt="NICTA logo" />
+    </a>© NICTA 2013
+  </p>
+  <p class="license">Project source code is licensed under the <a href="https://github.com/rtc-io/rtc/blob/master/LICENSE">Apache 2.0</a>.</p>
+  <a class="closing" href="#top"></a>
+</footer>
+</body>
+<script src="js/app.js"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-26567546-2', 'rtc.io');
+  ga('send', 'pageview');
+
+</script>
+</html>
+

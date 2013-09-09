@@ -1,8 +1,12 @@
 var crel = require('crel');
 var qsa = require('cog/qsa');
+var loader = require('cog/loader');
 var main = qsa('.main')[0];
 var reStatusOK = /^(2|3)\d{2}$/;
 var reStripExt = /^(.*)\.js$/;
+var baseScripts = [
+  'https://rtcjs.io/socket.io/socket.io.js'
+];
 
 function createCodeFrame(sample, anchor, callback) {
   var frameContainer;
@@ -66,13 +70,8 @@ function initSample(anchor) {
     // don't do the default click anchor thing...
     evt.preventDefault();
 
-
     // create the code frame
     createCodeFrame(sample, anchor, function(frame, doc) {
-      var script = doc.createElement('script');
-      script.src = 'js/samples/' + sample + '.js';
-      doc.body.appendChild(script);
-
       var style = doc.createElement('style');
       style.innerHTML = [
         'body { width: 820px; margin: 5px auto 0; }',
@@ -81,14 +80,18 @@ function initSample(anchor) {
       
       doc.head.appendChild(style);
 
+      // load the required scripts
+      loader(baseScripts, function() {
+        loader('js/samples/' + sample + '.js');
+
+        setTimeout(function() {
+          frame.className += ' active';
+        }, 100);
+      });
+
       // associate the code frame with the frame
       anchor.codeframe = frame;
-
       qsa('.closer', frame)[0].addEventListener('click', closeCode);
-
-      setTimeout(function() {
-        frame.className += ' active';
-      }, 100);
     });
   });
 }
