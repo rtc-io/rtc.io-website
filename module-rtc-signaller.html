@@ -62,39 +62,40 @@ complicated).</li>
 <p>To be completed.</p>
 <h2>Reference</h2>
 <p>The <code>rtc-signaller</code> module is designed to be used primarily in a functional
-way and when called it creates a new signalling scope that will enable
+way and when called it creates a new signaller that will enable
 you to communicate with other peers via your messaging network.</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">signaller</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-signaller&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">scope</span> <span class="o">=</span> <span class="nx">signaller</span><span class="p">(</span><span class="nx">messenger</span><span class="p">);</span>
+<div class="highlight"><pre><span class="c1">// create a signaller from something that knows how to send messages</span>
+<span class="kd">var</span> <span class="nx">signaller</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-signaller&#39;</span><span class="p">)(</span><span class="nx">messenger</span><span class="p">);</span>
 </pre></div>
 
-<h3>scope.send(data)</h3>
+<h3>signaller#send(data)</h3>
 <p>Send data over the messenging interface.</p>
-<h3>scope.announce(data?)</h3>
-<p>The <code>announce</code> function of the scope will a scope message through the
-messenger network.  When no additional data is supplied to this function
-then only the id of the scope is sent to all active members of the
-messenging network.</p>
+<h3>signaller#announce(data?)</h3>
+<p>The <code>announce</code> function of the signaller will pass an <code>/announce</code> message
+through the messenger network.  When no additional data is supplied to
+this function then only the id of the signaller is sent to all active
+members of the messenging network.</p>
 <p>As a unique it is generally insufficient information to determine whether
 a peer is a good match for another (for instance,  you might be looking
 for other parties by name or role) it is generally a good idea to provide
 some additional information during this announce call:</p>
-<div class="highlight"><pre><span class="nx">scope</span><span class="p">.</span><span class="nx">announce</span><span class="p">({</span> <span class="nx">role</span><span class="o">:</span> <span class="s1">&#39;translator&#39;</span> <span class="p">});</span>
+<div class="highlight"><pre><span class="nx">signaller</span><span class="p">.</span><span class="nx">announce</span><span class="p">({</span> <span class="nx">role</span><span class="o">:</span> <span class="s1">&#39;translator&#39;</span> <span class="p">});</span>
 </pre></div>
 
 <p><strong>NOTE:</strong> In some particular messenger types may attach or infer
 additional data during the announce phase.  For instance, socket.io
 connections are generally organised into rooms which is inferred
 information that limits the messaging scope.</p>
-<h3>scope.block()</h3>
-<p>Prevent the scope from responding to requests until the block
+<h3>signaller#block()</h3>
+<p>Prevent the signaller from responding to requests until the block
 is cleared with a clearBlock call.</p>
-<h3>scope.clearBlock(id)</h3>
-<p>Clear the specified block id</p>
-<h3>scope.leave()</h3>
+<h3>signaller#clearBlock(id)</h3>
+<p>Clear the specified block id.  Think <code>clearTimeout</code> but for signalling
+blocks</p>
+<h3>signaller#leave()</h3>
 <p>Leave the messenger mesh</p>
-<h3>scope.request(data)</h3>
-<p>The <code>scope.request</code> call is where one peer goes looking for a target
+<h3>signaller#request(data)</h3>
+<p>The <code>signaller.request</code> call is where one peer goes looking for a target
 peer that satisfies specific search parameters.  This may be a search
 for a peer with a particular id, or something more general such as
 a request for a peer with a particular name or role.</p>
@@ -105,7 +106,7 @@ particular peer.</p>
 mesh level if required. Signallers will not attempt to parse a message
 destined for another signaller, but they are visible by default.  This
 can easily be handled however, by filtering <code>/to</code> messages.</p>
-<h3>scope.to(targetId)</h3>
+<h3>signaller#to(targetId)</h3>
 <p>The to method returns an encapsulated</p>
 <h2>signaller process handling</h2>
 <p>When a signaller&#39;s underling messenger emits a <code>data</code> event this is
