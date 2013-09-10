@@ -83,7 +83,14 @@ fake video:</p>
   <span class="kd">var</span> <span class="nx">alpha</span><span class="p">;</span>
   <span class="kd">var</span> <span class="nx">ii</span><span class="p">;</span>
 
+  <span class="c1">// check that we have channels is divisible by four (just as a safety)</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">channels</span><span class="p">.</span><span class="nx">length</span> <span class="o">%</span> <span class="mi">4</span> <span class="o">!==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span><span class="p">;</span>
+  <span class="p">}</span>
+
   <span class="c1">// iterate through the data</span>
+  <span class="c1">// NOTE: decrementing loops are fast but you need to know that you will </span>
+  <span class="c1">// hit 0 using this logic otherwise it will run forever (only 0 is falsy)</span>
   <span class="k">for</span> <span class="p">(</span><span class="nx">ii</span> <span class="o">=</span> <span class="nx">channels</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">ii</span> <span class="o">-=</span> <span class="mi">4</span><span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
     <span class="c1">// get the rgb tuple</span>
     <span class="nx">rgb</span> <span class="o">=</span> <span class="p">[</span><span class="nx">channels</span><span class="p">[</span><span class="nx">ii</span><span class="p">],</span> <span class="nx">channels</span><span class="p">[</span><span class="nx">ii</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="nx">channels</span><span class="p">[</span><span class="nx">ii</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]];</span>
