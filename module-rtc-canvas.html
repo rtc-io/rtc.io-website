@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+<title>rtc.io</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css" />
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+<!-- responsive -->
+<link rel="stylesheet" media="screen and (max-width: 960px)" href="css/tablet.css" />
+<link rel="stylesheet" media="screen and (max-width: 710px)" href="css/phone.css" />
+<link rel="stylesheet" type="text/css" href="fonts/source-sans/stylesheet.css" />
+<link rel="stylesheet" type="text/css" href="css/code.css" />
+</head>
+<body>
+
+<a class="scroll-point pt-top" name="top"></a>
+<header>
+<a href="https://github.com/rtc-io"><img class="fork" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub" /></a>
+<a class="scroll-point pt-top" name="top"></a>
+<div class="site">
+  <div class="logo" data-subtext="OpenSource WebRTC">
+    <a href="index.html">rtc.io</a>
+  </div>
+  <nav>
+    <ul>
+    <li><a href="index.html">About</a></li>
+    <li><a href="tutorials.html">Tutorials</a></li>
+    <li><a href="demos.html">Demos</a></li>
+    <li><a href="modules.html">Modules</a></li>
+    </ul>
+  </nav>
+</div>
+<div class="shadow"></div>
+</header>
+<div class="main" role="content"><h1>rtc-canvas</h1>
+<p>This is a small helper module that allows you to substitute a video
+element with a canvas element.  This can be useful when you want to 
+do pixel manipulation of the rendered images, or in situations when 
+a video element does not behave as you expect.</p>
+<p><a href="https://nodei.co/npm/rtc-canvas/"><img src="https://nodei.co/npm/rtc-canvas.png" alt="NPM" /></a></p>
+<p><a href="http://github.com/hughsk/stability-badges"><img src="http://hughsk.github.io/stability-badges/dist/unstable.svg" alt="unstable" /></a></p>
+<h2>Example Usage</h2>
+<p>This was primarily written to work with the
+<a href="https://github.com/rtc-io/rtc-media">rtc-media</a> library so here&#39;s an
+example of how it works there:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">fakevid</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-canvas&#39;</span><span class="p">);</span>
+
+<span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nx">fakevid</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">));</span>
+</pre></div>
+
+<p>Normally, the <code>media().render</code> call will create a <code>&lt;video&gt;</code> element in
+the specified target container.  In this case, however, <code>rtc-canvas</code>
+intercepts the request and creates it&#39;s own fake video element that is
+passed back to the render call.</p>
+<h2>Using the Processing Pipeline</h2>
+<p>A processing pipeline has been included to assist with
+manipulating the canvas on the fly. Adding a processor to the pipeline is
+simply a matter of adding a pipeline processor available on the returned
+fake video:</p>
+<div class="highlight"><pre><span class="c1">// add a processor</span>
+<span class="nx">canvas</span><span class="p">.</span><span class="nx">pipeline</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">imageData</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// examine the pixel data</span>
+
+  <span class="c1">// if we&#39;ve modified the pixel data and want to write that back</span>
+  <span class="c1">// to the canvas then we must return a truthy value</span>
+  <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>A more complete example is shown below:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">fakevideo</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-canvas&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">vid</span><span class="p">;</span>
+
+<span class="kd">function</span> <span class="nx">handleDraw</span><span class="p">(</span><span class="nx">imageData</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">channels</span> <span class="o">=</span> <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">rgb</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="kd">var</span> <span class="nx">rgbAvg</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">alpha</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">ii</span><span class="p">;</span>
+
+  <span class="c1">// iterate through the data</span>
+  <span class="k">for</span> <span class="p">(</span><span class="nx">ii</span> <span class="o">=</span> <span class="nx">channels</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">ii</span> <span class="o">-=</span> <span class="mi">4</span><span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// get the rgb tuple</span>
+    <span class="nx">rgb</span> <span class="o">=</span> <span class="p">[</span><span class="nx">channels</span><span class="p">[</span><span class="nx">ii</span><span class="p">],</span> <span class="nx">channels</span><span class="p">[</span><span class="nx">ii</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="nx">channels</span><span class="p">[</span><span class="nx">ii</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]];</span>
+
+    <span class="c1">// get the alpha value</span>
+    <span class="nx">alpha</span> <span class="o">=</span> <span class="nx">channels</span><span class="p">[</span><span class="nx">ii</span> <span class="o">+</span> <span class="mi">3</span><span class="p">];</span>
+
+    <span class="c1">// calculate the rgb average</span>
+    <span class="nx">rgbAvg</span> <span class="o">=</span> <span class="p">(</span><span class="nx">rgb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="nx">rgb</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nx">rgb</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="p">)</span> <span class="o">/</span> <span class="mi">3</span><span class="p">;</span>
+
+    <span class="c1">// update the values to the rgb average</span>
+    <span class="nx">channels</span><span class="p">[</span><span class="nx">ii</span><span class="p">]</span> <span class="o">=</span> <span class="nx">channels</span><span class="p">[</span><span class="nx">ii</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nx">channels</span><span class="p">[</span><span class="nx">ii</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="nx">rgbAvg</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// capture media</span>
+<span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nx">vid</span> <span class="o">=</span> <span class="nx">fakevideo</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">));</span>
+
+<span class="c1">// handle draw events on the fake video</span>
+<span class="nx">vid</span><span class="p">.</span><span class="nx">pipeline</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">handleDraw</span><span class="p">);</span>
+</pre></div>
+
+<h2>A Note with Regards to CPU Usage</h2>
+<p>By default rtc-canvas will draw at 25fps but this can be modified to capture
+at a lower frame rate for slower devices, or increased if you have a
+machine with plenty of grunt.</p>
+<h2>Reference</h2>
+<h3>canvas(target, opts)</h3>
+<p>Create a fake video element for the specified target element.</p>
+<ul>
+<li><code>fps</code> - the redraw rate of the fake video (default = 25)</li>
+</ul>
+<h2>License(s)</h2>
+<h3>Apache 2.0</h3>
+<p>Copyright 2013 National ICT Australia Limited (NICTA)</p>
+<p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at</p>
+<pre><code> http://www.apache.org/licenses/LICENSE-2.0</code></pre>
+<p>   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.</p>
+</div>
+
+<footer>
+  <p>
+    <a href="http://nicta.com.au">
+      <img src="images/nicta-logo.gif" alt="NICTA logo" />
+    </a>© NICTA 2013
+  </p>
+  <p class="license">Project source code is licensed under the <a href="https://github.com/rtc-io/rtc/blob/master/LICENSE">Apache 2.0</a>.</p>
+  <a class="closing" href="#top"></a>
+</footer>
+</body>
+<script src="js/app.js"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-26567546-2', 'rtc.io');
+  ga('send', 'pageview');
+
+</script>
+</html>
+
