@@ -8,11 +8,11 @@ The `rtc-canvas` module allows you to render a captured `rtc-media` stream to a 
 
 For example, here is what you will commonly include if you wish to do some video manipulation using the `rtc-canvas` module:
 
-<<< code/simple-manipulation.js[:9]
+<<< code/simple-manipulation.js
 
-Next, let's take a look at our `handleDraw` function:
+In the code above, you can see that we are using a node style `require` statement to include a grayscale filter into our processing code.  Let's have a look at the implementation of that small module now:
 
-<<< code/simple-manipulation.js[10:]
+<<< code/filters/grayscale.js
 
 This code takes the image data that has already been extracted via the canvas 2d context [getImageData](http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#dom-context-2d-getimagedata) method and applies some processing to it (in this case a simple grayscale filter).
 
@@ -24,7 +24,6 @@ By returning true at the end of the function, we are flagging to the `rtc-canvas
 
 By default, the canvas is set to capture at 25 fps, but this can be adjusted if you feel like giving your CPU a bit of a rest:
 
-```js
-// capture media
-media().render(vid = canvas(document.body, { fps: 5 }));
-```
+<<< code/simple-manipulation-5fps.js
+
+<a class="sample" data-sample="simple-manipulation-5fps" href="#">Run Sample</a>

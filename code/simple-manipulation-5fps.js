@@ -3,7 +3,7 @@ var canvas = require('rtc-canvas');
 var vid;
 
 // capture media
-media().render(vid = canvas(document.body));
+media().render(vid = canvas(document.body, { fps: 5 }));
 
 // add a draw handler to the pipeline
 vid.pipeline.add(require('./filters/grayscale'));
