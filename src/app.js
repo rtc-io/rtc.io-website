@@ -76,7 +76,8 @@ function initSample(anchor) {
       style.innerHTML = [
         'html { overflow: hidden; }',
         'body { width: 820px; margin: 5px auto 0; }',
-        'body video { width: 100% }'
+        'body video { width: 100% }',
+        'body canvas { width: 100% }'
       ].join('\n');
       
       doc.head.appendChild(style);

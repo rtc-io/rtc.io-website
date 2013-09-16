@@ -26,7 +26,8 @@
     "cog": "~0.3.0",
     "rtc": "~0.4.0",
     "rtc-core": "~0.4.2",
-    "crel": "~1.0.0"
+    "crel": "~1.0.0",
+    "rtc-canvas": "~0.3.2"
   },
   "devDependencies": {}
 }
