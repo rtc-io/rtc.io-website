@@ -157,13 +157,6 @@ the modules, e.g. <code>require(&#39;rtc/lib/helpermodule&#39;)</code></p>
 <p>The <code>listen</code> helper provides an event emitter for a peer connection object
 that will bind to each of the core events WebRTC events (unless overriden
 by providing the listen function additional arguments).</p>
-<h3>inbound()</h3>
-<p>The inbound function creates a pull-stream sink that will accept the 
-outbound messages from the signaller and route them to the server.</p>
-<h3>outbound()</h3>
-<p>The outbound function creates a pull-stream source that will be fed into 
-the signaller input.  The source will be populated as messages are received
-from the websocket and closed if the websocket connection is closed.</p>
 </div>
 
 <footer>

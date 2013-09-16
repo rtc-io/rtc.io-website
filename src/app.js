@@ -82,8 +82,8 @@ function initSample(anchor) {
       doc.head.appendChild(style);
 
       // load the required scripts
-      loader(baseScripts, function() {
-        loader('js/samples/' + sample + '.js');
+      loader(baseScripts, { target: doc.body }, function() {
+        loader('js/samples/' + sample + '.js', { target: doc.body });
 
         setTimeout(function() {
           frame.className += ' active';
