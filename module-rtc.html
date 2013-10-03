@@ -65,9 +65,10 @@ are passed onto a <code>/request</code> command when looking for remote peer
 to couple and exchange messages with.</p>
 <h3>Example Usage</h3>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">couple</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc/couple&#39;</span><span class="p">);</span>
+
+<span class="nx">couple</span><span class="p">(</span><span class="k">new</span> <span class="nx">RTCPeerConnection</span><span class="p">(),</span> <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;test&#39;</span> <span class="p">},</span> <span class="nx">signaller</span><span class="p">);</span>
 </pre></div>
 
-<p>couple(new RTCPeerConnection(), { id: &#39;test&#39; }, signaller);</p>
 <h3>Using Filters</h3>
 <p>In certain instances you may wish to modify the raw SDP that is provided
 by the <code>createOffer</code> and <code>createAnswer</code> calls.  This can be done by passing

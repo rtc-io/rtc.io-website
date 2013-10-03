@@ -27,7 +27,8 @@
     "rtc": "~0.4.0",
     "rtc-core": "~0.4.2",
     "crel": "~1.0.0",
-    "rtc-canvas": "~0.3.2"
+    "rtc-canvas": "~0.3.2",
+    "demo-console": "~1.0.0"
   },
   "devDependencies": {}
 }
