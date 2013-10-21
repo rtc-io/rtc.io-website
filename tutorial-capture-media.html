@@ -36,8 +36,10 @@
 <div class="shadow"></div>
 </header>
 <div class="main" role="content"><h1>WebRTC Media Capture Tutorial</h1>
-<p>This is a simple tutorial that looks at how to capture media from within
+<p>This is a tutorial that looks at how to capture media from within
 your browser using the <a href="http://www.w3.org/TR/mediacapture-streams/#dom-navigator-getusermedia">getUserMedia</a> API.</p>
+<p>It was created to show all the coding required to capture video or audio from a camera or microphone in the browser. This is in comparison to using rtc.io's  to simplify this, <code>rtc-media</code> module, which is explained in <a href="/tutorial-capture-rtc-media.html">the next tutorial</a>.</p>
+
 <p>The first thing we will do is work around the browser prefixing that exists
 at the moment, you can do this manually if you prefer but in this tutorial we will make use of the <a href="/modules-rtc-core.html">rtc-core</a> helper module:</p>
 <div class="highlight"><pre><span class="c1">// include the rtc-core detection helpers to assist with finding</span>
