@@ -40,26 +40,38 @@
 mechanism for WebRTC.</p>
 <p><a href="https://nodei.co/npm/rtc-signaller/"><img src="https://nodei.co/npm/rtc-signaller.png" alt="NPM" /></a></p>
 <p><a href="https://travis-ci.org/rtc-io/rtc-signaller"><img src="https://travis-ci.org/rtc-io/rtc-signaller.png?branch=master" alt="Build Status" /></a>
-<a href="http://github.com/hughsk/stability-badges"><img src="http://hughsk.github.io/stability-badges/dist/experimental.svg" alt="experimental" /></a></p>
+<a href="http://github.com/hughsk/stability-badges"><img src="http://hughsk.github.io/stability-badges/dist/unstable.svg" alt="unstable" /></a></p>
 <h2>Purpose</h2>
 <p>The signaller provides set of client-side tools that assist with the
-setting up <code>RTCPeerConnections</code> and helping them communicate. All that is
+setting up an <code>PeerConnection</code> and helping them communicate. All that is
 required for the signaller to operate is a suitable messenger.</p>
 <p>A messenger is a simple object that implements node
 <a href="http://nodejs.org/api/events.html">EventEmitter</a> style <code>on</code> events for
-<code>open</code>, <code>close</code>, <code>message</code> events, and also a <code>send</code> method by which 
+<code>open</code>, <code>close</code>, <code>message</code> events, and also a <code>send</code> method by which
 data will be send &quot;over-the-wire&quot;.</p>
-<p>By using this approach, we can conduct signalling over any number of 
+<p>By using this approach, we can conduct signalling over any number of
 mechanisms:</p>
 <ul>
 <li>local, in memory message passing</li>
-<li>via WebSockets and higher level abstractions (such as 
-<a href="http://socket.io">socket.io</a> and friends)</li>
+<li>via WebSockets and higher level abstractions (such as
+<a href="https://github.com/primus/primus">primus</a>)</li>
 <li>also over WebRTC data-channels (very meta, and admittedly a little
 complicated).</li>
 </ul>
 <h2>Getting Started</h2>
-<p>To be completed.</p>
+<p>To work with the signaller, you first need a messenger of some kind. If you
+have run up a version of the
+<a href="https://github.com/rtc-io/rtc-switchboard">rtc-switchboard</a> somewhere then
+the following example should work:</p>
+<div class="highlight"><pre><span class="c1">// to be completed</span>
+</pre></div>
+
+<p>While the example above demonstrates communication between two endpoints
+via websockets, it does not go into detail on setting up a WebRTC peer
+connection (as that is significantly more involved).  If you are looking for
+an easy way to do this, I&#39;d recommend checking out
+<a href="https://github.com/rtc-io/rtc-quickconnect">rtc-quickconnect</a> or
+<a href="https://github.com/rtc-io/rtc-glue">rtc-glue</a>.</p>
 <h2>Reference</h2>
 <p>The <code>rtc-signaller</code> module is designed to be used primarily in a functional
 way and when called it creates a new signaller that will enable
@@ -135,8 +147,20 @@ object data is decoded and the scope emits an <code>announce</code> message.</p>
 <pre><code>/request|{&quot;key&quot;:&quot;value&quot;,&quot;__srcid&quot;: &quot;&quot;, &quot;__reqid&quot;: &quot;&quot;}</code></pre>
 <p>A request is basically a &quot;search for a friend&quot; message.  This is where one
 peer in the mesh is searching for another peer based on particular criteria.
-In general, a request message is delivered to all peers within the mesh 
+In general, a request message is delivered to all peers within the mesh
 and then those peers that are not in a blocked state will respond.</p>
+<h2>License(s)</h2>
+<h3>Apache 2.0</h3>
+<p>Copyright 2013 National ICT Australia Limited (NICTA)</p>
+<p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at</p>
+<pre><code> http://www.apache.org/licenses/LICENSE-2.0</code></pre>
+<p>   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.</p>
 </div>
 
 <footer>
