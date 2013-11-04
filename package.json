@@ -1,6 +1,6 @@
 {
   "name": "rtc.io",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "rtc.io website",
   "main": "index.js",
   "scripts": {
