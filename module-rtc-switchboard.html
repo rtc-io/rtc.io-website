@@ -35,13 +35,13 @@
 </div>
 <div class="shadow"></div>
 </header>
-<div class="main" role="content"><h1>rtc-switchboard</h1>
+<div class="main" role="content"><h1 id="rtc-switchboard">rtc-switchboard</h1>
 <p>This is an rtc.io signaller that makes use of the excellent realtime
 abstraction library, <a href="https://github.com/primus/primus">primus</a>.</p>
 <p><a href="https://nodei.co/npm/rtc-switchboard/"><img src="https://nodei.co/npm/rtc-switchboard.png" alt="NPM" /></a></p>
 <p><a href="https://travis-ci.org/rtc-io/rtc-switchboard"><img src="https://travis-ci.org/rtc-io/rtc-switchboard.png?branch=master" alt="Build Status" /></a>
 <a href="http://github.com/hughsk/stability-badges"><img src="http://hughsk.github.io/stability-badges/dist/unstable.svg" alt="unstable" /></a></p>
-<h2>Usage: Standalone</h2>
+<h2 id="usage-standalone">Usage: Standalone</h2>
 <p>If you wish to use <code>rtc-switchboard</code> on it&#39;s own to test signalling,
 then you can simply clone this repository, install dependencies and start
 the server:</p>
@@ -52,10 +52,10 @@ node server.js</code></pre>
 <p>If you wish to run the server on a specific port, then set the <code>SERVER_PORT</code>
 environment variable prior to execution:</p>
 <pre><code>SERVER_PORT=8997 node server.js</code></pre>
-<h2>Usage: API</h2>
+<h2 id="usage-api">Usage: API</h2>
 <p>To create an application using primus signalling, see the following
 examples:</p>
-<h3>Pure Node HTTP</h3>
+<h3 id="pure-node-http">Pure Node HTTP</h3>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">).</span><span class="nx">createServer</span><span class="p">();</span>
 <span class="kd">var</span> <span class="nx">switchboard</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./&#39;</span><span class="p">)(</span><span class="nx">server</span><span class="p">,</span> <span class="p">{</span> <span class="nx">servelib</span><span class="o">:</span> <span class="kc">true</span> <span class="p">});</span>
 <span class="kd">var</span> <span class="nx">port</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_PORT</span> <span class="o">||</span> <span class="nx">process</span><span class="p">.</span><span class="nx">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">10</span><span class="p">)</span> <span class="o">||</span> <span class="mi">3000</span><span class="p">;</span>
@@ -70,7 +70,7 @@ examples:</p>
 <span class="p">});</span>
 </pre></div>
 
-<h3>Using Express</h3>
+<h3 id="using-express">Using Express</h3>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
 <span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">).</span><span class="nx">Server</span><span class="p">(</span><span class="nx">app</span><span class="p">);</span>
@@ -91,7 +91,7 @@ examples:</p>
 <span class="p">});</span>
 </pre></div>
 
-<h2>Including the Primus Client</h2>
+<h2 id="including-the-primus-client">Including the Primus Client</h2>
 <p>The <code>rtc-switchboard</code> makes use of the slick WebSockets abstraction library
 <a href="https://github.com/primus/primus">Primus</a>. To work with the server, you
 will need to include the <code>primus.js</code> library in your application prior to
@@ -105,7 +105,7 @@ tag will likely do the job:</p>
 working with particular rtc.io library (such as
 <a href="https://github.com/rtc-io/rtc-glue">rtc-glue</a>), as they will ensure the
 primus library has been included prior to running their internal code.</p>
-<h2>Writing Custom Command Handlers</h2>
+<h2 id="writing-custom-command-handlers">Writing Custom Command Handlers</h2>
 <p>When you initialize the switchboard, you are able to provide custom handlers
 for specific commands that you want handled by the switchboard. Imagine
 for instance, that we want our switchboard to do something clever when a
@@ -132,48 +132,48 @@ client sends an <code>/img</code> command.</p>
 <span class="p">};</span>
 </pre></div>
 
-<h2>Reference</h2>
-<h3>switchboard(server, opts?)</h3>
+<h2 id="reference">Reference</h2>
+<h3 id="switchboard-server-opts-">switchboard(server, opts?)</h3>
 <p>Create the switchboard which uses primus under the hood. By default calling
 this function will create a new <code>Primus</code> instance and use the
 pure <a href="https://github.com/primus/primus#websockets">websockets adapter</a>.</p>
-<h3>ConnectionManager(primus, opts)</h3>
+<h3 id="connectionmanager-primus-opts-">ConnectionManager(primus, opts)</h3>
 <p>The <code>ConnectionManager</code> is used to route messages from one peer to another.
 When a peer announces itself to the signalling server, if it has specified
 a room, then general messages will only be routed to other peers in the
 same room.</p>
 <p>An exeption to this case is <code>/to</code> messages which are routed directly to
 the specified peer.</p>
-<h4>connect(spark)</h4>
+<h4 id="connect-spark-">connect(spark)</h4>
 <p>Return a <a href="https://github.com/dominictarr/through">through</a> stream for the
 spark that we can pipe the incoming data from the spark into to be handled
 correctly.</p>
-<h4>createSocket(url)</h4>
+<h4 id="createsocket-url-">createSocket(url)</h4>
 <p>Create a websocket client connection the underlying primus server.</p>
-<h4>joinRoom(name, spark)</h4>
+<h4 id="joinroom-name-spark-">joinRoom(name, spark)</h4>
 <p>Join the room specified by <code>name</code>.</p>
-<h4>library(req, res)</h4>
+<h4 id="library-req-res-">library(req, res)</h4>
 <p>Write the library to the response</p>
-<h4>_cleanupPeer(data)</h4>
+<h4 id="_cleanuppeer-data-">_cleanupPeer(data)</h4>
 <p>Cleanup a peer when we receive a leave notification.</p>
-<h3>Room(name)</h3>
+<h3 id="room-name-">Room(name)</h3>
 <p>This is a simple helper class for encapsulating room details.</p>
-<h4>leave(spark)</h4>
+<h4 id="leave-spark-">leave(spark)</h4>
 <p>Remove the specified spark from the room</p>
-<h4>write(message, source)</h4>
+<h4 id="write-message-source-">write(message, source)</h4>
 <p>Write <code>message</code> to all the sparks in the room, with the exception of the
 <code>source</code> spark.</p>
-<h2>Custom Message Handlers</h2>
+<h2 id="custom-message-handlers">Custom Message Handlers</h2>
 <p>The socket server is configured to handle some specific rtc.io signaller
 messages.  The handlers are stored in the <code>handlers/</code> folder of the
 repository and have details outlined below.</p>
-<h3>announce handler</h3>
+<h3 id="announce-handler">announce handler</h3>
 <p>Will handle <code>/announce</code> messages and associate the peer id assigned by
 the client-side signaller with the socket on the server side.</p>
 <p>This will allow routing of messages to the correct receipient when
 <code>/to</code> messages are received.</p>
-<h2>License(s)</h2>
-<h3>Apache 2.0</h3>
+<h2 id="license-s-">License(s)</h2>
+<h3 id="apache-2-0">Apache 2.0</h3>
 <p>Copyright 2013 National ICT Australia Limited (NICTA)</p>
 <p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
    you may not use this file except in compliance with the License.

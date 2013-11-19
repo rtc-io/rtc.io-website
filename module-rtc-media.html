@@ -35,14 +35,14 @@
 </div>
 <div class="shadow"></div>
 </header>
-<div class="main" role="content"><h1>rtc-media</h1>
+<div class="main" role="content"><h1 id="rtc-media">rtc-media</h1>
 <p>Simple <a href="http://dev.w3.org/2011/webrtc/editor/getusermedia.html">getUserMedia</a>
 cross-browser wrappers.  Part of the <a href="http://rtc.io/">rtc.io</a> suite, which is
 sponsored by <a href="http://opennicta.com">NICTA</a> and released under an
 <a href="/LICENSE">Apache 2.0 license</a>.</p>
 <p><a href="https://nodei.co/npm/rtc-media/"><img src="https://nodei.co/npm/rtc-media.png" alt="NPM" /></a></p>
 <p><a href="http://github.com/hughsk/stability-badges"><img src="http://hughsk.github.io/stability-badges/dist/unstable.svg" alt="unstable" /></a></p>
-<h2>Example Usage</h2>
+<h2 id="example-usage">Example Usage</h2>
 <p>Capturing media on your machine is as simple as:</p>
 <div class="highlight"><pre><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">)();</span>
 </pre></div>
@@ -64,10 +64,10 @@ code out to the following to aid our understanding of what is going on:</p>
 <p>The code above is written in a more traditional JS style, but feel free
 to use the first style as it&#39;s quite safe (thanks to some checks in the
 code).</p>
-<h3>Events</h3>
+<h3 id="events">Events</h3>
 <p>Once a media object has been created, it will provide a number of events
 through the standard node EventEmitter API.</p>
-<h4><code>capture</code></h4>
+<h4 id="-capture-"><code>capture</code></h4>
 <p>The <code>capture</code> event is triggered once the requested media stream has
 been captured by the browser.</p>
 <div class="highlight"><pre><span class="nx">media</span><span class="p">().</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;capture&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
@@ -75,7 +75,7 @@ been captured by the browser.</p>
 <span class="p">});</span>
 </pre></div>
 
-<h4><code>render</code></h4>
+<h4 id="-render-"><code>render</code></h4>
 <p>The <code>render</code> event is triggered once the stream has been rendered
 to the any supplied (or created) video elements.</p>
 <p>While it might seem a little confusing that when the <code>render</code> event
@@ -85,8 +85,8 @@ fires that it returns an array of elements rather than a single element
 media stream to multiple media elements on a page.  The <code>render</code> event
 is reporting once the render operation has completed for all targets that
 have been registered with the capture stream.</p>
-<h2>Reference</h2>
-<h3>media</h3>
+<h2 id="reference">Reference</h2>
+<h3 id="media">media</h3>
 <pre><code>media(opts?)</code></pre>
 <p>Capture media using the underlying
 <a href="http://www.w3.org/TR/mediacapture-streams/">getUserMedia</a> API.</p>
@@ -122,12 +122,12 @@ fairly standard defaults:</p>
 
 </li>
 </ul>
-<h3>capture</h3>
+<h3 id="capture">capture</h3>
 <pre><code>capture(constraints, callback)</code></pre>
 <p>Capture media.  If constraints are provided, then they will
 override the default constraints that were used when the media object was
 created.</p>
-<h3>render</h3>
+<h3 id="render">render</h3>
 <div class="highlight"><pre><span class="nx">render</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">opts</span><span class="o">?</span><span class="p">,</span> <span class="nx">callback</span><span class="o">?</span><span class="p">)</span>
 </pre></div>
 
@@ -154,37 +154,37 @@ the stream:</p>
 <span class="p">});</span>
 </pre></div>
 
-<h3>stop()</h3>
+<h3 id="stop-">stop()</h3>
 <p>Stop the media stream</p>
-<h2>Debugging Tips</h2>
+<h2 id="debugging-tips">Debugging Tips</h2>
 <p>Chrome and Chromium can both be started with the following flag:</p>
 <pre><code>--use-fake-device-for-media-stream</code></pre>
 <p>This uses a fake stream for the getUserMedia() call rather than attempting
 to capture the actual camera.  This is useful when doing automated testing
 and also if you want to test connectivity between two browser instances and
 want to distinguish between the two local videos.</p>
-<h2>Internal Methods</h2>
+<h2 id="internal-methods">Internal Methods</h2>
 <p>There are a number of internal methods that are used in the <code>rtc-media</code>
 implementation. These are outlined below, but not expected to be of
 general use.</p>
-<h3>_prepareElement(opts, element)</h3>
+<h3 id="_prepareelement-opts-element-">_prepareElement(opts, element)</h3>
 <p>The prepareElement function is used to prepare DOM elements that will
 receive the media streams once the stream have been successfully captured.</p>
-<h3>_bindStream(stream)</h3>
+<h3 id="_bindstream-stream-">_bindStream(stream)</h3>
 <p>Bind a stream to previously prepared DOM elements.</p>
-<h3>_unbind()</h3>
+<h3 id="_unbind-">_unbind()</h3>
 <p>Gracefully detach elements that are using the stream from the
 current stream.</p>
-<h3>_createObjectUrl(stream)</h3>
+<h3 id="_createobjecturl-stream-">_createObjectUrl(stream)</h3>
 <p>This method is used to create an object url that can be attached to a video
 or audio element.  Object urls are cached to ensure only one is created
 per stream.</p>
-<h3>_handleSuccess(stream)</h3>
+<h3 id="_handlesuccess-stream-">_handleSuccess(stream)</h3>
 <p>Handle the success condition of a <code>getUserMedia</code> call.</p>
-<h3>_handleFail(evt)</h3>
+<h3 id="_handlefail-evt-">_handleFail(evt)</h3>
 <p>Handle the failure condition of a <code>getUserMedia</code> call.</p>
-<h2>License(s)</h2>
-<h3>Apache 2.0</h3>
+<h2 id="license-s-">License(s)</h2>
+<h3 id="apache-2-0">Apache 2.0</h3>
 <p>Copyright 2013 National ICT Australia Limited (NICTA)</p>
 <p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
    you may not use this file except in compliance with the License.

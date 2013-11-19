@@ -35,19 +35,21 @@
 </div>
 <div class="shadow"></div>
 </header>
-<div class="main" role="content"><h1>rtc-audio</h1>
+<div class="main" role="content"><h1 id="rtc-audio">rtc-audio</h1>
 <p>This is a small helper module that allows you to render a canvas
 to visualize audio from an audio or video element, or a getUserMedia
 stream. It uses the Web Audio API. This can be useful to display
 audio visually, or to track down when a video or audio element does
 not behave as you expect.</p>
-<p>BROWSER SUPPORT:
-<em> Chrome is the only browser that has support for Web Audio &amp; WebRTC
-</em> works in Chrome for getUserMedia(), Audio(), audio and video elements
-* broken in Chrome for PeerConnection, see <a href="https://code.google.com/p/chromium/issues/detail?id=121673">https://code.google.com/p/chromium/issues/detail?id=121673</a></p>
+<p>BROWSER SUPPORT:</p>
+<ul>
+<li>Chrome is the only browser that has support for Web Audio &amp; WebRTC</li>
+<li>works in Chrome for getUserMedia(), Audio(), audio and video elements</li>
+<li>broken in Chrome for PeerConnection, see <a href="https://code.google.com/p/chromium/issues/detail?id=121673">https://code.google.com/p/chromium/issues/detail?id=121673</a></li>
+</ul>
 <p><a href="https://nodei.co/npm/rtc-audio/"><img src="https://nodei.co/npm/rtc-audio.png" alt="NPM" /></a></p>
 <p><a href="http://github.com/hughsk/stability-badges"><img src="http://hughsk.github.io/stability-badges/dist/unstable.svg" alt="unstable" /></a></p>
-<h2>Usage with WebRTC</h2>
+<h2 id="usage-with-webrtc">Usage with WebRTC</h2>
 <p>This was primarily written to work with the
 <a href="https://github.com/rtc-io/rtc-media">rtc-media</a> library so here&#39;s an
 example of how it works there:</p>
@@ -61,7 +63,7 @@ example of how it works there:</p>
 <span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">waveform</span><span class="p">(</span><span class="nx">videoElement</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;stream&quot;</span> <span class="o">:</span> <span class="nx">localvideo</span><span class="p">});</span>
 </pre></div>
 
-<h2>Usage with Audio interface</h2>
+<h2 id="usage-with-audio-interface">Usage with Audio interface</h2>
 <p>This example shows how to pipe an audio file into the waveform display.
 The canvas will be added to the body element unless you provide a different
 element to attach it to.</p>
@@ -74,7 +76,7 @@ element to attach it to.</p>
 <span class="nx">audio</span><span class="p">.</span><span class="nx">play</span><span class="p">();</span>
 </pre></div>
 
-<h2>Usage with a media element</h2>
+<h2 id="usage-with-a-media-element">Usage with a media element</h2>
 <p>This example shows how to create a waveform display for a video element.
 It also shows how to attach the waveform to a separate element.</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">waveform</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-audio&#39;</span><span class="p">);</span>
@@ -95,7 +97,7 @@ It also shows how to attach the waveform to a separate element.</p>
 <span class="nx">video</span><span class="p">.</span><span class="nx">play</span><span class="p">();</span>
 </pre></div>
 
-<h2>Parameters for waveform</h2>
+<h2 id="parameters-for-waveform">Parameters for waveform</h2>
 <ul>
 <li>target : media element or Audio instance </li>
 <li>opts:<ul>
@@ -107,11 +109,11 @@ It also shows how to attach the waveform to a separate element.</p>
 </ul>
 </li>
 </ul>
-<h2>Running the examples</h2>
+<h2 id="running-the-examples">Running the examples</h2>
 <p>You can use <a href="http://didact.us/beefy/">beefy</a> to run the examples, e.g.</p>
 <p>$ beefy examples/rtc-media.js</p>
-<h2>License(s)</h2>
-<h3>Apache 2.0</h3>
+<h2 id="license-s-">License(s)</h2>
+<h3 id="apache-2-0">Apache 2.0</h3>
 <p>Copyright 2013 National ICT Australia Limited (NICTA)</p>
 <p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
    you may not use this file except in compliance with the License.

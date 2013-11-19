@@ -35,11 +35,11 @@
 </div>
 <div class="shadow"></div>
 </header>
-<div class="main" role="content"><h1>Establishing an RTCPeerConnection</h1>
+<div class="main" role="content"><h1 id="establishing-an-rtcpeerconnection">Establishing an RTCPeerConnection</h1>
 <p>There are a number of steps involved with establishing a successful <code>RTCPeerConnection</code> between two hosts on different networks.  In many of the WebRTC demos around the place, this is done quite transparently but we think it&#39;s worth taking you through the overall process so you are well armed for diagnosing connectivity problems.</p>
 <p><strong>NOTE:</strong> This demo uses <code>rtc.io</code> specific libraries as opposed to a general implementation.  See the other articles at the end of this tutorial for alternative resources using different approaches.</p>
 <p>Essentially there are three phases when connecting two peers:</p>
-<h2>Peer Discovery</h2>
+<h2 id="peer-discovery">Peer Discovery</h2>
 <p>The first step in having two (or more) peers connect with one another is the discovery phase.  In simple cases, this is done in the rtc.io stack using a <a href="module-rtc-signaller.html">signaller</a>:</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">rtc</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc&#39;</span><span class="p">);</span>
 
@@ -63,7 +63,7 @@
 <p>Here is what <a href="https://socket.io">socket.io</a> broadcast for us on the connected socket in response to the code above:</p>
 <pre><code>3:::/announce|{&quot;id&quot;:&quot;27b340b8-8472-4b38-ab3e-7d2fe56716a6&quot;,&quot;name&quot;:&quot;Bob&quot;}</code></pre>
 <p>Here we can see that we have issued an <code>/announce</code> command with a JSON payload containing the data about our client.  Depending on the server implementation, this message will then be passed onto other clients on the same broadcast channel.</p>
-<h2>Peer Handshaking</h2>
+<h2 id="peer-handshaking">Peer Handshaking</h2>
 <p>Handshaking with another peer is done in the <code>rtc.io</code> suite using a <code>/request</code> command that is issued by the signaller.  Additionally, some higher level functions have been provided to make the job of &quot;coupling&quot; one <code>RTCPeerConnection</code> to another via a signalling channel simple.</p>
 <p>Consider the following example, where we are attempting to get in touch with a client that has the name of &quot;Sue&quot;:</p>
 <div class="highlight"><pre><span class="c1">// create a new peer connection (with default constraints)</span>
@@ -79,9 +79,9 @@
 <p>If one of the connected clients acknowledges this request (the behaviour is automatic within the signaller, i.e. no additional code is required) then the internal <code>rtc</code> module code will continue with joining our local peer connection with the remote, discovered connection.</p>
 <p><strong>NOTE:</strong> At the present point in time this method does not return &quot;failure&quot; (or we couldn&#39;t find your requested peer) states.  As such is currently advised that the <code>rtc.couple</code> function only be used after the local signaller has &quot;announced&quot; the remote connection.  This is on the <a href="https://github.com/rtc-io/rtc/issues/2">todo</a> list.</p>
 <p>In the instance that Sue is online and connected to the broadcast channel, then we will be able to track the progress of the network negotiation and signalling state using the returned <code>coupling</code> (which is a node-style <a href="http://nodejs.org/api/events.html#events_class_events_eventemitter">EventEmitter</a>)</p>
-<h2>Signalling (via SDP)</h2>
+<h2 id="signalling-via-sdp-">Signalling (via SDP)</h2>
 <p>To be completed.</p>
-<h2>Network Negotiation (using ICE)</h2>
+<h2 id="network-negotiation-using-ice-">Network Negotiation (using ICE)</h2>
 <p>To be completed.</p>
 <p><a class="sample" data-sample="connect" href="#">Run Sample</a></p>
 </div>

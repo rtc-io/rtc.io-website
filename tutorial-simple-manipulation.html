@@ -35,7 +35,7 @@
 </div>
 <div class="shadow"></div>
 </header>
-<div class="main" role="content"><h1>Processing Video Streams</h1>
+<div class="main" role="content"><h1 id="processing-video-streams">Processing Video Streams</h1>
 <p>One of the really &quot;fun&quot; things that you can do with WebRTC and media capture in general, is to do some post-processing on the captured video. This is a reasonably simple process whereby, you draw the video frames to a <code>&lt;canvas&gt;</code> element and then get the pixel data, manipulate the data and then push it back to the canvas.</p>
 <p>As with other parts of the rtc.io suite, we&#39;ve tried to make this as simple as possible, and much of the magic is achieved by using the <a href="module-rtc-canvas.html">rtc-canvas</a> helper module.</p>
 <p>The <code>rtc-canvas</code> module allows you to render a captured <code>rtc-media</code> stream to a virtual <code>&lt;video&gt;</code> element which redraws it&#39;s content on a canvas.  This virtual video element also has a processing pipeline that you can add manipulation methods to using the <code>.pipeline.add(handler)</code> method.</p>
@@ -74,7 +74,7 @@
 <p>This code takes the image data that has already been extracted via the canvas 2d context <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#dom-context-2d-getimagedata">getImageData</a> method and applies some processing to it (in this case a simple grayscale filter).</p>
 <p>By returning true at the end of the function, we are flagging to the <code>rtc-canvas</code> module that modifications have been made to the reference pixel data and that a <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#dom-context-2d-putimagedata">putImageData</a> call should be made to replace the contents of the canvas.</p>
 <p><a class="sample" data-sample="simple-manipulation" href="#">Run Sample</a></p>
-<h2>Adjusting the Capture Rate</h2>
+<h2 id="adjusting-the-capture-rate">Adjusting the Capture Rate</h2>
 <p>By default, the canvas is set to capture at 25 fps, but this can be adjusted if you feel like giving your CPU a bit of a rest:</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc/media&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-canvas&#39;</span><span class="p">);</span>

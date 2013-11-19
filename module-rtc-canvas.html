@@ -35,14 +35,14 @@
 </div>
 <div class="shadow"></div>
 </header>
-<div class="main" role="content"><h1>rtc-canvas</h1>
+<div class="main" role="content"><h1 id="rtc-canvas">rtc-canvas</h1>
 <p>This is a small helper module that allows you to substitute a video
 element with a canvas element.  This can be useful when you want to 
 do pixel manipulation of the rendered images, or in situations when 
 a video element does not behave as you expect.</p>
 <p><a href="https://nodei.co/npm/rtc-canvas/"><img src="https://nodei.co/npm/rtc-canvas.png" alt="NPM" /></a></p>
 <p><a href="http://github.com/hughsk/stability-badges"><img src="http://hughsk.github.io/stability-badges/dist/unstable.svg" alt="unstable" /></a></p>
-<h2>Example Usage</h2>
+<h2 id="example-usage">Example Usage</h2>
 <p>This was primarily written to work with the
 <a href="https://github.com/rtc-io/rtc-media">rtc-media</a> library so here&#39;s an
 example of how it works there:</p>
@@ -56,7 +56,7 @@ example of how it works there:</p>
 the specified target container.  In this case, however, <code>rtc-canvas</code>
 intercepts the request and creates it&#39;s own fake video element that is
 passed back to the render call.</p>
-<h2>Using the Processing Pipeline</h2>
+<h2 id="using-the-processing-pipeline">Using the Processing Pipeline</h2>
 <p>A processing pipeline has been included to assist with
 manipulating the canvas on the fly. Adding a processor to the pipeline is
 simply a matter of adding a pipeline processor available on the returned
@@ -115,18 +115,18 @@ fake video:</p>
 <span class="nx">vid</span><span class="p">.</span><span class="nx">pipeline</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">handleDraw</span><span class="p">);</span>
 </pre></div>
 
-<h2>A Note with Regards to CPU Usage</h2>
+<h2 id="a-note-with-regards-to-cpu-usage">A Note with Regards to CPU Usage</h2>
 <p>By default rtc-canvas will draw at 25fps but this can be modified to capture
 at a lower frame rate for slower devices, or increased if you have a
 machine with plenty of grunt.</p>
-<h2>Reference</h2>
-<h3>canvas(target, opts)</h3>
+<h2 id="reference">Reference</h2>
+<h3 id="canvas-target-opts-">canvas(target, opts)</h3>
 <p>Create a fake video element for the specified target element.</p>
 <ul>
 <li><code>fps</code> - the redraw rate of the fake video (default = 25)</li>
 </ul>
-<h2>License(s)</h2>
-<h3>Apache 2.0</h3>
+<h2 id="license-s-">License(s)</h2>
+<h3 id="apache-2-0">Apache 2.0</h3>
 <p>Copyright 2013 National ICT Australia Limited (NICTA)</p>
 <p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
    you may not use this file except in compliance with the License.

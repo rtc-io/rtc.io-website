@@ -35,13 +35,14 @@
 </div>
 <div class="shadow"></div>
 </header>
-<div class="main" role="content"><h1>rtc-signaller</h1>
+<div class="main" role="content"><h1 id="rtc-signaller">rtc-signaller</h1>
 <p>The <code>rtc-signaller</code> module provides a transportless signalling
 mechanism for WebRTC.</p>
 <p><a href="https://nodei.co/npm/rtc-signaller/"><img src="https://nodei.co/npm/rtc-signaller.png" alt="NPM" /></a></p>
-<p><a href="https://travis-ci.org/rtc-io/rtc-signaller"><img src="https://travis-ci.org/rtc-io/rtc-signaller.png?branch=master" alt="Build Status" /></a>
-<a href="http://github.com/hughsk/stability-badges"><img src="http://hughsk.github.io/stability-badges/dist/unstable.svg" alt="unstable" /></a></p>
-<h2>Purpose</h2>
+<p><a href="https://travis-ci.org/rtc-io/rtc-signaller"><img src="https://travis-ci.org/rtc-io/rtc-signaller.png?branch=master" alt="Build Status" /></a></p>
+<p><a href="https://ci.testling.com/rtc-io/rtc-signaller"><img src="https://ci.testling.com/rtc-io/rtc-signaller.png" alt="browser support" /></a></p>
+<p><a href="http://github.com/hughsk/stability-badges"><img src="http://hughsk.github.io/stability-badges/dist/unstable.svg" alt="unstable" /></a></p>
+<h2 id="purpose">Purpose</h2>
 <p>The signaller provides set of client-side tools that assist with the
 setting up an <code>PeerConnection</code> and helping them communicate. All that is
 required for the signaller to operate is a suitable messenger.</p>
@@ -58,7 +59,7 @@ mechanisms:</p>
 <li>also over WebRTC data-channels (very meta, and admittedly a little
 complicated).</li>
 </ul>
-<h2>Getting Started</h2>
+<h2 id="getting-started">Getting Started</h2>
 <p>To work with the signaller, you first need a messenger of some kind. If you
 have run up a version of the
 <a href="https://github.com/rtc-io/rtc-switchboard">rtc-switchboard</a> somewhere then
@@ -72,7 +73,7 @@ connection (as that is significantly more involved).  If you are looking for
 an easy way to do this, I&#39;d recommend checking out
 <a href="https://github.com/rtc-io/rtc-quickconnect">rtc-quickconnect</a> or
 <a href="https://github.com/rtc-io/rtc-glue">rtc-glue</a>.</p>
-<h2>Reference</h2>
+<h2 id="reference">Reference</h2>
 <p>The <code>rtc-signaller</code> module is designed to be used primarily in a functional
 way and when called it creates a new signaller that will enable
 you to communicate with other peers via your messaging network.</p>
@@ -80,9 +81,9 @@ you to communicate with other peers via your messaging network.</p>
 <span class="kd">var</span> <span class="nx">signaller</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-signaller&#39;</span><span class="p">)(</span><span class="nx">messenger</span><span class="p">);</span>
 </pre></div>
 
-<h3>signaller#send(data)</h3>
+<h3 id="signaller-send-data-">signaller#send(data)</h3>
 <p>Send data over the messenging interface.</p>
-<h3>signaller#announce(data?)</h3>
+<h3 id="signaller-announce-data-">signaller#announce(data?)</h3>
 <p>The <code>announce</code> function of the signaller will pass an <code>/announce</code> message
 through the messenger network.  When no additional data is supplied to
 this function then only the id of the signaller is sent to all active
@@ -98,15 +99,15 @@ some additional information during this announce call:</p>
 additional data during the announce phase.  For instance, socket.io
 connections are generally organised into rooms which is inferred
 information that limits the messaging scope.</p>
-<h3>signaller#block()</h3>
+<h3 id="signaller-block-">signaller#block()</h3>
 <p>Prevent the signaller from responding to requests until the block
 is cleared with a clearBlock call.</p>
-<h3>signaller#clearBlock(id)</h3>
+<h3 id="signaller-clearblock-id-">signaller#clearBlock(id)</h3>
 <p>Clear the specified block id.  Think <code>clearTimeout</code> but for signalling
 blocks</p>
-<h3>signaller#leave()</h3>
+<h3 id="signaller-leave-">signaller#leave()</h3>
 <p>Leave the messenger mesh</p>
-<h3>signaller#request(data)</h3>
+<h3 id="signaller-request-data-">signaller#request(data)</h3>
 <p>The <code>signaller.request</code> call is where one peer goes looking for a target
 peer that satisfies specific search parameters.  This may be a search
 for a peer with a particular id, or something more general such as
@@ -118,9 +119,10 @@ particular peer.</p>
 mesh level if required. Signallers will not attempt to parse a message
 destined for another signaller, but they are visible by default.  This
 can easily be handled however, by filtering <code>/to</code> messages.</p>
-<h3>signaller#to(targetId)</h3>
+<h3 id="signaller-to-targetid-">signaller#to(targetId)</h3>
 <p>The to method returns an encapsulated</p>
-<h2>signaller process handling</h2>
+<h3 id="signaller-loadprimus-signalhost-callback-">signaller.loadPrimus(signalhost, callback)</h3>
+<h2 id="signaller-process-handling">signaller process handling</h2>
 <p>When a signaller&#39;s underling messenger emits a <code>data</code> event this is
 delegated to a simple message parser, which applies the following simple
 logic:</p>
@@ -138,19 +140,19 @@ to it.</p>
 If so, then pass the entire message contents onto the registered handler.</p>
 </li>
 </ul>
-<h2>signaller message handlers</h2>
-<h3>announce</h3>
+<h2 id="signaller-message-handlers">signaller message handlers</h2>
+<h3 id="announce">announce</h3>
 <pre><code>/announce|{}</code></pre>
 <p>When an announce message is received by the socket scope, the attached
 object data is decoded and the scope emits an <code>announce</code> message.</p>
-<h3>request</h3>
+<h3 id="request">request</h3>
 <pre><code>/request|{&quot;key&quot;:&quot;value&quot;,&quot;__srcid&quot;: &quot;&quot;, &quot;__reqid&quot;: &quot;&quot;}</code></pre>
 <p>A request is basically a &quot;search for a friend&quot; message.  This is where one
 peer in the mesh is searching for another peer based on particular criteria.
 In general, a request message is delivered to all peers within the mesh
 and then those peers that are not in a blocked state will respond.</p>
-<h2>License(s)</h2>
-<h3>Apache 2.0</h3>
+<h2 id="license-s-">License(s)</h2>
+<h3 id="apache-2-0">Apache 2.0</h3>
 <p>Copyright 2013 National ICT Australia Limited (NICTA)</p>
 <p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
    you may not use this file except in compliance with the License.

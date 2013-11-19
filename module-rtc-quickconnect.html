@@ -35,7 +35,7 @@
 </div>
 <div class="shadow"></div>
 </header>
-<div class="main" role="content"><h1>rtc-quickconnect</h1>
+<div class="main" role="content"><h1 id="rtc-quickconnect">rtc-quickconnect</h1>
 <p>This is a very high level helper library designed to help you get up
 an running with WebRTC really, really quickly.  By using this module you
 are trading off some flexibility, so if you need a more flexible
@@ -43,26 +43,32 @@ configuration you should drill down into lower level components of the
 <a href="http://www.rtc.io">rtc.io</a> suite.</p>
 <p><a href="https://nodei.co/npm/rtc-quickconnect/"><img src="https://nodei.co/npm/rtc-quickconnect.png" alt="NPM" /></a></p>
 <p><a href="http://github.com/hughsk/stability-badges"><img src="http://hughsk.github.io/stability-badges/dist/unstable.svg" alt="unstable" /></a></p>
-<h2>Example Usage</h2>
+<h2 id="example-usage">Example Usage</h2>
 <p>In the simplest case you simply call quickconnect with a single string
 argument to establish a namespace for your demo or application.  This string
 will then be combined with randomly generated location hash that will
 determine the room for your application signalling.</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">quickconnect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-quickconnect&#39;</span><span class="p">);</span>
 
-<span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
+<span class="nx">quickconnect</span><span class="p">({</span> <span class="nx">ns</span><span class="o">:</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">signaller</span><span class="o">:</span> <span class="s1">&#39;http://sig.rtc.io:50000&#39;</span> <span class="p">})</span>
   <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">conn</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">monitor</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;got a new friend, id: &#39;</span> <span class="o">+</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">conn</span><span class="p">);</span>
   <span class="p">});</span>
 </pre></div>
 
-<h2>Example Usage (Using Data Channels)</h2>
+<h2 id="example-usage-using-data-channels-">Example Usage (Using Data Channels)</h2>
 <p>By default, the <code>RTCPeerConnection</code> created by quickconnect will not be
 &quot;data channels ready&quot;.  You can change that very simply, by flagging
 <code>data</code> as <code>true</code> during quickconnect initialization:</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">quickconnect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-quickconnect&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">opts</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">ns</span><span class="o">:</span> <span class="s1">&#39;dctest&#39;</span><span class="p">,</span>
+  <span class="nx">data</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="nx">dtls</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="nx">signaller</span><span class="o">:</span> <span class="s1">&#39;http://sig.rtc.io:50000&#39;</span>
+<span class="p">};</span>
 
-<span class="nx">quickconnect</span><span class="p">({</span> <span class="nx">ns</span><span class="o">:</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">dtls</span><span class="o">:</span> <span class="kc">true</span> <span class="p">})</span>
+<span class="nx">quickconnect</span><span class="p">(</span><span class="nx">opts</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">connection</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">monitor</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;got a new friend: &#39;</span> <span class="o">+</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">connection</span><span class="p">);</span>
   <span class="p">})</span>
@@ -76,12 +82,12 @@ determine the room for your application signalling.</p>
   <span class="p">});</span>
 </pre></div>
 
-<h2>How it works?</h2>
+<h2 id="how-it-works-">How it works?</h2>
 <p><strong>NOTE:</strong> Our public test signaller is currently unavailable, you will
 need to run up a version of <code>rtc-switchboard</code> locally for the time being.</p>
 <p>The <code>rtc-quickconnect</code> module makes use of our internal, publicly available
-signaller which uses <a href="http://socket.io/">socket.io</a> and our
-<a href="https://github.com/rtc-io/rtc-signaller-socket.io">signalling adapter</a>.</p>
+signaller which uses <a href="https://github.com/primus/primus">primus</a> and our
+<a href="https://github.com/rtc-io/rtc-switchboard">signalling adapter</a>.</p>
 <p>Our test signaller is exactly that, <strong>something we use for testing</strong>.  If
 you want to run your own signaller this is very simple and you should
 consult the <code>rtc-signaller-socket.io</code> module for information on how to
@@ -92,7 +98,7 @@ signaller option when creating:</p>
 <span class="nx">quickconnect</span><span class="p">({</span> <span class="nx">ns</span><span class="o">:</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">signaller</span><span class="o">:</span> <span class="s1">&#39;http://mysignaller.com:3000&#39;</span> <span class="p">});</span>
 </pre></div>
 
-<h2>Full Reactive Stream Conference Example</h2>
+<h2 id="full-reactive-stream-conference-example">Full Reactive Stream Conference Example</h2>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">quickconnect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-quickconnect&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">crel</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;crel&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">rtc</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc&#39;</span><span class="p">);</span>
@@ -105,18 +111,19 @@ signaller option when creating:</p>
 <span class="kd">var</span> <span class="nx">peerVideos</span> <span class="o">=</span> <span class="p">{};</span>
 
 <span class="c1">// capture local media</span>
-<span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">rtc</span><span class="p">.</span><span class="nx">media</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">localMedia</span> <span class="o">=</span> <span class="nx">media</span><span class="p">();</span>
 
 <span class="kd">function</span> <span class="nx">handleConnect</span><span class="p">(</span><span class="nx">conn</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">monitor</span><span class="p">)</span> <span class="p">{</span>
   <span class="c1">// save the peer</span>
   <span class="nx">peers</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">conn</span><span class="p">;</span>
 
   <span class="c1">// hook up our local media</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">media</span><span class="p">.</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">conn</span><span class="p">.</span><span class="nx">addStream</span><span class="p">(</span><span class="nx">media</span><span class="p">.</span><span class="nx">stream</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">localMedia</span><span class="p">.</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">conn</span><span class="p">.</span><span class="nx">addStream</span><span class="p">(</span><span class="nx">localMedia</span><span class="p">.</span><span class="nx">stream</span><span class="p">);</span>
   <span class="p">}</span>
   <span class="k">else</span> <span class="p">{</span>
-    <span class="nx">media</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;capture&#39;</span><span class="p">,</span> <span class="nx">conn</span><span class="p">.</span><span class="nx">addStream</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="nx">conn</span><span class="p">));</span>
+    <span class="nx">localMedia</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;capture&#39;</span><span class="p">,</span> <span class="nx">conn</span><span class="p">.</span><span class="nx">addStream</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="nx">conn</span><span class="p">));</span>
   <span class="p">}</span>
 
   <span class="c1">// add existing remote streams</span>
@@ -148,14 +155,14 @@ signaller option when creating:</p>
   <span class="nx">peerVideos</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">peerVideos</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span> <span class="o">||</span> <span class="p">[];</span>
 
   <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">peerVideos</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">peerVideos</span><span class="p">[</span><span class="nx">id</span><span class="p">].</span><span class="nx">concat</span><span class="p">(</span><span class="nx">rtc</span><span class="p">.</span><span class="nx">media</span><span class="p">(</span><span class="nx">stream</span><span class="p">).</span><span class="nx">render</span><span class="p">(</span><span class="nx">remote</span><span class="p">));</span>
+    <span class="nx">peerVideos</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">peerVideos</span><span class="p">[</span><span class="nx">id</span><span class="p">].</span><span class="nx">concat</span><span class="p">(</span><span class="nx">media</span><span class="p">(</span><span class="nx">stream</span><span class="p">).</span><span class="nx">render</span><span class="p">(</span><span class="nx">remote</span><span class="p">));</span>
   <span class="p">}</span>
 <span class="p">}</span>
 <span class="c1">// render to local</span>
-<span class="nx">media</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">local</span><span class="p">);</span>
+<span class="nx">localMedia</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">local</span><span class="p">);</span>
 
 <span class="c1">// handle the connection stuff</span>
-<span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
+<span class="nx">quickconnect</span><span class="p">({</span> <span class="nx">ns</span><span class="o">:</span> <span class="s1">&#39;conftest&#39;</span><span class="p">,</span> <span class="nx">signaller</span><span class="o">:</span> <span class="s1">&#39;http://sig.rtc.io:50000/&#39;</span> <span class="p">})</span>
   <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer&#39;</span><span class="p">,</span> <span class="nx">handleConnect</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;leave&#39;</span><span class="p">,</span> <span class="nx">handleLeave</span><span class="p">);</span>
 
@@ -172,8 +179,8 @@ signaller option when creating:</p>
 <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">remote</span><span class="p">);</span>
 </pre></div>
 
-<h2>License(s)</h2>
-<h3>Apache 2.0</h3>
+<h2 id="license-s-">License(s)</h2>
+<h3 id="apache-2-0">Apache 2.0</h3>
 <p>Copyright 2013 National ICT Australia Limited (NICTA)</p>
 <p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
    you may not use this file except in compliance with the License.

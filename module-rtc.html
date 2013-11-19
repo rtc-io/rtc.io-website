@@ -35,16 +35,17 @@
 </div>
 <div class="shadow"></div>
 </header>
-<div class="main" role="content"><h1>rtc</h1>
+<div class="main" role="content"><h1 id="rtc">rtc</h1>
 <p>The <code>rtc</code> package is a convenience layer for working with the rtc.io toolkit.
 Consider it a boxed set of lego of the most common pieces required to build
 the front-end component of a WebRTC application.</p>
 <p><a href="https://nodei.co/npm/rtc/"><img src="https://nodei.co/npm/rtc.png" alt="NPM" /></a></p>
 <p><a href="https://ci.testling.com/rtc-io/rtc"><img src="https://ci.testling.com/rtc-io/rtc.png" alt="browser support" /></a></p>
-<h2>Getting Started</h2>
+<p><a href="http://github.com/hughsk/stability-badges"><img src="http://hughsk.github.io/stability-badges/dist/unstable.svg" alt="unstable" /></a></p>
+<h2 id="getting-started">Getting Started</h2>
 <p>TO BE COMPLETED.</p>
-<h2>Factories</h2>
-<h3>createConnection(opts?, constraints?)</h3>
+<h2 id="factories">Factories</h2>
+<h3 id="createconnection-opts-constraints-">createConnection(opts?, constraints?)</h3>
 <p>Create a new <code>RTCPeerConnection</code> auto generating default opts as required.</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">conn</span><span class="p">;</span>
 
@@ -57,19 +58,19 @@ the front-end component of a WebRTC application.</p>
 <span class="p">});</span>
 </pre></div>
 
-<h2>rtc/couple</h2>
-<h3>couple(pc, targetAttr, signaller, opts?)</h3>
+<h2 id="rtc-couple">rtc/couple</h2>
+<h3 id="couple-pc-targetattr-signaller-opts-">couple(pc, targetAttr, signaller, opts?)</h3>
 <p>Couple a WebRTC connection with another webrtc connection via a
 signalling scope.  The <code>targetAttr</code> argument specifies the criteria that
 are passed onto a <code>/request</code> command when looking for remote peer
 to couple and exchange messages with.</p>
-<h3>Example Usage</h3>
+<h3 id="example-usage">Example Usage</h3>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">couple</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc/couple&#39;</span><span class="p">);</span>
 
 <span class="nx">couple</span><span class="p">(</span><span class="k">new</span> <span class="nx">RTCPeerConnection</span><span class="p">(),</span> <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;test&#39;</span> <span class="p">},</span> <span class="nx">signaller</span><span class="p">);</span>
 </pre></div>
 
-<h3>Using Filters</h3>
+<h3 id="using-filters">Using Filters</h3>
 <p>In certain instances you may wish to modify the raw SDP that is provided
 by the <code>createOffer</code> and <code>createAnswer</code> calls.  This can be done by passing
 a <code>sdpfilter</code> function (or array) in the options.  For example:</p>
@@ -77,35 +78,44 @@ a <code>sdpfilter</code> function (or array) in the options.  For example:</p>
 <span class="nx">couple</span><span class="p">(</span><span class="nx">pc</span><span class="p">,</span> <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;blah&#39;</span> <span class="p">},</span> <span class="nx">signaller</span><span class="p">,</span> <span class="p">{</span> <span class="nx">sdpfilter</span><span class="o">:</span> <span class="nx">tweakSdp</span> <span class="p">});</span>
 </pre></div>
 
-<h2>rtc/detect</h2>
+<h2 id="rtc-detect">rtc/detect</h2>
 <p>Provide the <a href="https://github.com/rtc-io/rtc-core#detect">rtc-core/detect</a> 
 functionality.</p>
-<h2>rtc/generators</h2>
+<h2 id="rtc-generators">rtc/generators</h2>
 <p>The generators package provides some utility methods for generating
 constraint objects and similar constructs.</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">generators</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc/generators&#39;</span><span class="p">);</span>
 </pre></div>
 
-<h3>generators.config(config)</h3>
+<h3 id="generators-config-config-">generators.config(config)</h3>
 <p>Generate a configuration object suitable for passing into an W3C 
 RTCPeerConnection constructor first argument, based on our custom config.</p>
-<h3>generators.mediaConstraints(flags, context)</h3>
+<h3 id="generators-connectionconstraints-flags-constraints-">generators.connectionConstraints(flags, constraints)</h3>
+<p>This is a helper function that will generate appropriate connection
+constraints for a new <code>RTCPeerConnection</code> object which is constructed
+in the following way:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">conn</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RTCPeerConnection</span><span class="p">(</span><span class="nx">flags</span><span class="p">,</span> <span class="nx">constraints</span><span class="p">);</span>
+</pre></div>
+
+<p>In most cases the constraints object can be left empty, but when creating
+data channels some additional options are required.  This function
+can generate those additional options and intelligently combine any
+user defined constraints (in <code>constraints</code>) with shorthand flags that
+might be passed while using the <code>rtc.createConnection</code> helper.</p>
+<h3 id="generators-mediaconstraints-flags-context-">generators.mediaConstraints(flags, context)</h3>
 <p>Generate mediaConstraints appropriate for the context in which they are 
 being called (i.e. either constructing an RTCPeerConnection object, or
 on the <code>createOffer</code> or <code>createAnswer</code> calls).</p>
-<h3>parseFlags(opts)</h3>
+<h3 id="parseflags-opts-">parseFlags(opts)</h3>
 <p>This is a helper function that will extract known flags from a generic 
 options object.</p>
-<h2>rtc/media</h2>
-<p>Provide the core <a href="https://github.com/rtc-io/rtc-media">rtc-media</a> for
-convenience.</p>
-<h2>rtc/monitor</h2>
+<h2 id="rtc-monitor">rtc/monitor</h2>
 <p>In most current implementations of <code>RTCPeerConnection</code> it is quite
 difficult to determine whether a peer connection is active and ready
 for use or not.  The monitor provides some assistance here by providing
 a simple function that provides an <code>EventEmitter</code> which gives updates
 on a connections state.</p>
-<h3>monitor(pc) -&gt; EventEmitter</h3>
+<h3 id="monitor-pc-eventemitter">monitor(pc) -&gt; EventEmitter</h3>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">monitor</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc/monitor&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">pc</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RTCPeerConnection</span><span class="p">(</span><span class="nx">config</span><span class="p">);</span>
 
@@ -126,7 +136,7 @@ an <code>RTCPeerConnection</code> object to see if the <code>active</code> state
 If so, the <code>active</code> event will be fired in the next tick.</p>
 <p>If you require a synchronous check of a connection&#39;s &quot;openness&quot; then
 use the <code>monitor.isActive</code> test outlined below.</p>
-<h3>monitor.getState(pc)</h3>
+<h3 id="monitor-getstate-pc-">monitor.getState(pc)</h3>
 <p>Provides a unified state definition for the RTCPeerConnection based
 on a few checks.</p>
 <p>In emerging versions of the spec we have various properties such as
@@ -134,19 +144,16 @@ on a few checks.</p>
 connection.  In older versions we need to look at things like
 <code>signalingState</code> and <code>iceGatheringState</code> to make an educated guess 
 as to the connection state.</p>
-<h3>monitor.isActive(pc) -&gt; Boolean</h3>
+<h3 id="monitor-isactive-pc-boolean">monitor.isActive(pc) -&gt; Boolean</h3>
 <p>Test an <code>RTCPeerConnection</code> to see if it&#39;s currently open.  The test for
 &quot;openness&quot; looks at a combination of current <code>signalingState</code> and
 <code>iceGatheringState</code>.</p>
-<h2>rtc/signaller</h2>
-<p>Provide the core <a href="https://github.com/rtc-io/rtc-signaller">rtc-signaller</a>
-for convenience.</p>
-<h2>Internal RTC Helper Libraries</h2>
+<h2 id="internal-rtc-helper-libraries">Internal RTC Helper Libraries</h2>
 <p>The RTC library uses a number of helper modules that are contained within
 the <code>lib/</code> folder of the <code>rtc-io/rtc</code> repository.  While these are designed
 primarily for internal use, they can be accessed by directly requiring
 the modules, e.g. <code>require(&#39;rtc/lib/helpermodule&#39;)</code></p>
-<h2>rtc/lib/listen</h2>
+<h2 id="rtc-lib-listen">rtc/lib/listen</h2>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">listen</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc/lib/listen&#39;</span><span class="p">);</span>
 
 <span class="c1">// listen for negotiation needed events</span>
@@ -158,6 +165,18 @@ the modules, e.g. <code>require(&#39;rtc/lib/helpermodule&#39;)</code></p>
 <p>The <code>listen</code> helper provides an event emitter for a peer connection object
 that will bind to each of the core events WebRTC events (unless overriden
 by providing the listen function additional arguments).</p>
+<h2 id="license-s-">License(s)</h2>
+<h3 id="apache-2-0">Apache 2.0</h3>
+<p>Copyright 2013 National ICT Australia Limited (NICTA)</p>
+<p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at</p>
+<pre><code> http://www.apache.org/licenses/LICENSE-2.0</code></pre>
+<p>   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.</p>
 </div>
 
 <footer>
