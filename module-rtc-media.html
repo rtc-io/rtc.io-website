@@ -49,7 +49,13 @@ sponsored by <a href="http://opennicta.com">NICTA</a> and released under an
 
 <p>While this will in fact start the user media capture process, it won&#39;t
 do anything with it.  Lets take a look at a more realistic example:</p>
-<pre><code>ERROR: could not find: js</code></pre>
+<div class="highlight"><pre><span class="c1">// require the media capture helper from rtc.io</span>
+<span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
+
+<span class="c1">// capture video and render it to the document body</span>
+<span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+</pre></div>
+
 <p><a href="http://requirebin.com/?gist=6085450">run on requirebin</a></p>
 <p>In the code above, we are creating a new instance of our userMedia wrapper
 using the <code>media()</code> call and then telling it to render to the
@@ -70,8 +76,13 @@ through the standard node EventEmitter API.</p>
 <h4 id="-capture-"><code>capture</code></h4>
 <p>The <code>capture</code> event is triggered once the requested media stream has
 been captured by the browser.</p>
-<div class="highlight"><pre><span class="nx">media</span><span class="p">().</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;capture&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">localMedia</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">)();</span>
+
+<span class="nx">localMedia</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+<span class="nx">localMedia</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;capture&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
   <span class="c1">// stream references underlying media stream that was captured</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;capture complete&#39;</span><span class="p">);</span>
 <span class="p">});</span>
 </pre></div>
 
@@ -140,17 +151,20 @@ element it will a new Media element will be created that using the target
 as it&#39;s parent.</p>
 <p>A simple example of requesting default media capture and rendering to the
 document body is shown below:</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span> <span class="c1">// or require(&#39;rtc/media&#39;)</span>
+<div class="highlight"><pre><span class="c1">// require the media capture helper from rtc.io</span>
+<span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
 
-<span class="c1">// start the stream and render to the document body once active</span>
+<span class="c1">// capture video and render it to the document body</span>
 <span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
 </pre></div>
 
 <p>You may optionally provide a callback to this function, which is
 will be triggered once each of the media elements has started playing
 the stream:</p>
-<div class="highlight"><pre><span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">elements</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;captured and playing&#39;</span><span class="p">);</span>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
+
+<span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;captured and playing to media element: &#39;</span><span class="p">,</span> <span class="nx">el</span><span class="p">);</span>
 <span class="p">});</span>
 </pre></div>
 

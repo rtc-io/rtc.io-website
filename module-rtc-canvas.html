@@ -37,8 +37,8 @@
 </header>
 <div class="main" role="content"><h1 id="rtc-canvas">rtc-canvas</h1>
 <p>This is a small helper module that allows you to substitute a video
-element with a canvas element.  This can be useful when you want to 
-do pixel manipulation of the rendered images, or in situations when 
+element with a canvas element.  This can be useful when you want to
+do pixel manipulation of the rendered images, or in situations when
 a video element does not behave as you expect.</p>
 <p><a href="https://nodei.co/npm/rtc-canvas/"><img src="https://nodei.co/npm/rtc-canvas.png" alt="NPM" /></a></p>
 <p><a href="http://github.com/hughsk/stability-badges"><img src="http://hughsk.github.io/stability-badges/dist/unstable.svg" alt="unstable" /></a></p>
@@ -89,7 +89,7 @@ fake video:</p>
   <span class="p">}</span>
 
   <span class="c1">// iterate through the data</span>
-  <span class="c1">// NOTE: decrementing loops are fast but you need to know that you will </span>
+  <span class="c1">// NOTE: decrementing loops are fast but you need to know that you will</span>
   <span class="c1">// hit 0 using this logic otherwise it will run forever (only 0 is falsy)</span>
   <span class="k">for</span> <span class="p">(</span><span class="nx">ii</span> <span class="o">=</span> <span class="nx">channels</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">ii</span> <span class="o">-=</span> <span class="mi">4</span><span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
     <span class="c1">// get the rgb tuple</span>
@@ -113,6 +113,24 @@ fake video:</p>
 
 <span class="c1">// handle draw events on the fake video</span>
 <span class="nx">vid</span><span class="p">.</span><span class="nx">pipeline</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">handleDraw</span><span class="p">);</span>
+</pre></div>
+
+<h2 id="listening-for-custom-frame-events">Listening for custom <code>frame</code> events</h2>
+<p>In addition to providing the opportunity to analyse and modify pixel data
+the <code>rtc-canvas</code> module also provides the a custom <code>frame</code> event for
+detecting when a new frame has been drawn to the canvas.</p>
+<p>A simple example can be found below:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">fakevid</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-canvas&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">fakevid</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+
+<span class="c1">// capture the media and render to the fake canvas</span>
+<span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nx">canvas</span><span class="p">);</span>
+
+<span class="c1">// listen from frames in the canvas</span>
+<span class="nx">canvas</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;frame&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">evt</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;captured frame at &#39;</span> <span class="o">+</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">detail</span><span class="p">.</span><span class="nx">tick</span><span class="p">);</span>
+<span class="p">});</span>
 </pre></div>
 
 <h2 id="a-note-with-regards-to-cpu-usage">A Note with Regards to CPU Usage</h2>
