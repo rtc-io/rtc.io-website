@@ -4,7 +4,7 @@ This is a simple tutorial that looks at how to capture media from within
 your browser using the [getUserMedia](http://www.w3.org/TR/mediacapture-streams/#dom-navigator-getusermedia) API.
 
 The first thing we will do is work around the browser prefixing that exists
-at the moment, you can do this manually if you prefer but in this tutorial we will make use of the [rtc-core](/modules-rtc-core.html) helper module:
+at the moment, you can do this manually if you prefer but in this tutorial we will make use of the [rtc-core](/module-rtc-core.html) helper module:
 
 <<< code/capture-media.js[:9]
 

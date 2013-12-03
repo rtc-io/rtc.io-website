@@ -1,4 +1,4 @@
-var media = require('rtc/media');
+var media = require('rtc-media');
 var canvas = require('rtc-canvas');
 var vid;
 

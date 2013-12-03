@@ -50,7 +50,7 @@ will then be combined with randomly generated location hash that will
 determine the room for your application signalling.</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">quickconnect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-quickconnect&#39;</span><span class="p">);</span>
 
-<span class="nx">quickconnect</span><span class="p">({</span> <span class="nx">ns</span><span class="o">:</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">signaller</span><span class="o">:</span> <span class="s1">&#39;http://sig.rtc.io:50000&#39;</span> <span class="p">})</span>
+<span class="nx">quickconnect</span><span class="p">({</span> <span class="nx">ns</span><span class="o">:</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">signalhost</span><span class="o">:</span> <span class="s1">&#39;http://sig.rtc.io:50000&#39;</span> <span class="p">})</span>
   <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">conn</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">monitor</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;got a new friend, id: &#39;</span> <span class="o">+</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">conn</span><span class="p">);</span>
   <span class="p">});</span>
@@ -64,8 +64,7 @@ determine the room for your application signalling.</p>
 <span class="kd">var</span> <span class="nx">opts</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">ns</span><span class="o">:</span> <span class="s1">&#39;dctest&#39;</span><span class="p">,</span>
   <span class="nx">data</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-  <span class="nx">dtls</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-  <span class="nx">signaller</span><span class="o">:</span> <span class="s1">&#39;http://sig.rtc.io:50000&#39;</span>
+  <span class="nx">signalhost</span><span class="o">:</span> <span class="s1">&#39;http://sig.rtc.io:50000&#39;</span>
 <span class="p">};</span>
 
 <span class="nx">quickconnect</span><span class="p">(</span><span class="nx">opts</span><span class="p">)</span>
@@ -162,7 +161,7 @@ signaller option when creating:</p>
 <span class="nx">localMedia</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">local</span><span class="p">);</span>
 
 <span class="c1">// handle the connection stuff</span>
-<span class="nx">quickconnect</span><span class="p">({</span> <span class="nx">ns</span><span class="o">:</span> <span class="s1">&#39;conftest&#39;</span><span class="p">,</span> <span class="nx">signaller</span><span class="o">:</span> <span class="s1">&#39;http://sig.rtc.io:50000/&#39;</span> <span class="p">})</span>
+<span class="nx">quickconnect</span><span class="p">({</span> <span class="nx">ns</span><span class="o">:</span> <span class="s1">&#39;conftest&#39;</span><span class="p">,</span> <span class="nx">signalhost</span><span class="o">:</span> <span class="s1">&#39;http://sig.rtc.io:50000/&#39;</span> <span class="p">})</span>
   <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer&#39;</span><span class="p">,</span> <span class="nx">handleConnect</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;leave&#39;</span><span class="p">,</span> <span class="nx">handleLeave</span><span class="p">);</span>
 
