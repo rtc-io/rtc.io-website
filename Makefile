@@ -36,9 +36,4 @@ prepare:
 	@mkdir -p build/
 	@cp src/*.md build/
 
-	@for mod in ${rtcmods}; do \
-		echo "- [$${mod}](module-$${mod}.html)" >> build/modules.md ; \
-	done
-
-
 build: prepare app static $(rtcmods) $(sourcedocs) $(tutorials) $(samples)
