@@ -35,7 +35,67 @@
 </div>
 <div class="shadow"></div>
 </header>
-<div class="main" role="content"></div>
+<div class="main" role="content"><h1 id="simple-signalling-with-socket-io-part-1-">Simple Signalling with Socket.IO (Part 1)</h1>
+<p>While not part of the WebRTC spec, signalling is a very important part of WebRTC and allows peer A and peer B to locate each other and exchange data required to successfully form a peer connection.</p>
+<p>In this tutorial we will look at how to setup and use the <a href="module-rtc-signaller-socket.io.html">rtc-signaller-socket.io</a> module to leverage <a href="http://socket.io/">Socket.IO</a> for our signalling comms.</p>
+<h2 id="creating-the-server">Creating the Server</h2>
+<p>Let&#39;s walk through the creation of the signalling server step-by-step.  First let&#39;s create a directory for your server:</p>
+<pre><code>mkdir signalling-test
+cd signalling-test</code></pre>
+<p>Now, let&#39;s initialize the project as a npm project:</p>
+<pre><code>npm init</code></pre>
+<p>If you don&#39;t have <code>node</code> and <code>npm</code> installed, then you will need to do that now.  After answering the questions during the <code>npm init</code> step (feel free to use the default answers) you will find that your directory has a shiny new <code>package.json</code> file in it.   Let&#39;s continue by importing some modules required to make the project work:</p>
+<pre><code>npm install socket.io rtc-signaller-socket.io --save</code></pre>
+<p>This will ask npm to install the latest stable versions of both <code>socket.io</code> and <code>rtc-signaller-socket.io</code> and save them in your list of project dependencies.  All being well, your <code>package.json</code> file should look something like the one shown below after the command has completed:</p>
+<div class="highlight"><pre><span class="p">{</span>
+  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;test-signaller&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;0.0.0&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;main&quot;</span><span class="p">:</span> <span class="s2">&quot;index.js&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;scripts&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;license&quot;</span><span class="p">:</span> <span class="s2">&quot;BSD-2-Clause&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;dependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;rtc-signaller-socket.io&quot;</span><span class="p">:</span> <span class="s2">&quot;~0.2.0&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;socket.io&quot;</span><span class="p">:</span> <span class="s2">&quot;~0.9.16&quot;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>OK.  It&#39;s now time to create our <code>server.js</code> file that will fire up our test signalling server.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">);</span>
+
+<span class="c1">// create the http server and implement your custom logic here</span>
+<span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span> <span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span> <span class="s1">&#39;text/plain&#39;</span> <span class="p">});</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">&#39;I am a signalling server&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// bring in socket.io and have it bind to the http server</span>
+<span class="kd">var</span> <span class="nx">io</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;socket.io&#39;</span><span class="p">).</span><span class="nx">listen</span><span class="p">(</span><span class="nx">server</span><span class="p">);</span>
+
+<span class="c1">// initialise the socket-io signaller, and add some custom handlers</span>
+<span class="kd">var</span> <span class="nx">signaller</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-signaller-socket.io&#39;</span><span class="p">)(</span><span class="nx">io</span><span class="p">);</span>
+
+<span class="c1">// when we get a new socket connection, send it to the signaller</span>
+<span class="nx">io</span><span class="p">.</span><span class="nx">sockets</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;connection&#39;</span><span class="p">,</span> <span class="nx">signaller</span><span class="p">);</span>
+
+<span class="c1">// make our server listen on the specified port (default to 3000)</span>
+<span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PORT</span> <span class="o">||</span> <span class="mi">3000</span><span class="p">);</span>
+</pre></div>
+
+<p>With this file complete, you should then be able to run <code>npm start</code> in your project directory and see output similar to the following:</p>
+<pre><code>&gt; test-signaller@0.0.0 start /home/doehlman/code/rtc.io/rtc.io/code/test-signaller
+&gt; node server.js
+
+   info  - socket.io started</code></pre>
+<p>To test if your signalling server is working, you can load up the following page on rtc.io which will attempt to connect to a signalling server running on <code>localhost</code> at port <code>3000</code>.</p>
+<p><a class="sample" data-sample="test-connection" href="#">Test Connection to your Local Signalling Server</a></p>
+<p>Otherwise, feel free to move onto the next part of the tutorial, which looks at the client aspects:</p>
+<p><a href="tutorial-simple-signalling-socket-io-part2.html">Simple Signalling with Socket.IO (Part 2)</a></p>
+</div>
 
 <footer>
   <p>

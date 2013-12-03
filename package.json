@@ -20,9 +20,9 @@
   "bugs": {
     "url": "https://github.com/rtc-io/rtc.io/issues"
   },
-  "dependencies": {
+  "devDependencies": {
     "blockdown": "~0.2.0",
-    "injectcode": "~0.2.0",
+    "injectcode": "~0.2.3",
     "cog": "~0.3.0",
     "rtc": "~0.10.3",
     "rtc-core": "~0.5.0",
@@ -31,6 +31,5 @@
     "demo-console": "~1.0.0",
     "rtc-media": "~1.4.1",
     "rtc-signaller": "~0.9.0"
-  },
-  "devDependencies": {}
+  }
 }
