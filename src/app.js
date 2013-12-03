@@ -5,7 +5,7 @@ var main = qsa('.main')[0];
 var reStatusOK = /^(2|3)\d{2}$/;
 var reStripExt = /^(.*)\.js$/;
 var baseScripts = [
-  'https://rtcjs.io/socket.io/socket.io.js'
+  'http://sig.rtc.io:50000/rtc.io/primus.js'
 ];
 
 function createCodeFrame(sample, anchor, callback) {
@@ -30,7 +30,7 @@ function createCodeFrame(sample, anchor, callback) {
   // check if we have custom html for this demo
   xhr.open('GET', 'code/' + sample + '.html');
   xhr.onload = function() {
-    // if we got it, then use that as the document 
+    // if we got it, then use that as the document
     if (this.status === 200) {
       sampleHTML = this.response;
     }
@@ -79,7 +79,7 @@ function initSample(anchor) {
         'body video { width: 100% }',
         'body canvas { width: 100% }'
       ].join('\n');
-      
+
       doc.head.appendChild(style);
 
       // load the required scripts
