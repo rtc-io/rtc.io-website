@@ -1,4 +1,4 @@
-rtcmods = rtc rtc-media rtc-quickconnect rtc-glue rtc-core rtc-signaller rtc-switchboard rtc-canvas rtc-audio rtc-captureconfig
+rtcmods = rtc rtc-media rtc-quickconnect rtc-glue rtc-core rtc-signaller rtc-switchboard rtc-audio rtc-captureconfig rtc-videoproc
 blockdown = `npm bin`/blockdown
 injectcode = `npm bin`/injectcode
 outputfiles = $(filter-out template.html,$(wildcard *.html))

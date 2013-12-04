@@ -35,21 +35,21 @@
 </div>
 <div class="shadow"></div>
 </header>
-<div class="main" role="content"><h1 id="rtc-canvas">rtc-canvas</h1>
+<div class="main" role="content"><h1 id="rtc-videoproc">rtc-videoproc</h1>
 <p>This is a small helper module that allows you to substitute a video
 element with a canvas element.  This can be useful when you want to
 do pixel manipulation of the rendered images, or in situations when
 a video element does not behave as you expect.</p>
-<p><a href="https://nodei.co/npm/rtc-canvas/"><img src="https://nodei.co/npm/rtc-canvas.png" alt="NPM" /></a></p>
+<p><a href="https://nodei.co/npm/rtc-videoproc/"><img src="https://nodei.co/npm/rtc-videoproc.png" alt="NPM" /></a></p>
 <p><a href="http://github.com/hughsk/stability-badges"><img src="http://hughsk.github.io/stability-badges/dist/unstable.svg" alt="unstable" /></a></p>
 <h2 id="example-usage">Example Usage</h2>
 <p>This was primarily written to work with the
 <a href="https://github.com/rtc-io/rtc-media">rtc-media</a> library so here&#39;s an
 example of how it works there:</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">fakevid</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-canvas&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">processor</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-videoproc&#39;</span><span class="p">);</span>
 
-<span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nx">fakevid</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">));</span>
+<span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nx">processor</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">));</span>
 </pre></div>
 
 <p>Normally, the <code>media().render</code> call will create a <code>&lt;video&gt;</code> element in
@@ -73,7 +73,7 @@ fake video:</p>
 
 <p>A more complete example is shown below:</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">fakevideo</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-canvas&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">processor</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-videoproc&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">vid</span><span class="p">;</span>
 
 <span class="kd">function</span> <span class="nx">handleDraw</span><span class="p">(</span><span class="nx">imageData</span><span class="p">)</span> <span class="p">{</span>
@@ -109,7 +109,7 @@ fake video:</p>
 <span class="p">}</span>
 
 <span class="c1">// capture media</span>
-<span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nx">vid</span> <span class="o">=</span> <span class="nx">fakevideo</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">));</span>
+<span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nx">vid</span> <span class="o">=</span> <span class="nx">processor</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">));</span>
 
 <span class="c1">// handle draw events on the fake video</span>
 <span class="nx">vid</span><span class="p">.</span><span class="nx">pipeline</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">handleDraw</span><span class="p">);</span>
@@ -121,8 +121,8 @@ the <code>rtc-canvas</code> module also provides the a custom <code>frame</code>
 detecting when a new frame has been drawn to the canvas.</p>
 <p>A simple example can be found below:</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">fakevid</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-canvas&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">fakevid</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">processor</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-videoproc&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">processor</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
 
 <span class="c1">// capture the media and render to the fake canvas</span>
 <span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nx">canvas</span><span class="p">);</span>

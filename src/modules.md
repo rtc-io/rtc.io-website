@@ -42,6 +42,14 @@ The switchboard can either be incorporated into your node server application cod
 
 ## Utility Modules
 
-### [rtc-captureconfig](/module-captureconfig.html)
+### [rtc-captureconfig](/module-rtc-captureconfig.html)
 
 The `rtc-captureconfig` module is used in `rtc-glue` to convert simple string based attributes to valid WebRTC constraints that can be used in for media capture.
+
+## Processing Modules
+
+Once you are capturing realtime video and audio in the browser, there is a lot that can be done in terms of video and audio analysis. Listed below are modules that assist doing exactly that:
+
+### [rtc-videoproc](/module-rtc-videoproc.html)
+
+The video processing module allows you to replace a standard video element with a simulated video element using a HTML5 canvas.  This custom canvas provides a video processing pipeline that permits analysis and optional modification of the pixel data that is being drawn to the canvas.

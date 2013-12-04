@@ -72,6 +72,30 @@ connection (as that is significantly more involved).  If you are looking for
 an easy way to do this, I&#39;d recommend checking out
 <a href="https://github.com/rtc-io/rtc-quickconnect">rtc-quickconnect</a> or
 <a href="https://github.com/rtc-io/rtc-glue">rtc-glue</a>.</p>
+<h2 id="signal-flow-diagrams">Signal Flow Diagrams</h2>
+<p>Displayed below are some diagrams how the signalling flow between peers
+behaves.  In each of the diagrams we illustrate three peers (A, B and C)
+participating discovery and coordinating RTCPeerConnection handshakes.</p>
+<p>In each case, only the interaction between the clients is represented not
+how a signalling server
+(such as <a href="https://github.com/rtc-io/rtc-switchboard">rtc-switchboard</a>) would
+pass on broadcast messages, etc.  This is done for two reasons:</p>
+<ol>
+<li>It is out of scope of this documentation.</li>
+<li>The <code>rtc-signaller</code> has been designed to work without having to rely on
+any intelligence in the server side signalling component.  In the
+instance that a signaller broadcasts all messages to all connected peers
+then <code>rtc-signaller</code> should be smart enough to make sure everything works
+as expected.</li>
+</ol>
+<h3 id="peer-discovery-announcement">Peer Discovery / Announcement</h3>
+<p>This diagram illustrates the process of how peer <code>A</code> announces itself to
+peers <code>B</code> and <code>C</code>, and in turn they announce themselves.</p>
+<p><img src="https://raw.github.com/rtc-io/rtc-signaller/master/docs/announce.png" alt="" /></p>
+<h3 id="editing-updating-the-diagrams">Editing / Updating the Diagrams</h3>
+<p>Each of the diagrams has been generated using
+<a href="http://www.mcternan.me.uk/mscgen/index.html">mscgen</a> and the source for
+these documents can be found in the <code>docs/</code> folder of this repository.</p>
 <h2 id="reference">Reference</h2>
 <p>The <code>rtc-signaller</code> module is designed to be used primarily in a functional
 way and when called it creates a new signaller that will enable
