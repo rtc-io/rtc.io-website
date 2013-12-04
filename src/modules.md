@@ -39,3 +39,9 @@ This is the server-side companion to the `rtc-signaller` module.  If you are loo
 It has been constructed using [primus](https://github.com/primus/primus) for the websocket communication layer, which means that different node websocket implementations can be used in your applications.
 
 The switchboard can either be incorporated into your node server application code, or hosted separately - whatever best suits your application architecture.
+
+## Utility Modules
+
+### [rtc-captureconfig](/module-captureconfig.html)
+
+The `rtc-captureconfig` module is used in `rtc-glue` to convert simple string based attributes to valid WebRTC constraints that can be used in for media capture.
