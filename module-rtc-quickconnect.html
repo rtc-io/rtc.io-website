@@ -97,10 +97,54 @@ signaller option when creating:</p>
 <span class="nx">quickconnect</span><span class="p">({</span> <span class="nx">ns</span><span class="o">:</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">signaller</span><span class="o">:</span> <span class="s1">&#39;http://mysignaller.com:3000&#39;</span> <span class="p">});</span>
 </pre></div>
 
-<h2 id="full-reactive-stream-conference-example">Full Reactive Stream Conference Example</h2>
+<h2 id="reference">Reference</h2>
+<pre><code>quickconnect(opts?) =&gt; EventEmitter</code></pre>
+<p>The <code>rtc-quickconnect</code> module exports a single function that is used to
+create a node <a href="http://nodejs.org/api/events.html">EventEmitter</a> and
+start the signalling process required to establish WebRTC peer connections.</p>
+<h3 id="valid-quick-connect-options">Valid Quick Connect Options</h3>
+<p>The options provided to the <code>rtc-quickconnect</code> module function influence the
+behaviour of some of the underlying components used from the rtc.io suite.</p>
+<p>Listed below are some of the commonly used options:</p>
+<ul>
+<li><p><code>signalhost</code>: The host that will be used to coordinate signalling between
+peers.  This defaults to <code>http://localhost:3000</code> but during testing feel
+free to use our test signalling server (<code>http://sig.rtc.io:50000</code>).</p>
+</li>
+<li><p><code>ns</code>: An optional namespace for your signalling room.  While quickconnect
+will generate a unique hash for the room, this can be made to be more
+unique by providing a namespace.  Using a namespace means two demos
+that have generated the same hash but use a different namespace will be
+in different rooms.</p>
+</li>
+<li><p><code>room</code> (added 0.6): Rather than use the internal hash generation
+(plus optional namespace) for room name generation, simply use this room
+name instead.  <strong>NOTE:</strong> Use of the <code>room</code> option takes precendence over
+<code>ns</code>.</p>
+</li>
+<li><p><code>debug</code>: Write rtc.io suite debug output to the browser console.</p>
+</li>
+</ul>
+<h4 id="options-for-peer-connection-creation">Options for Peer Connection Creation</h4>
+<p>Options that are passed onto the
+<a href="https://github.com/rtc-io/rtc#createconnectionopts-constraints">rtc.createConnection</a>
+function:</p>
+<ul>
+<li><p><code>data</code>: Provide <code>{ data: true }</code> if you want to enable data channels on
+the peer connection.</p>
+</li>
+<li><p><code>constraints</code>: Used to provide specific constraints when creating a new
+peer connection.</p>
+</li>
+</ul>
+<h4 id="options-for-p2p-negotiation">Options for P2P negotiation</h4>
+<p>Under the hood, quickconnect uses the
+<a href="https://github.com/rtc-io/rtc#rtccouple">rtc/couple</a> logic, and the options
+passed to quickconnect are also passed onto this function.</p>
+<h2 id="additional-examples">Additional examples</h2>
+<h3 id="full-reactive-stream-conference-example">Full Reactive Stream Conference Example</h3>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">quickconnect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-quickconnect&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">crel</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;crel&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">rtc</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc&#39;</span><span class="p">);</span>
 
 <span class="c1">// create containers for our local and remote video</span>
 <span class="kd">var</span> <span class="nx">local</span> <span class="o">=</span> <span class="nx">crel</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="kr">class</span><span class="o">:</span> <span class="s1">&#39;local&#39;</span> <span class="p">});</span>
