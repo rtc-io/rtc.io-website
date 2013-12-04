@@ -5,6 +5,7 @@ outputfiles = $(filter-out template.html,$(wildcard *.html))
 sourcedocs = $(patsubst %.md,%.html,$(subst src/,,$(wildcard src/*.md)))
 tutorials = $(patsubst %.md,tutorial-%.html,$(subst src/tutorials/,,$(wildcard src/tutorials/*.md)))
 samples = $(subst code/,js/samples/,$(wildcard code/*.js))
+glue_repo = https://raw.github.com/rtc-io/rtc-glue/master/dist
 
 default: build
 
@@ -13,6 +14,12 @@ app: prepare
 
 static: prepare
 	cp src/static/* .
+
+getlibs:
+	@echo "fetching glue.js"
+	@curl -s ${glue_repo}/glue.js > glue.js
+	@echo "fetching glue.min.js"
+	@curl -s ${glue_repo}/glue.min.js > glue.min.js
 
 $(rtcmods): prepare
 	@echo "fetching $@ module readme"
@@ -36,4 +43,4 @@ prepare:
 	@mkdir -p build/
 	@cp src/*.md build/
 
-build: prepare app static $(rtcmods) $(sourcedocs) $(tutorials) $(samples)
+build: prepare getlibs app static $(rtcmods) $(sourcedocs) $(tutorials) $(samples)
