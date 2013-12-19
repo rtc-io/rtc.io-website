@@ -211,7 +211,7 @@ passed to quickconnect are also passed onto this function.</p>
 <span class="nx">localMedia</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">local</span><span class="p">);</span>
 
 <span class="c1">// handle the connection stuff</span>
-<span class="nx">quickconnect</span><span class="p">({</span> <span class="nx">ns</span><span class="o">:</span> <span class="s1">&#39;conftest&#39;</span><span class="p">,</span> <span class="nx">signalhost</span><span class="o">:</span> <span class="s1">&#39;http://sig.rtc.io:50000/&#39;</span> <span class="p">})</span>
+<span class="nx">quickconnect</span><span class="p">({</span> <span class="nx">data</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">ns</span><span class="o">:</span> <span class="s1">&#39;conftest&#39;</span><span class="p">,</span> <span class="nx">signalhost</span><span class="o">:</span> <span class="s1">&#39;http://sig.rtc.io:50000/&#39;</span> <span class="p">})</span>
   <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer&#39;</span><span class="p">,</span> <span class="nx">handleConnect</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;leave&#39;</span><span class="p">,</span> <span class="nx">handleLeave</span><span class="p">);</span>
 

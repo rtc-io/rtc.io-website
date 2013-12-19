@@ -58,11 +58,9 @@ the front-end component of a WebRTC application.</p>
 </pre></div>
 
 <h2 id="rtc-couple">rtc/couple</h2>
-<h3 id="couple-pc-targetattr-signaller-opts-">couple(pc, targetAttr, signaller, opts?)</h3>
-<p>Couple a WebRTC connection with another webrtc connection via a
-signalling scope.  The <code>targetAttr</code> argument specifies the criteria that
-are passed onto a <code>/request</code> command when looking for remote peer
-to couple and exchange messages with.</p>
+<h3 id="couple-pc-targetid-signaller-opts-">couple(pc, targetId, signaller, opts?)</h3>
+<p>Couple a WebRTC connection with another webrtc connection identified by
+<code>targetId</code> via the signaller.</p>
 <p>The following options can be provided in the <code>opts</code> argument:</p>
 <ul>
 <li><p><code>sdpfilter</code> (default: null)</p>
@@ -81,7 +79,7 @@ if it fails.</p>
 <h4 id="example-usage">Example Usage</h4>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">couple</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc/couple&#39;</span><span class="p">);</span>
 
-<span class="nx">couple</span><span class="p">(</span><span class="nx">pc</span><span class="p">,</span> <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;test&#39;</span> <span class="p">},</span> <span class="nx">signaller</span><span class="p">);</span>
+<span class="nx">couple</span><span class="p">(</span><span class="nx">pc</span><span class="p">,</span> <span class="s1">&#39;54879965-ce43-426e-a8ef-09ac1e39a16d&#39;</span><span class="p">,</span> <span class="nx">signaller</span><span class="p">);</span>
 </pre></div>
 
 <h4 id="using-filters">Using Filters</h4>
@@ -89,7 +87,9 @@ if it fails.</p>
 by the <code>createOffer</code> and <code>createAnswer</code> calls.  This can be done by passing
 a <code>sdpfilter</code> function (or array) in the options.  For example:</p>
 <div class="highlight"><pre><span class="c1">// run the sdp from through a local tweakSdp function.</span>
-<span class="nx">couple</span><span class="p">(</span><span class="nx">pc</span><span class="p">,</span> <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;blah&#39;</span> <span class="p">},</span> <span class="nx">signaller</span><span class="p">,</span> <span class="p">{</span> <span class="nx">sdpfilter</span><span class="o">:</span> <span class="nx">tweakSdp</span> <span class="p">});</span>
+<span class="nx">couple</span><span class="p">(</span><span class="nx">pc</span><span class="p">,</span> <span class="s1">&#39;54879965-ce43-426e-a8ef-09ac1e39a16d&#39;</span><span class="p">,</span> <span class="nx">signaller</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">sdpfilter</span><span class="o">:</span> <span class="nx">tweakSdp</span>
+<span class="p">});</span>
 </pre></div>
 
 <h2 id="rtc-detect">rtc/detect</h2>
