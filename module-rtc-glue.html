@@ -88,7 +88,7 @@ signalling:</p>
 <div class="highlight"><pre><span class="nt">&lt;html&gt;</span>
 <span class="nt">&lt;head&gt;</span>
 <span class="c">&lt;!-- configure the signalling to use the test rtc.io public signaller --&gt;</span>
-<span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">&quot;rtc-signalhost&quot;</span> <span class="na">content=</span><span class="s">&quot;http://sig.rtc.io:50000&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">&quot;rtc-signalhost&quot;</span> <span class="na">content=</span><span class="s">&quot;http://rtc.io/switchboard/&quot;</span><span class="nt">&gt;</span>
 <span class="nt">&lt;style&gt;</span>
 <span class="nt">video</span> <span class="p">{</span>
   <span class="k">max-width</span><span class="o">:</span> <span class="m">640px</span><span class="p">;</span>
@@ -109,6 +109,20 @@ signalling:</p>
 
 <span class="c">&lt;!-- make magic happen --&gt;</span>
 <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;../dist/glue.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+<span class="nx">glue</span><span class="p">.</span><span class="nx">events</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;connected&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">signaller</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;connected&#39;</span><span class="p">);</span>
+
+    <span class="nx">signaller</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;received color notification: &#39;</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+    <span class="p">});</span>
+
+    <span class="nx">signaller</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;/color&#39;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">src</span><span class="o">:</span> <span class="nx">signaller</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span>
+        <span class="nx">color</span><span class="o">:</span> <span class="s1">&#39;blue&#39;</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
 <span class="nt">&lt;/body&gt;</span>
 <span class="nt">&lt;/html&gt;</span>
 </pre></div>
@@ -202,6 +216,21 @@ interface.</p>
   <span class="c1">// will also be triggered once ready, and equivalent to glue.ready</span>
   <span class="c1">// when directly using eve</span>
 <span class="p">});</span>
+
+<span class="c1">// listen for connected events</span>
+<span class="c1">// NOTE: only trigger when a page has valid peer elements</span>
+<span class="nx">glue</span><span class="p">.</span><span class="nx">events</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;connected&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">signaller</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;connected&#39;</span><span class="p">);</span>
+
+    <span class="nx">signaller</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;received color notification: &#39;</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+    <span class="p">});</span>
+
+    <span class="nx">signaller</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;/color&#39;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">src</span><span class="o">:</span> <span class="nx">signaller</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span>
+        <span class="nx">color</span><span class="o">:</span> <span class="s1">&#39;blue&#39;</span>
+    <span class="p">});</span>
+<span class="p">});</span>
 </pre></div>
 
 <h3 id="sessionmanager">SessionManager</h3>
@@ -222,7 +251,7 @@ target peer.  This information is useful when a particular remote media
 element is expecting the contents of a particular capture target.</p>
 <h2 id="license-s-">License(s)</h2>
 <h3 id="apache-2-0">Apache 2.0</h3>
-<p>Copyright 2013 National ICT Australia Limited (NICTA)</p>
+<p>Copyright 2014 National ICT Australia Limited (NICTA)</p>
 <p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at</p>

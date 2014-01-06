@@ -104,34 +104,109 @@ you to communicate with other peers via your messaging network.</p>
 <span class="kd">var</span> <span class="nx">signaller</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-signaller&#39;</span><span class="p">)(</span><span class="nx">messenger</span><span class="p">);</span>
 </pre></div>
 
-<h3 id="signaller-send-data-">signaller#send(data)</h3>
-<p>Send data over the messenging interface.</p>
-<h3 id="signaller-announce-data-">signaller#announce(data?)</h3>
+<h3 id="signaller-send-message-data-">signaller#send(message, data*)</h3>
+<p>Use the send function to send a message to other peers in the current
+signalling scope (if announced in a room this will be a room, otherwise
+broadcast to all peers connected to the signalling server).</p>
+<h3 id="announce-data-">announce(data?)</h3>
 <p>The <code>announce</code> function of the signaller will pass an <code>/announce</code> message
 through the messenger network.  When no additional data is supplied to
 this function then only the id of the signaller is sent to all active
 members of the messenging network.</p>
-<p>As a unique it is generally insufficient information to determine whether
-a peer is a good match for another (for instance,  you might be looking
-for other parties by name or role) it is generally a good idea to provide
-some additional information during this announce call:</p>
-<div class="highlight"><pre><span class="nx">signaller</span><span class="p">.</span><span class="nx">announce</span><span class="p">({</span> <span class="nx">role</span><span class="o">:</span> <span class="s1">&#39;translator&#39;</span> <span class="p">});</span>
+<h4 id="joining-rooms">Joining Rooms</h4>
+<p>To join a room using an announce call you simply provide the name of the
+room you wish to join as part of the data block that you annouce, for
+example:</p>
+<div class="highlight"><pre><span class="nx">signaller</span><span class="p">.</span><span class="nx">announce</span><span class="p">({</span> <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;testroom&#39;</span> <span class="p">});</span>
 </pre></div>
 
-<p><strong>NOTE:</strong> In some particular messenger types may attach or infer
-additional data during the announce phase.  For instance, socket.io
-connections are generally organised into rooms which is inferred
-information that limits the messaging scope.</p>
-<h3 id="signaller-leave-">signaller#leave()</h3>
-<p>Leave the messenger mesh</p>
-<h3 id="signaller-lock-targetid-opts-callback-">signaller#lock(targetId, opts?, callback?)</h3>
+<p>Signalling servers (such as
+<a href="https://github.com/rtc-io/rtc-switchboard">rtc-switchboard</a>) will then
+place your peer connection into a room with other peers that have also
+announced in this room.</p>
+<p>Once you have joined a room, the server will only deliver messages that
+you <code>send</code> to other peers within that room.</p>
+<h4 id="providing-additional-announce-data">Providing Additional Announce Data</h4>
+<p>There may be instances where you wish to send additional data as part of
+your announce message in your application.  For instance, maybe you want
+to send an alias or nick as part of your announce message rather than just
+use the signaller&#39;s generated id.</p>
+<p>If for instance you were writing a simple chat application you could join
+the <code>webrtc</code> room and tell everyone your name with the following announce
+call:</p>
+<div class="highlight"><pre><span class="nx">signaller</span><span class="p">.</span><span class="nx">announce</span><span class="p">({</span>
+  <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;webrtc&#39;</span><span class="p">,</span>
+  <span class="nx">nick</span><span class="o">:</span> <span class="s1">&#39;Damon&#39;</span>
+<span class="p">});</span>
+</pre></div>
+
+<h4 id="announcing-updates">Announcing Updates</h4>
+<p>The signaller is written to distinguish between initial peer announcements
+and peer data updates (see the docs on the announce handler below). As
+such it is ok to provide any data updates using the announce method also.</p>
+<p>For instance, I could send a status update as an announce message to flag
+that I am going offline:</p>
+<div class="highlight"><pre><span class="nx">signaller</span><span class="p">.</span><span class="nx">announce</span><span class="p">({</span> <span class="nx">status</span><span class="o">:</span> <span class="s1">&#39;offline&#39;</span> <span class="p">});</span>
+</pre></div>
+
+<h3 id="ismaster-targetid-">isMaster(targetId)</h3>
+<p>A simple function that indicates whether the local signaller is the master
+for it&#39;s relationship with peer signaller indicated by <code>targetId</code>.  Roles
+are determined at the point at which signalling peers discover each other,
+and are simply worked out by whichever peer has the lowest signaller id
+when lexigraphically sorted.</p>
+<p>For example, if we have two signaller peers that have discovered each
+others with the following ids:</p>
+<ul>
+<li><code>b11f4fd0-feb5-447c-80c8-c51d8c3cced2</code></li>
+<li><code>8a07f82e-49a5-4b9b-a02e-43d911382be6</code></li>
+</ul>
+<p>They would be assigned roles:</p>
+<ul>
+<li><code>b11f4fd0-feb5-447c-80c8-c51d8c3cced2</code></li>
+<li><code>8a07f82e-49a5-4b9b-a02e-43d911382be6</code> (master)</li>
+</ul>
+<h3 id="leave-">leave()</h3>
+<p>Tell the signalling server we are leaving.  Calling this function is
+usually not required though as the signalling server should issue correct
+<code>/leave</code> messages when it detects a disconnect event.</p>
+<h3 id="lock-targetid-opts-callback-">lock(targetId, opts?, callback?)</h3>
 <p>Attempt to get a temporary exclusive lock on the communication
 channel between the local signaller and the specified target peer id.</p>
-<h3 id="signaller-to-targetid-">signaller#to(targetId)</h3>
-<p>The to method returns an encapsulated</p>
-<h3 id="signaller-unlock-targetid-opts-">signaller#unlock(targetId, opts?)</h3>
-<h3 id="signaller-loadprimus-signalhost-callback-">signaller.loadPrimus(signalhost, callback)</h3>
-<h2 id="signaller-process-handling">signaller process handling</h2>
+<h3 id="to-targetid-">to(targetId)</h3>
+<p>Use the <code>to</code> function to send a message to the specified target peer.
+A large parge of negotiating a WebRTC peer connection involves direct
+communication between two parties which must be done by the signalling
+server.  The <code>to</code> function provides a simple way to provide a logical
+communication channel between the two parties:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">send</span> <span class="o">=</span> <span class="nx">signaller</span><span class="p">.</span><span class="nx">to</span><span class="p">(</span><span class="s1">&#39;e95fa05b-9062-45c6-bfa2-5055bf6625f4&#39;</span><span class="p">).</span><span class="nx">send</span><span class="p">;</span>
+
+<span class="c1">// create an offer on a local peer connection</span>
+<span class="nx">pc</span><span class="p">.</span><span class="nx">createOffer</span><span class="p">(</span>
+  <span class="kd">function</span><span class="p">(</span><span class="nx">desc</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// set the local description using the offer sdp</span>
+    <span class="c1">// if this occurs successfully send this to our peer</span>
+    <span class="nx">pc</span><span class="p">.</span><span class="nx">setLocalDescription</span><span class="p">(</span>
+      <span class="nx">desc</span><span class="p">,</span>
+      <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">send</span><span class="p">(</span><span class="s1">&#39;/sdp&#39;</span><span class="p">,</span> <span class="nx">desc</span><span class="p">);</span>
+      <span class="p">},</span>
+      <span class="nx">handleFail</span>
+    <span class="p">);</span>
+  <span class="p">},</span>
+  <span class="nx">handleFail</span>
+<span class="p">);</span>
+</pre></div>
+
+<h3 id="signaller-unlock-targetid-opts-callback-">signaller#unlock(targetId, opts?, callback)</h3>
+<p>Send an unlock message to the target peer to release a previously
+attained lock.  The callback will be triggered once we know whether the
+lock release was successful and acknowledged.</p>
+<h3 id="loadprimus-signalhost-callback-">loadPrimus(signalhost, callback)</h3>
+<p>This is a convenience function that is patched into the signaller to assist
+with loading the <code>primus.js</code> client library from an <code>rtc-switchboard</code>
+signaling server.</p>
+<h3 id="signaller-process-handling">signaller process handling</h3>
 <p>When a signaller&#39;s underling messenger emits a <code>data</code> event this is
 delegated to a simple message parser, which applies the following simple
 logic:</p>
@@ -149,12 +224,12 @@ to it.</p>
 If so, then pass the entire message contents onto the registered handler.</p>
 </li>
 </ul>
-<h2 id="signaller-message-handlers">signaller message handlers</h2>
-<h3 id="announce">announce</h3>
+<h3 id="signaller-message-handlers">signaller message handlers</h3>
+<h4 id="announce">announce</h4>
 <pre><code>/announce|{&quot;id&quot;: &quot;...&quot;, ... }</code></pre>
 <p>When an announce message is received by the signaller, the attached
 object data is decoded and the signaller emits an <code>announce</code> message.</p>
-<h4 id="events-triggered-in-response-to-announce-">Events Triggered in response to <code>/announce</code></h4>
+<h5 id="events-triggered-in-response-to-announce-">Events Triggered in response to <code>/announce</code></h5>
 <p>There are two different types of <code>peer:</code> events that can be triggered
 in on peer B to calling the <code>announce</code> method on peer A.</p>
 <ul>
@@ -168,12 +243,12 @@ as the first argument of the event handler.</p>
 rather than a <code>peer:announce</code> event.</p>
 </li>
 </ul>
-<h3 id="leave">leave</h3>
+<h4 id="leave">leave</h4>
 <pre><code>/leave|{&quot;id&quot;:&quot;...&quot;}</code></pre>
 <p>When a leave message is received from a peer, we check to see if that is
 a peer that we are managing state information for and if we are then the
 peer state is removed.</p>
-<h4 id="events-triggered-in-response-to-leave-messages">Events triggered in response to <code>/leave</code> messages</h4>
+<h5 id="events-triggered-in-response-to-leave-messages">Events triggered in response to <code>/leave</code> messages</h5>
 <p>The following event(s) are triggered when a <code>/leave</code> action is received
 from a peer signaller:</p>
 <ul>
@@ -184,7 +259,7 @@ data in the signaller is removed but can be accessed in 2nd argument
 of the event handler.</p>
 </li>
 </ul>
-<h3 id="lock">lock</h3>
+<h4 id="lock">lock</h4>
 <pre><code>/lock</code></pre>
 <p>A <code>/lock</code> request can only be sent within the context of a <code>/to</code> message
 and thus must contain source data to be processed correctly.  The <code>/lock</code>
@@ -194,12 +269,12 @@ both peers which to commence renegotiation at the same time.</p>
 same time, then the peer that has been identified as party <code>a</code> in the peer
 relationship will take on the role of the initiator in the negotiation and
 party <code>b</code> will respond to the offer sdp.</p>
-<h3 id="unlock">unlock</h3>
+<h4 id="unlock">unlock</h4>
 <pre><code>/unlock|label</code></pre>
 <p>Clear a remote lock</p>
 <h2 id="license-s-">License(s)</h2>
 <h3 id="apache-2-0">Apache 2.0</h3>
-<p>Copyright 2013 National ICT Australia Limited (NICTA)</p>
+<p>Copyright 2014 National ICT Australia Limited (NICTA)</p>
 <p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at</p>
