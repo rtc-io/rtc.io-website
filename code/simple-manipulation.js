@@ -1,5 +1,5 @@
 var media = require('rtc-media');
-var canvas = require('rtc-canvas');
+var canvas = require('rtc-videoproc');
 var vid;
 
 // capture media
