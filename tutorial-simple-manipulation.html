@@ -41,7 +41,7 @@
 <p>The <code>rtc-canvas</code> module allows you to render a captured <code>rtc-media</code> stream to a virtual <code>&lt;video&gt;</code> element which redraws it&#39;s content on a canvas.  This virtual video element also has a processing pipeline that you can add manipulation methods to using the <code>.pipeline.add(handler)</code> method.</p>
 <p>For example, here is what you will commonly include if you wish to do some video manipulation using the <code>rtc-canvas</code> module:</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-canvas&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-videoproc&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">vid</span><span class="p">;</span>
 
 <span class="c1">// capture media</span>
@@ -77,7 +77,7 @@
 <h2 id="adjusting-the-capture-rate">Adjusting the Capture Rate</h2>
 <p>By default, the canvas is set to capture at 25 fps, but this can be adjusted if you feel like giving your CPU a bit of a rest:</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-canvas&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-videoproc&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">vid</span><span class="p">;</span>
 
 <span class="c1">// capture media</span>
