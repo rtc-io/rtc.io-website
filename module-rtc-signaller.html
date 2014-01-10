@@ -59,19 +59,34 @@ mechanisms:</p>
 complicated).</li>
 </ul>
 <h2 id="getting-started">Getting Started</h2>
-<p>To work with the signaller, you first need a messenger of some kind. If you
-have run up a version of the
-<a href="https://github.com/rtc-io/rtc-switchboard">rtc-switchboard</a> somewhere then
-the following example should work:</p>
-<div class="highlight"><pre><span class="c1">// to be completed</span>
+<p>While the signaller is capable of communicating by a number of different
+messengers (i.e. anything that can send and receive messages over a wire)
+it comes with support for understanding how to connect to an
+<a href="https://github.com/rtc-io/rtc-switchboard">rtc-switchboard</a> out of the box.</p>
+<p>The following code sample demonstrates how:</p>
+<div class="highlight"><pre><span class="c1">// create a new signaller, connecting to the target switchboard</span>
+<span class="kd">var</span> <span class="nx">signaller</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-signaller&#39;</span><span class="p">)(</span><span class="s1">&#39;http://rtc.io/switchboard&#39;</span><span class="p">);</span>
+
+<span class="c1">// when a new peer is announced, log it</span>
+<span class="nx">signaller</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer:announce&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+ <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;new peer found in room: &#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// when a peer leaves the switchboard, log it</span>
+<span class="nx">signaller</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer:leave&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;peer &#39;</span> <span class="o">+</span> <span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39; has left the room&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// for our sanity, pop a message once we are connected</span>
+<span class="nx">signaller</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;connected&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;we have successfully connected&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// send through an announce message</span>
+<span class="c1">// this will occur once the primus socket has been opened and active</span>
+<span class="nx">signaller</span><span class="p">.</span><span class="nx">announce</span><span class="p">({</span> <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;signaller-getting-started&#39;</span> <span class="p">});</span>
 </pre></div>
 
-<p>While the example above demonstrates communication between two endpoints
-via websockets, it does not go into detail on setting up a WebRTC peer
-connection (as that is significantly more involved).  If you are looking for
-an easy way to do this, I&#39;d recommend checking out
-<a href="https://github.com/rtc-io/rtc-quickconnect">rtc-quickconnect</a> or
-<a href="https://github.com/rtc-io/rtc-glue">rtc-glue</a>.</p>
 <h2 id="signal-flow-diagrams">Signal Flow Diagrams</h2>
 <p>Displayed below are some diagrams how the signalling flow between peers
 behaves.  In each of the diagrams we illustrate three peers (A, B and C)
@@ -104,6 +119,9 @@ you to communicate with other peers via your messaging network.</p>
 <span class="kd">var</span> <span class="nx">signaller</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-signaller&#39;</span><span class="p">)(</span><span class="nx">messenger</span><span class="p">);</span>
 </pre></div>
 
+<p>As demonstrated in the getting started guide, you can also pass through
+a string value instead of a messenger instance if you simply want to
+connect to an existing <code>rtc-switchboard</code> instance.</p>
 <h3 id="signaller-send-message-data-">signaller#send(message, data*)</h3>
 <p>Use the send function to send a message to other peers in the current
 signalling scope (if announced in a room this will be a room, otherwise

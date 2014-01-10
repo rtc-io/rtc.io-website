@@ -31,5 +31,8 @@
     "rtc-media": "~1.5.1",
     "rtc-signaller": "~0.14.1",
     "rtc-videoproc": "~0.5.1"
+  },
+  "dependencies": {
+    "rtc-signaller": "~0.15.0"
   }
 }
