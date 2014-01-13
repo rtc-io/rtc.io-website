@@ -36,82 +36,136 @@
 <div class="shadow"></div>
 </header>
 <div class="main" role="content"><h1 id="rtc-quickconnect">rtc-quickconnect</h1>
-<p>This is a very high level helper library designed to help you get up
+<p>This is a high level helper module designed to help you get up
 an running with WebRTC really, really quickly.  By using this module you
 are trading off some flexibility, so if you need a more flexible
 configuration you should drill down into lower level components of the
-<a href="http://www.rtc.io">rtc.io</a> suite.</p>
+<a href="http://www.rtc.io">rtc.io</a> suite.  In particular you should check out
+<a href="https://github.com/rtc-io/rtc">rtc</a>.</p>
 <p><a href="https://nodei.co/npm/rtc-quickconnect/"><img src="https://nodei.co/npm/rtc-quickconnect.png" alt="NPM" /></a></p>
 <p><a href="http://github.com/hughsk/stability-badges"><img src="http://hughsk.github.io/stability-badges/dist/unstable.svg" alt="unstable" /></a></p>
 <h2 id="example-usage">Example Usage</h2>
 <p>In the simplest case you simply call quickconnect with a single string
-argument to establish a namespace for your demo or application.  This string
-will then be combined with randomly generated location hash that will
-determine the room for your application signalling.</p>
+argument which tells quickconnect which server to use for signaling:</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">quickconnect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-quickconnect&#39;</span><span class="p">);</span>
 
-<span class="nx">quickconnect</span><span class="p">({</span> <span class="nx">ns</span><span class="o">:</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">signalhost</span><span class="o">:</span> <span class="s1">&#39;http://sig.rtc.io:50000&#39;</span> <span class="p">})</span>
-  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">conn</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">monitor</span><span class="p">)</span> <span class="p">{</span>
+<span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard/&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">pc</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">monitor</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;got a new friend, id: &#39;</span> <span class="o">+</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">conn</span><span class="p">);</span>
   <span class="p">});</span>
 </pre></div>
 
-<h2 id="example-usage-using-data-channels-">Example Usage (Using Data Channels)</h2>
-<p>By default, the <code>RTCPeerConnection</code> created by quickconnect will not be
-&quot;data channels ready&quot;.  You can change that very simply, by flagging
-<code>data</code> as <code>true</code> during quickconnect initialization:</p>
+<h2 id="example-usage-using-data-channels-">Example Usage (using data channels)</h2>
+<p>When working with WebRTC data channels, you can call the <code>createDataChannel</code>
+function helper that is attached to the object returned from the
+<code>quickconnect</code> call.  The <code>createDataChannel</code> function signature matches
+the signature of the <code>RTCPeerConnection</code> <code>createDataChannel</code> function.</p>
+<p>At the minimum it requires a label for the channel, but you can also pass
+through a dictionary of options that can be used to fine tune the
+data channel behaviour.  For more information on these options, I&#39;d
+recommend having a quick look at the WebRTC spec:</p>
+<p><a href="http://dev.w3.org/2011/webrtc/editor/webrtc.html#dictionary-rtcdatachannelinit-members">http://dev.w3.org/2011/webrtc/editor/webrtc.html#dictionary-rtcdatachannelinit-members</a></p>
+<p>If in doubt, I&#39;d recommend not passing through options.</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">quickconnect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-quickconnect&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">opts</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">ns</span><span class="o">:</span> <span class="s1">&#39;dctest&#39;</span><span class="p">,</span>
-  <span class="nx">data</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-  <span class="nx">signalhost</span><span class="o">:</span> <span class="s1">&#39;http://sig.rtc.io:50000&#39;</span>
-<span class="p">};</span>
 
-<span class="nx">quickconnect</span><span class="p">(</span><span class="nx">opts</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">connection</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">monitor</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;got a new friend: &#39;</span> <span class="o">+</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">connection</span><span class="p">);</span>
-  <span class="p">})</span>
-  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;dc:open&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dc</span><span class="p">,</span> <span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">dc</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;message&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">evt</span><span class="p">)</span> <span class="p">{</span>
+<span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard/&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">ns</span><span class="o">:</span> <span class="s1">&#39;dctest&#39;</span> <span class="p">})</span>
+  <span class="c1">// tell quickconnect we want a datachannel called test</span>
+  <span class="p">.</span><span class="nx">createDataChannel</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
+  <span class="c1">// when the test channel is open, let us know</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;test:open&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dc</span><span class="p">,</span> <span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">dc</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">evt</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;peer &#39;</span> <span class="o">+</span> <span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39; says: &#39;</span> <span class="o">+</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
-    <span class="p">});</span>
+    <span class="p">};</span>
 
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;dc open for peer: &#39;</span> <span class="o">+</span> <span class="nx">id</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;test dc open for peer: &#39;</span> <span class="o">+</span> <span class="nx">id</span><span class="p">);</span>
     <span class="nx">dc</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;hi&#39;</span><span class="p">);</span>
   <span class="p">});</span>
 </pre></div>
 
-<h2 id="how-it-works-">How it works?</h2>
-<p><strong>NOTE:</strong> Our public test signaller is currently unavailable, you will
-need to run up a version of <code>rtc-switchboard</code> locally for the time being.</p>
-<p>The <code>rtc-quickconnect</code> module makes use of our internal, publicly available
-signaller which uses <a href="https://github.com/primus/primus">primus</a> and our
-<a href="https://github.com/rtc-io/rtc-switchboard">signalling adapter</a>.</p>
-<p>Our test signaller is exactly that, <strong>something we use for testing</strong>.  If
-you want to run your own signaller this is very simple and you should
-consult the <code>rtc-signaller-socket.io</code> module for information on how to
-do this.  Once you have this running, simply provide quickconnect a
-signaller option when creating:</p>
+<p><strong>NOTE:</strong> Data channel interoperability has been tested between Chrome 32
+and Firefox 26, which both make use of SCTP data channels.</p>
+<p><strong>NOTE:</strong> The current stable version of Chrome is 31, so interoperability
+with Firefox right now will be hard to achieve.</p>
+<h2 id="example-usage-using-captured-media-">Example Usage (using captured media)</h2>
+<p>Another example is displayed below, and this example demonstrates how
+to use <code>rtc-quickconnect</code> to create a simple video conferencing application:</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">quickconnect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-quickconnect&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">crel</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;crel&#39;</span><span class="p">);</span>
 
-<span class="nx">quickconnect</span><span class="p">({</span> <span class="nx">ns</span><span class="o">:</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">signaller</span><span class="o">:</span> <span class="s1">&#39;http://mysignaller.com:3000&#39;</span> <span class="p">});</span>
+<span class="c1">// create containers for our local and remote video</span>
+<span class="kd">var</span> <span class="nx">local</span> <span class="o">=</span> <span class="nx">crel</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="kr">class</span><span class="o">:</span> <span class="s1">&#39;local&#39;</span> <span class="p">});</span>
+<span class="kd">var</span> <span class="nx">remote</span> <span class="o">=</span> <span class="nx">crel</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="kr">class</span><span class="o">:</span> <span class="s1">&#39;remote&#39;</span> <span class="p">});</span>
+<span class="kd">var</span> <span class="nx">media</span>  
+<span class="kd">var</span> <span class="nx">peerMedia</span> <span class="o">=</span> <span class="p">{};</span>
+
+<span class="c1">// capture local media</span>
+<span class="kd">var</span> <span class="nx">localMedia</span> <span class="o">=</span> <span class="nx">media</span><span class="p">();</span>
+
+<span class="c1">// require(&#39;cog/logger&#39;).enable(&#39;*&#39;);</span>
+
+<span class="c1">// once media is captured, connect</span>
+<span class="nx">localMedia</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;capture&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard/&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">ns</span><span class="o">:</span> <span class="s1">&#39;dctest&#39;</span> <span class="p">})</span>
+    <span class="c1">// broadcast our captured media to other participants in the room</span>
+    <span class="p">.</span><span class="nx">broadcast</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span>
+    <span class="c1">// when a peer is connected (and active) pass it to us for use</span>
+    <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer:connect&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">pc</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;peer connected: &#39;</span><span class="p">,</span> <span class="nx">id</span><span class="p">);</span>
+
+      <span class="c1">// render the remote streams</span>
+      <span class="nx">pc</span><span class="p">.</span><span class="nx">getRemoteStreams</span><span class="p">().</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">renderRemote</span><span class="p">(</span><span class="nx">id</span><span class="p">));</span>
+    <span class="p">})</span>
+    <span class="c1">// when a peer leaves, remove teh media</span>
+    <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer:leave&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// remove media for the target peer from the dom</span>
+      <span class="p">(</span><span class="nx">peerMedia</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span> <span class="o">||</span> <span class="p">[]).</span><span class="nx">splice</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">el</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span>
+      <span class="p">});</span>
+    <span class="p">})</span>
+<span class="p">});</span>
+
+<span class="c1">// render the local media</span>
+<span class="nx">localMedia</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">local</span><span class="p">);</span>
+
+<span class="c1">// render a remote video</span>
+<span class="kd">function</span> <span class="nx">renderRemote</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// create the peer media list</span>
+  <span class="nx">peerMedia</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">peerMedia</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span> <span class="o">||</span> <span class="p">[];</span>
+
+  <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">peerMedia</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">peerMedia</span><span class="p">[</span><span class="nx">id</span><span class="p">].</span><span class="nx">concat</span><span class="p">(</span><span class="nx">media</span><span class="p">(</span><span class="nx">stream</span><span class="p">).</span><span class="nx">render</span><span class="p">(</span><span class="nx">remote</span><span class="p">));</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/* extra code to handle dynamic html and css creation */</span>
+
+<span class="c1">// add some basic styling</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">head</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">crel</span><span class="p">(</span><span class="s1">&#39;style&#39;</span><span class="p">,</span> <span class="p">[</span>
+  <span class="s1">&#39;.local { position: absolute;  right: 10px; }&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;.local video { max-width: 200px; }&#39;</span>
+<span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">)));</span>
+
+<span class="c1">// add the local and remote elements</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">local</span><span class="p">);</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">remote</span><span class="p">);</span>
 </pre></div>
 
+<h2 id="regarding-signalling-and-a-signalling-server">Regarding Signalling and a Signalling Server</h2>
+<p>Signaling is an important part of setting up a WebRTC connection and for
+our examples we use our own test instance of the
+<a href="https://github.com/rtc-io/rtc-switchboard">rtc-switchboard</a>. For your
+testing and development you are more than welcome to use this also, but
+just be aware that we use this for our testing so it may go up and down
+a little.  If you need something more stable, why not consider deploying
+an instance of the switchboard yourself - it&#39;s pretty easy :)</p>
 <h2 id="reference">Reference</h2>
-<pre><code>quickconnect(opts?) =&gt; EventEmitter</code></pre>
-<p>The <code>rtc-quickconnect</code> module exports a single function that is used to
-create a node <a href="http://nodejs.org/api/events.html">EventEmitter</a> and
-start the signalling process required to establish WebRTC peer connections.</p>
+<pre><code>quickconnect(signalhost, opts?) =&gt; rtc-sigaller instance (+ helpers)</code></pre>
 <h3 id="valid-quick-connect-options">Valid Quick Connect Options</h3>
 <p>The options provided to the <code>rtc-quickconnect</code> module function influence the
 behaviour of some of the underlying components used from the rtc.io suite.</p>
 <p>Listed below are some of the commonly used options:</p>
 <ul>
-<li><p><code>signalhost</code> (default: &#39;<a href="http://localhost:3000">http://localhost:3000</a>&#39;)</p>
-<p>The host that will be used to coordinate signalling between
-peers.  This defaults to <code>http://localhost:3000</code> but during testing feel
-free to use our test signalling server (<code>http://sig.rtc.io:50000</code>).</p>
-</li>
 <li><p><code>ns</code> (default: &#39;&#39;)</p>
 <p>An optional namespace for your signalling room.  While quickconnect
 will generate a unique hash for the room, this can be made to be more
@@ -134,10 +188,6 @@ name instead.  <strong>NOTE:</strong> Use of the <code>room</code> option takes 
 <a href="https://github.com/rtc-io/rtc#createconnectionopts-constraints">rtc.createConnection</a>
 function:</p>
 <ul>
-<li><p><code>data</code> (default: false)</p>
-<p>Provide <code>{ data: true }</code> if you want to enable data channels on
-the peer connection.</p>
-</li>
 <li><p><code>constraints</code></p>
 <p>Used to provide specific constraints when creating a new
 peer connection.</p>
@@ -147,90 +197,27 @@ peer connection.</p>
 <p>Under the hood, quickconnect uses the
 <a href="https://github.com/rtc-io/rtc#rtccouple">rtc/couple</a> logic, and the options
 passed to quickconnect are also passed onto this function.</p>
-<h2 id="additional-examples">Additional examples</h2>
-<h3 id="full-reactive-stream-conference-example">Full Reactive Stream Conference Example</h3>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">quickconnect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-quickconnect&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">crel</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;crel&#39;</span><span class="p">);</span>
-
-<span class="c1">// create containers for our local and remote video</span>
-<span class="kd">var</span> <span class="nx">local</span> <span class="o">=</span> <span class="nx">crel</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="kr">class</span><span class="o">:</span> <span class="s1">&#39;local&#39;</span> <span class="p">});</span>
-<span class="kd">var</span> <span class="nx">remote</span> <span class="o">=</span> <span class="nx">crel</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="kr">class</span><span class="o">:</span> <span class="s1">&#39;remote&#39;</span> <span class="p">});</span>
-
-<span class="kd">var</span> <span class="nx">peers</span> <span class="o">=</span> <span class="p">{};</span>
-<span class="kd">var</span> <span class="nx">peerVideos</span> <span class="o">=</span> <span class="p">{};</span>
-
-<span class="c1">// capture local media</span>
-<span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">localMedia</span> <span class="o">=</span> <span class="nx">media</span><span class="p">();</span>
-
-<span class="kd">function</span> <span class="nx">handleConnect</span><span class="p">(</span><span class="nx">conn</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">monitor</span><span class="p">)</span> <span class="p">{</span>
-  <span class="c1">// save the peer</span>
-  <span class="nx">peers</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">conn</span><span class="p">;</span>
-
-  <span class="c1">// hook up our local media</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">localMedia</span><span class="p">.</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">conn</span><span class="p">.</span><span class="nx">addStream</span><span class="p">(</span><span class="nx">localMedia</span><span class="p">.</span><span class="nx">stream</span><span class="p">);</span>
-  <span class="p">}</span>
-  <span class="k">else</span> <span class="p">{</span>
-    <span class="nx">localMedia</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;capture&#39;</span><span class="p">,</span> <span class="nx">conn</span><span class="p">.</span><span class="nx">addStream</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="nx">conn</span><span class="p">));</span>
-  <span class="p">}</span>
-
-  <span class="c1">// add existing remote streams</span>
-  <span class="nx">conn</span><span class="p">.</span><span class="nx">getRemoteStreams</span><span class="p">().</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">renderRemote</span><span class="p">(</span><span class="nx">id</span><span class="p">));</span>
-
-  <span class="c1">// listen for new streams</span>
-  <span class="nx">conn</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;addstream&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">evt</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">renderRemote</span><span class="p">(</span><span class="nx">id</span><span class="p">)(</span><span class="nx">evt</span><span class="p">.</span><span class="nx">stream</span><span class="p">);</span>
-  <span class="p">});</span>
-<span class="p">}</span>
-
-<span class="c1">// handle the signaller telling us a peer is leaving</span>
-<span class="kd">function</span> <span class="nx">handleLeave</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-  <span class="c1">// remove old streams</span>
-  <span class="p">(</span><span class="nx">peerVideos</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span> <span class="o">||</span> <span class="p">[]).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">el</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span>
-  <span class="p">});</span>
-
-  <span class="nx">peerVideos</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
-
-  <span class="c1">// close the peer connection</span>
-  <span class="nx">peers</span><span class="p">[</span><span class="nx">id</span><span class="p">].</span><span class="nx">close</span><span class="p">();</span>
-  <span class="nx">peers</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="c1">// render a remote video</span>
-<span class="kd">function</span> <span class="nx">renderRemote</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-  <span class="c1">// create the peer videos list</span>
-  <span class="nx">peerVideos</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">peerVideos</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span> <span class="o">||</span> <span class="p">[];</span>
-
-  <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">peerVideos</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">peerVideos</span><span class="p">[</span><span class="nx">id</span><span class="p">].</span><span class="nx">concat</span><span class="p">(</span><span class="nx">media</span><span class="p">(</span><span class="nx">stream</span><span class="p">).</span><span class="nx">render</span><span class="p">(</span><span class="nx">remote</span><span class="p">));</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-<span class="c1">// render to local</span>
-<span class="nx">localMedia</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">local</span><span class="p">);</span>
-
-<span class="c1">// handle the connection stuff</span>
-<span class="nx">quickconnect</span><span class="p">({</span> <span class="nx">data</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">ns</span><span class="o">:</span> <span class="s1">&#39;conftest&#39;</span><span class="p">,</span> <span class="nx">signalhost</span><span class="o">:</span> <span class="s1">&#39;http://sig.rtc.io:50000/&#39;</span> <span class="p">})</span>
-  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer&#39;</span><span class="p">,</span> <span class="nx">handleConnect</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;leave&#39;</span><span class="p">,</span> <span class="nx">handleLeave</span><span class="p">);</span>
-
-<span class="cm">/* extra code to handle dynamic html and css creation */</span>
-
-<span class="c1">// add some basic styling</span>
-<span class="nb">document</span><span class="p">.</span><span class="nx">head</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">crel</span><span class="p">(</span><span class="s1">&#39;style&#39;</span><span class="p">,</span> <span class="p">[</span>
-  <span class="s1">&#39;.local { position: absolute;  right: 10px; }&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;.local video { max-width: 200px; }&#39;</span>
-<span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">)));</span>
-
-<span class="c1">// add the local and remote elements</span>
-<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">local</span><span class="p">);</span>
-<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">remote</span><span class="p">);</span>
+<h3 id="quickconnect-broadcast-and-data-channel-helper-functions">Quickconnect Broadcast and Data Channel Helper Functions</h3>
+<p>The following are functions that are patched into the <code>rtc-signaller</code>
+instance that make working with and creating functional WebRTC applications
+a lot simpler.</p>
+<h4 id="broadcast-stream-">broadcast(stream)</h4>
+<p>Add the stream to the set of local streams that we will broadcast
+to other peers.</p>
+<h4 id="createdatachannel-label-config-">createDataChannel(label, config)</h4>
+<p>Request that a data channel with the specified <code>label</code> is created on
+the peer connection.  When the data channel is open and available, an
+event will be triggered using the label of the data channel.</p>
+<p>For example, if a new data channel was requested using the following
+call:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">qc</span> <span class="o">=</span> <span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard&#39;</span><span class="p">).</span><span class="nx">createDataChannel</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">);</span>
 </pre></div>
 
+<p>Then when the data channel is ready for use, a <code>test:open</code> event would
+be emitted by <code>qc</code>.</p>
 <h2 id="license-s-">License(s)</h2>
 <h3 id="apache-2-0">Apache 2.0</h3>
-<p>Copyright 2013 National ICT Australia Limited (NICTA)</p>
+<p>Copyright 2014 National ICT Australia Limited (NICTA)</p>
 <p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at</p>

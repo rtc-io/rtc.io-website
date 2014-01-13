@@ -36,13 +36,73 @@
 <div class="shadow"></div>
 </header>
 <div class="main" role="content"><h1 id="rtc">rtc</h1>
-<p>The <code>rtc</code> package is a convenience layer for working with the rtc.io toolkit.
-Consider it a boxed set of lego of the most common pieces required to build
-the front-end component of a WebRTC application.</p>
+<p>The <code>rtc</code> module does most of the heavy lifting within the
+<a href="http://rtc.io">rtc.io</a> suite.  Primarily it handles the logic of coupling
+a local <code>RTCPeerConnection</code> with it&#39;s remote counterpart via an
+<a href="https://github.com/rtc-io/rtc-signaller">rtc-signaller</a> signalling
+channel.</p>
+<p>In most cases, it is recommended that you use one of the higher-level
+modules that uses the <code>rtc</code> module under the hood.  Such as:</p>
+<ul>
+<li><a href="https://github.com/rtc-io/rtc-quickconnect">rtc-quickconnect</a></li>
+<li><a href="https://github.com/rtc-io/rtc-glue">rtc-glue</a></li>
+</ul>
 <p><a href="https://nodei.co/npm/rtc/"><img src="https://nodei.co/npm/rtc.png" alt="NPM" /></a></p>
 <p><a href="http://github.com/hughsk/stability-badges"><img src="http://hughsk.github.io/stability-badges/dist/unstable.svg" alt="unstable" /></a></p>
 <h2 id="getting-started">Getting Started</h2>
-<p>TO BE COMPLETED.</p>
+<p>If you decide that the <code>rtc</code> module is a better fit for you than either
+<a href="https://github.com/rtc-io/rtc-quickconnect">rtc-quickconnect</a> or
+<a href="https://github.com/rtc-io/rtc-glue">rtc-glue</a> then the code snippet below
+will provide you a guide on how to get started using it in conjunction with
+the <a href="https://github.com/rtc-io/rtc-signaller">rtc-signaller</a> and
+<a href="https://github.com/rtc-io/rtc-media">rtc-media</a> modules:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">signaller</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-signaller&#39;</span><span class="p">)(</span><span class="s1">&#39;http://rtc.io/switchboard/&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">rtc</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">localMedia</span> <span class="o">=</span> <span class="nx">media</span><span class="p">();</span>
+
+<span class="c1">// render the local media to the document body</span>
+<span class="nx">localMedia</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+
+<span class="c1">// capture local media first as firefox</span>
+<span class="c1">// will want a local stream and doesn&#39;t support onnegotiationneeded event</span>
+<span class="nx">localMedia</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;capture&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">localStream</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// look for friends</span>
+  <span class="nx">signaller</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer:announce&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// create a peer connection for our new friend</span>
+    <span class="kd">var</span> <span class="nx">pc</span> <span class="o">=</span> <span class="nx">rtc</span><span class="p">.</span><span class="nx">createConnection</span><span class="p">();</span>
+
+    <span class="c1">// couple our connection via the signalling channel</span>
+    <span class="kd">var</span> <span class="nx">monitor</span> <span class="o">=</span> <span class="nx">rtc</span><span class="p">.</span><span class="nx">couple</span><span class="p">(</span><span class="nx">pc</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="nx">signaller</span><span class="p">);</span>
+
+    <span class="c1">// add the stream to the connection</span>
+    <span class="nx">pc</span><span class="p">.</span><span class="nx">addStream</span><span class="p">(</span><span class="nx">localStream</span><span class="p">);</span>
+
+    <span class="c1">// once the connection is active, log a console message</span>
+    <span class="nx">monitor</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;active&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;connection active to: &#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+    <span class="p">});</span>
+
+    <span class="c1">// when the peer connection receives a remote stream render it to the</span>
+    <span class="c1">// screen</span>
+    <span class="nx">pc</span><span class="p">.</span><span class="nx">onaddstream</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">remoteStream</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">media</span><span class="p">(</span><span class="nx">remoteStream</span><span class="p">).</span><span class="nx">render</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+    <span class="p">};</span>
+  <span class="p">});</span>
+
+  <span class="c1">// announce ourself in the rtc-getting-started room</span>
+  <span class="nx">signaller</span><span class="p">.</span><span class="nx">announce</span><span class="p">({</span> <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;rtc-getting-started&#39;</span> <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>This code definitely doesn&#39;t cover all the cases that you need to consider
+(i.e. peers leaving, etc) but it should demonstrate how to:</p>
+<ol>
+<li>Capture video and add it to a peer connection</li>
+<li>Couple a local peer connection with a remote peer connection</li>
+<li>Deal with the remote steam being discovered and how to render
+that to the local interface.</li>
+</ol>
 <h2 id="factories">Factories</h2>
 <h3 id="createconnection-opts-constraints-">createConnection(opts?, constraints?)</h3>
 <p>Create a new <code>RTCPeerConnection</code> auto generating default opts as required.</p>
@@ -177,7 +237,7 @@ that will bind to each of the core events WebRTC events (unless overriden
 by providing the listen function additional arguments).</p>
 <h2 id="license-s-">License(s)</h2>
 <h3 id="apache-2-0">Apache 2.0</h3>
-<p>Copyright 2013 National ICT Australia Limited (NICTA)</p>
+<p>Copyright 2014 National ICT Australia Limited (NICTA)</p>
 <p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at</p>
