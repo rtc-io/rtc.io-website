@@ -51,7 +51,7 @@ argument which tells quickconnect which server to use for signaling:</p>
 
 <span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard/&#39;</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">pc</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">monitor</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;got a new friend, id: &#39;</span> <span class="o">+</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">conn</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;got a new friend, id: &#39;</span> <span class="o">+</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">pc</span><span class="p">);</span>
   <span class="p">});</span>
 </pre></div>
 
