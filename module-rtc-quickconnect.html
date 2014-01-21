@@ -106,7 +106,7 @@ to use <code>rtc-quickconnect</code> to create a simple video conferencing appli
 
 <span class="c1">// once media is captured, connect</span>
 <span class="nx">localMedia</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;capture&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard/&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">ns</span><span class="o">:</span> <span class="s1">&#39;dctest&#39;</span> <span class="p">})</span>
+  <span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard/&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;conftest&#39;</span> <span class="p">})</span>
     <span class="c1">// broadcast our captured media to other participants in the room</span>
     <span class="p">.</span><span class="nx">broadcast</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span>
     <span class="c1">// when a peer is connected (and active) pass it to us for use</span>

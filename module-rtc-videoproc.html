@@ -115,6 +115,23 @@ fake video:</p>
 <span class="nx">vid</span><span class="p">.</span><span class="nx">pipeline</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">handleDraw</span><span class="p">);</span>
 </pre></div>
 
+<h3 id="using-the-internal-filters">Using the internal filters</h3>
+<p>From <code>rtc-videoproc@0.6</code> onwards, we have begun including some simple
+filters as part of the library, which can be used by simply requiring
+<code>rtc-videoproc/filters/%filtername%</code> and letting browserify do the rest.</p>
+<p>An example of doing a grayscale transformation using the internal
+filters is shown below:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">processor</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-videoproc&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">vid</span><span class="p">;</span>
+
+<span class="c1">// capture media</span>
+<span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nx">vid</span> <span class="o">=</span> <span class="nx">processor</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">));</span>
+
+<span class="c1">// handle draw events on the fake video</span>
+<span class="nx">vid</span><span class="p">.</span><span class="nx">pipeline</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-videoproc/filters/grayscale&#39;</span><span class="p">));</span>
+</pre></div>
+
 <h2 id="listening-for-custom-frame-events">Listening for custom <code>frame</code> events</h2>
 <p>In addition to providing the opportunity to analyse and modify pixel data
 the <code>rtc-canvas</code> module also provides the a custom <code>frame</code> event for
@@ -145,7 +162,7 @@ machine with plenty of grunt.</p>
 </ul>
 <h2 id="license-s-">License(s)</h2>
 <h3 id="apache-2-0">Apache 2.0</h3>
-<p>Copyright 2013 National ICT Australia Limited (NICTA)</p>
+<p>Copyright 2014 National ICT Australia Limited (NICTA)</p>
 <p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at</p>

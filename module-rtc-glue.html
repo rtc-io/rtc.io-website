@@ -114,7 +114,7 @@ signalling:</p>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;connected&#39;</span><span class="p">);</span>
 
     <span class="nx">signaller</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;received color notification: &#39;</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;received color notification: &#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
     <span class="p">});</span>
 
     <span class="nx">signaller</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;/color&#39;</span><span class="p">,</span> <span class="p">{</span>

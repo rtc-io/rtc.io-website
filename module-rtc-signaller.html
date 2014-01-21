@@ -188,9 +188,6 @@ others with the following ids:</p>
 <p>Tell the signalling server we are leaving.  Calling this function is
 usually not required though as the signalling server should issue correct
 <code>/leave</code> messages when it detects a disconnect event.</p>
-<h3 id="lock-targetid-opts-callback-">lock(targetId, opts?, callback?)</h3>
-<p>Attempt to get a temporary exclusive lock on the communication
-channel between the local signaller and the specified target peer id.</p>
 <h3 id="to-targetid-">to(targetId)</h3>
 <p>Use the <code>to</code> function to send a message to the specified target peer.
 A large parge of negotiating a WebRTC peer connection involves direct
@@ -216,10 +213,6 @@ communication channel between the two parties:</p>
 <span class="p">);</span>
 </pre></div>
 
-<h3 id="signaller-unlock-targetid-opts-callback-">signaller#unlock(targetId, opts?, callback)</h3>
-<p>Send an unlock message to the target peer to release a previously
-attained lock.  The callback will be triggered once we know whether the
-lock release was successful and acknowledged.</p>
 <h3 id="loadprimus-signalhost-callback-">loadPrimus(signalhost, callback)</h3>
 <p>This is a convenience function that is patched into the signaller to assist
 with loading the <code>primus.js</code> client library from an <code>rtc-switchboard</code>
@@ -277,19 +270,6 @@ data in the signaller is removed but can be accessed in 2nd argument
 of the event handler.</p>
 </li>
 </ul>
-<h4 id="lock">lock</h4>
-<pre><code>/lock</code></pre>
-<p>A <code>/lock</code> request can only be sent within the context of a <code>/to</code> message
-and thus must contain source data to be processed correctly.  The <code>/lock</code>
-message is used to coordinate betwen two remote peers in the case that
-both peers which to commence renegotiation at the same time.</p>
-<p>In the case that two peers attempt to renegotiate with each other at the
-same time, then the peer that has been identified as party <code>a</code> in the peer
-relationship will take on the role of the initiator in the negotiation and
-party <code>b</code> will respond to the offer sdp.</p>
-<h4 id="unlock">unlock</h4>
-<pre><code>/unlock|label</code></pre>
-<p>Clear a remote lock</p>
 <h2 id="license-s-">License(s)</h2>
 <h3 id="apache-2-0">Apache 2.0</h3>
 <p>Copyright 2014 National ICT Australia Limited (NICTA)</p>
