@@ -24,16 +24,13 @@
     "blockdown": "~0.3.4",
     "injectcode": "~0.2.3",
     "cog": "~0.4.1",
-    "rtc": "~0.13.3",
+    "rtc": "~0.13.5",
     "rtc-core": "~0.7.1",
     "crel": "~1.1.0",
     "demo-console": "~1.1.1",
     "rtc-media": "~1.5.1",
-    "rtc-signaller": "~0.14.1",
-    "rtc-videoproc": "~0.5.1"
-  },
-  "dependencies": {
     "rtc-signaller": "~0.15.0",
-    "rtc-filter-grayscale": "~0.1.0"
+    "rtc-filter-grayscale": "~0.1.0",
+    "rtc-videoproc": "~0.5.1"
   }
 }
