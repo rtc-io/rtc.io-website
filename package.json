@@ -33,6 +33,7 @@
     "rtc-videoproc": "~0.5.1"
   },
   "dependencies": {
-    "rtc-signaller": "~0.15.0"
+    "rtc-signaller": "~0.15.0",
+    "rtc-filter-grayscale": "~0.1.0"
   }
 }

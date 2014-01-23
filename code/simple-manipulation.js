@@ -6,4 +6,4 @@ var vid;
 media().render(vid = canvas(document.body));
 
 // add a draw handler to the pipeline
-vid.pipeline.add(require('./filters/grayscale'));
+vid.pipeline.add(require('rtc-filter-grayscale'));
