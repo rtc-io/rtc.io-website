@@ -48,7 +48,7 @@
 <span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nx">vid</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">));</span>
 
 <span class="c1">// add a draw handler to the pipeline</span>
-<span class="nx">vid</span><span class="p">.</span><span class="nx">pipeline</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./filters/grayscale&#39;</span><span class="p">));</span>
+<span class="nx">vid</span><span class="p">.</span><span class="nx">pipeline</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-filter-grayscale&#39;</span><span class="p">));</span>
 </pre></div>
 
 <p>In the code above, you can see that we are using a node style <code>require</code> statement to include a grayscale filter into our processing code.  Let&#39;s have a look at the implementation of that small module now:</p>
@@ -84,7 +84,7 @@
 <span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nx">vid</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="p">{</span> <span class="nx">fps</span><span class="o">:</span> <span class="mi">5</span> <span class="p">}));</span>
 
 <span class="c1">// add a draw handler to the pipeline</span>
-<span class="nx">vid</span><span class="p">.</span><span class="nx">pipeline</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./filters/grayscale&#39;</span><span class="p">));</span>
+<span class="nx">vid</span><span class="p">.</span><span class="nx">pipeline</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-filter-grayscale&#39;</span><span class="p">));</span>
 </pre></div>
 
 <p><a class="sample" data-sample="simple-manipulation-5fps" href="#">Run Sample</a></p>
