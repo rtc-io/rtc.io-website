@@ -5,21 +5,20 @@ outputfiles = $(filter-out template.html,$(wildcard *.html))
 sourcedocs = $(patsubst %.md,%.html,$(subst src/,,$(wildcard src/*.md)))
 tutorials = $(patsubst %.md,tutorial-%.html,$(subst src/tutorials/,,$(wildcard src/tutorials/*.md)))
 samples = $(subst code/,js/samples/,$(wildcard code/*.js))
-glue_repo = https://raw.github.com/rtc-io/rtc-glue/master/dist
 
 default: build
 
 app: prepare
-	browserify --debug src/app.js > js/app.js
+	@echo "Building site application code"
+	@browserify --debug src/app.js > js/app.js
 
 static: prepare
-	cp src/static/* .
+	@echo "Preparing static assets"
+	@cp src/static/* .
 
-getlibs:
-	@echo "fetching glue.js"
-	@curl -s ${glue_repo}/glue.js > glue.js
-	@echo "fetching glue.min.js"
-	@curl -s ${glue_repo}/glue.min.js > glue.min.js
+updatelibs:
+	@echo "Updating rtc-glue"
+	@cp ./node_modules/rtc-glue/dist/* .
 
 $(rtcmods): prepare
 	@echo "fetching $@ module readme"
@@ -43,4 +42,4 @@ prepare:
 	@mkdir -p build/
 	@cp src/*.md build/
 
-build: prepare getlibs app static $(rtcmods) $(sourcedocs) $(tutorials) $(samples)
+build: prepare updatelibs app static $(rtcmods) $(sourcedocs) $(tutorials) $(samples)
