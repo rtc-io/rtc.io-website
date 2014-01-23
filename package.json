@@ -31,6 +31,7 @@
     "rtc-media": "~1.5.1",
     "rtc-signaller": "~0.15.0",
     "rtc-filter-grayscale": "~0.1.0",
-    "rtc-videoproc": "~0.5.1"
+    "rtc-videoproc": "~0.5.1",
+    "rtc-glue": "~0.8.0"
   }
 }
