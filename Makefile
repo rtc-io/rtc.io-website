@@ -29,10 +29,12 @@ js/samples/%.js: prepare
 	browserify --debug $(subst js/samples/,code/,$@) > $@
 
 tutorial-%.html: prepare
-	cat src/tutorials/$(patsubst tutorial-%.html,%.md,$@) | $(injectcode) | $(blockdown) template.html > $@
+	@echo "generating $@"
+	@cat src/tutorials/$(patsubst tutorial-%.html,%.md,$@) | $(injectcode) | $(blockdown) template.html > $@
 
 %.html: prepare
-	$(blockdown) --repo="https://github.com/rtc-io/rtc.io" template.html < build/$(patsubst %.html,%.md,$@) > $@
+	@echo "generating $@"
+	@$(blockdown) --repo="https://github.com/rtc-io" template.html < build/$(patsubst %.html,%.md,$@) > $@
 
 prepare:
 	@rm -f $(outputfiles)
