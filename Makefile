@@ -6,7 +6,7 @@ sourcedocs = $(patsubst %.md,%.html,$(subst src/,,$(wildcard src/*.md)))
 tutorials = $(patsubst %.md,tutorial-%.html,$(subst src/tutorials/,,$(wildcard src/tutorials/*.md)))
 samples = $(subst code/,js/samples/,$(wildcard code/*.js))
 
-default: build
+default: all
 
 app: prepare
 	@echo "Building site application code"
@@ -23,7 +23,7 @@ updatelibs:
 $(rtcmods): prepare
 	@echo "fetching $@ module readme"
 	@curl -s https://raw.github.com/rtc-io/$@/master/README.md | \
-		$(blockdown) template.html > module-$@.html
+		$(blockdown) --repo="https://github.com/rtc-io/$@" template.html > module-$@.html
 
 js/samples/%.js: prepare
 	browserify --debug $(subst js/samples/,code/,$@) > $@
@@ -31,8 +31,8 @@ js/samples/%.js: prepare
 tutorial-%.html: prepare
 	cat src/tutorials/$(patsubst tutorial-%.html,%.md,$@) | $(injectcode) | $(blockdown) template.html > $@
 
-%.html: prepare $(rtcmods)
-	$(blockdown) template.html < build/$(patsubst %.html,%.md,$@) > $@
+%.html: prepare
+	$(blockdown) --repo="https://github.com/rtc-io/rtc.io" template.html < build/$(patsubst %.html,%.md,$@) > $@
 
 prepare:
 	@rm -f $(outputfiles)
@@ -42,4 +42,6 @@ prepare:
 	@mkdir -p build/
 	@cp src/*.md build/
 
-build: prepare updatelibs app static $(rtcmods) $(sourcedocs) $(tutorials) $(samples)
+local: prepare app static updatelibs $(sourcedocs) $(tutorials) $(samples)
+
+all: local $(rtcmods)

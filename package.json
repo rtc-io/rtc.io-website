@@ -21,7 +21,7 @@
     "url": "https://github.com/rtc-io/rtc.io/issues"
   },
   "devDependencies": {
-    "blockdown": "~0.3.4",
+    "blockdown": "~0.4.0",
     "injectcode": "~0.2.3",
     "cog": "~0.4.1",
     "rtc": "~0.14.0",
