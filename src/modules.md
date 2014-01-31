@@ -2,7 +2,7 @@
 
 The rtc.io suite is made up of a number of modules, which cater for different needs.
 
-## Client Modules
+## Browser Modules
 
 The following is a list of modules that are designed for use within a browser.  Each of these modules (unless otherwise specified) is designed to be built into an application using [browserify](http://browserify.org/). In our experience, using browserify in conjunction with [npm](https://npmjs.org/) provides a very smooth development experience.
 
@@ -36,6 +36,20 @@ While in almost all our WebRTC implementations we have used websockets for signa
 
 The `rtc-core` module contains some lower-level, shared functionality that is used by most of the above client-side libraries.  It assists with cross-browser detection of `RTCPeerConnection` classes and other similar functions.
 
+## Browser Utility Modules
+
+### [rtc-captureconfig](/module-rtc-captureconfig.html)
+
+The `rtc-captureconfig` module is used in `rtc-glue` to convert simple string based attributes to valid WebRTC constraints that can be used in for media capture.
+
+## Browser Processing Modules
+
+Once you are capturing realtime video and audio in the browser, there is a lot that can be done in terms of video and audio analysis. Listed below are modules that assist doing exactly that:
+
+### [rtc-videoproc](/module-rtc-videoproc.html)
+
+The video processing module allows you to replace a standard video element with a simulated video element using a HTML5 canvas.  This custom canvas provides a video processing pipeline that permits analysis and optional modification of the pixel data that is being drawn to the canvas.
+
 ## Server Modules
 
 While the clientside modules make up 85% of the rtc.io suite, we do have some server-side node modules that are designed to work with our client side modules when building applications.
@@ -47,17 +61,3 @@ This is the server-side companion to the `rtc-signaller` module.  If you are loo
 It has been constructed using [primus](https://github.com/primus/primus) for the websocket communication layer, which means that different node websocket implementations can be used in your applications.
 
 The switchboard can either be incorporated into your node server application code, or hosted separately - whatever best suits your application architecture.
-
-## Utility Modules
-
-### [rtc-captureconfig](/module-rtc-captureconfig.html)
-
-The `rtc-captureconfig` module is used in `rtc-glue` to convert simple string based attributes to valid WebRTC constraints that can be used in for media capture.
-
-## Processing Modules
-
-Once you are capturing realtime video and audio in the browser, there is a lot that can be done in terms of video and audio analysis. Listed below are modules that assist doing exactly that:
-
-### [rtc-videoproc](/module-rtc-videoproc.html)
-
-The video processing module allows you to replace a standard video element with a simulated video element using a HTML5 canvas.  This custom canvas provides a video processing pipeline that permits analysis and optional modification of the pixel data that is being drawn to the canvas.
