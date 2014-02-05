@@ -107,6 +107,8 @@ to use <code>rtc-quickconnect</code> to create a simple video conferencing appli
 <span class="c1">// once media is captured, connect</span>
 <span class="nx">localMedia</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;capture&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
   <span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard/&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;conftest&#39;</span> <span class="p">})</span>
+    <span class="c1">// create a chat channel</span>
+    <span class="p">.</span><span class="nx">createDataChannel</span><span class="p">(</span><span class="s1">&#39;chat&#39;</span><span class="p">)</span>
     <span class="c1">// broadcast our captured media to other participants in the room</span>
     <span class="p">.</span><span class="nx">broadcast</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span>
     <span class="c1">// when a peer is connected (and active) pass it to us for use</span>
@@ -115,6 +117,15 @@ to use <code>rtc-quickconnect</code> to create a simple video conferencing appli
 
       <span class="c1">// render the remote streams</span>
       <span class="nx">pc</span><span class="p">.</span><span class="nx">getRemoteStreams</span><span class="p">().</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">renderRemote</span><span class="p">(</span><span class="nx">id</span><span class="p">));</span>
+    <span class="p">})</span>
+    <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;chat:open&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dc</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">dc</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">evt</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;received chat message: &#39;</span> <span class="o">+</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+      <span class="p">};</span>
+
+      <span class="nx">setInterval</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">dc</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">);</span>
+      <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
     <span class="p">})</span>
     <span class="c1">// when a peer leaves, remove teh media</span>
     <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer:leave&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
@@ -159,6 +170,24 @@ testing and development you are more than welcome to use this also, but
 just be aware that we use this for our testing so it may go up and down
 a little.  If you need something more stable, why not consider deploying
 an instance of the switchboard yourself - it&#39;s pretty easy :)</p>
+<h2 id="handling-peer-disconnection">Handling Peer Disconnection</h2>
+<p><strong>NOTE:</strong> This functionality is experimental and still in testing, it is
+recommended that you continue to use the <code>peer:leave</code> events at this stage.</p>
+<p>Since version <code>0.11</code> the following events are also emitted by quickconnect
+objects:</p>
+<ul>
+<li><code>peer:disconnect</code></li>
+<li><code>%label%:close</code> where <code>%label%</code> is the label of the channel
+ you provided in a <code>createDataChannel</code> call.</li>
+</ul>
+<p>Basically the <code>peer:disconnect</code> can be used as a more accurate version
+of the <code>peer:leave</code> message.  While the <code>peer:leave</code> event triggers when
+the background signaller disconnects, the <code>peer:disconnect</code> event is
+trigger when the actual WebRTC peer connection is closed.</p>
+<p>At present (due to limited browser support for handling peer close events
+and the like) this is implemented by creating a heartbeat data channel
+which sends messages on a regular basis between the peers.  When these
+messages are stopped being received the connection is considered closed.</p>
 <h2 id="reference">Reference</h2>
 <pre><code>quickconnect(signalhost, opts?) =&gt; rtc-sigaller instance (+ helpers)</code></pre>
 <h3 id="valid-quick-connect-options">Valid Quick Connect Options</h3>
@@ -204,6 +233,9 @@ a lot simpler.</p>
 <h4 id="broadcast-stream-">broadcast(stream)</h4>
 <p>Add the stream to the set of local streams that we will broadcast
 to other peers.</p>
+<h4 id="close-">close()</h4>
+<p>The <code>close</code> function provides a convenient way of closing all associated
+peer connections.</p>
 <h4 id="createdatachannel-label-config-">createDataChannel(label, config)</h4>
 <p>Request that a data channel with the specified <code>label</code> is created on
 the peer connection.  When the data channel is open and available, an
@@ -215,6 +247,10 @@ call:</p>
 
 <p>Then when the data channel is ready for use, a <code>test:open</code> event would
 be emitted by <code>qc</code>.</p>
+<h4 id="profile-data-">profile(data)</h4>
+<p>Update the profile data with the attached information, so when 
+the signaller announces it includes this data in addition to any
+room and id information.</p>
 <h2 id="license-s-">License(s)</h2>
 <h3 id="apache-2-0">Apache 2.0</h3>
 <p>Copyright 2014 National ICT Australia Limited (NICTA)</p>
@@ -233,7 +269,7 @@ be emitted by <code>qc</code>.</p>
   <p>
     <a href="http://nicta.com.au">
       <img src="images/nicta-logo.gif" alt="NICTA logo" />
-    </a>© NICTA 2013
+    </a>© NICTA 2013 - 2014
   </p>
   <p class="license">Project source code is licensed under the <a href="https://github.com/rtc-io/rtc/blob/master/LICENSE">Apache 2.0</a>.</p>
   <a class="closing" href="#top"></a>

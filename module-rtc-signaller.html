@@ -241,9 +241,25 @@ If so, then pass the entire message contents onto the registered handler.</p>
 <p>When an announce message is received by the signaller, the attached
 object data is decoded and the signaller emits an <code>announce</code> message.</p>
 <h5 id="events-triggered-in-response-to-announce-">Events Triggered in response to <code>/announce</code></h5>
-<p>There are two different types of <code>peer:</code> events that can be triggered
+<p>There are three different types of <code>peer:</code> events that can be triggered
 in on peer B to calling the <code>announce</code> method on peer A.</p>
 <ul>
+<li><p><code>peer:filter</code></p>
+<p>The <code>peer:filter</code> event is triggered prior to the <code>peer:announce</code> or
+<code>peer:update</code> events being fired and provides an application the
+opportunity to reject a peer.  The handler for this event is passed
+a JS object that contains a <code>data</code> attribute for the announce data, and an
+<code>allow</code> flag that controls whether the peer is to be accepted.</p>
+<p>Due to the way event emitters behave in node, the last handler invoked
+is the authority on whether the peer is accepted or not (so make sure to
+check the previous state of the allow flag):</p>
+<div class="highlight"><pre><span class="c1">// only accept connections from Bob</span>
+<span class="nx">signaller</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer:filter&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">evt</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">evt</span><span class="p">.</span><span class="nx">allow</span> <span class="o">=</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">allow</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">evt</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">name</span> <span class="o">===</span> <span class="s1">&#39;Bob&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+</li>
 <li><p><code>peer:announce</code></p>
 <p>The <code>peer:announce</code> event is triggered when a new peer has been
 discovered.  The data for the new peer (as an JS object) is provided
@@ -288,7 +304,7 @@ of the event handler.</p>
   <p>
     <a href="http://nicta.com.au">
       <img src="images/nicta-logo.gif" alt="NICTA logo" />
-    </a>© NICTA 2013
+    </a>© NICTA 2013 - 2014
   </p>
   <p class="license">Project source code is licensed under the <a href="https://github.com/rtc-io/rtc/blob/master/LICENSE">Apache 2.0</a>.</p>
   <a class="closing" href="#top"></a>

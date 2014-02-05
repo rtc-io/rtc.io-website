@@ -43,122 +43,104 @@ a video element does not behave as you expect.</p>
 <p><a href="https://nodei.co/npm/rtc-videoproc/"><img src="https://nodei.co/npm/rtc-videoproc.png" alt="NPM" /></a></p>
 <p><a href="http://github.com/hughsk/stability-badges"><img src="http://hughsk.github.io/stability-badges/dist/unstable.svg" alt="unstable" /></a></p>
 <h2 id="example-usage">Example Usage</h2>
-<p>This was primarily written to work with the
-<a href="https://github.com/rtc-io/rtc-media">rtc-media</a> library so here&#39;s an
-example of how it works there:</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">processor</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-videoproc&#39;</span><span class="p">);</span>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">crel</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;crel&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">videoproc</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-videoproc&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">vid</span> <span class="o">=</span> <span class="nx">crel</span><span class="p">(</span><span class="s1">&#39;video&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">crel</span><span class="p">(</span><span class="s1">&#39;canvas&#39;</span><span class="p">);</span>
 
-<span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nx">processor</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">));</span>
+<span class="c1">// create the processor</span>
+<span class="kd">var</span> <span class="nx">processor</span> <span class="o">=</span> <span class="nx">videoproc</span><span class="p">(</span><span class="nx">vid</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">filter</span><span class="o">:</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-filter-grayscale&#39;</span><span class="p">)</span>
+<span class="p">});</span>
+
+<span class="c1">// capture media and render</span>
+<span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nx">vid</span><span class="p">);</span>
+
+<span class="c1">// add the canvas to the document</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">canvas</span><span class="p">);</span>
 </pre></div>
 
-<p>Normally, the <code>media().render</code> call will create a <code>&lt;video&gt;</code> element in
-the specified target container.  In this case, however, <code>rtc-canvas</code>
-intercepts the request and creates it&#39;s own fake video element that is
-passed back to the render call.</p>
 <h2 id="using-the-processing-pipeline">Using the Processing Pipeline</h2>
 <p>A processing pipeline has been included to assist with
-manipulating the canvas on the fly. Adding a processor to the pipeline is
-simply a matter of adding a pipeline processor available on the returned
-fake video:</p>
-<div class="highlight"><pre><span class="c1">// add a processor</span>
-<span class="nx">canvas</span><span class="p">.</span><span class="nx">pipeline</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">imageData</span><span class="p">)</span> <span class="p">{</span>
-  <span class="c1">// examine the pixel data</span>
-
-  <span class="c1">// if we&#39;ve modified the pixel data and want to write that back</span>
-  <span class="c1">// to the canvas then we must return a truthy value</span>
-  <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+manipulating the canvas on the fly. To specify the filters to be used
+in the processing pipeline, this is done in the options accepted by
+videoproc. Either specifying an array of filters with the <code>filters</code> option
+or a single filter function with the <code>filter</code> option is fine.  If you use
+both then the individual filter will be added filter list and used in
+series.</p>
+<div class="highlight"><pre><span class="nx">videoproc</span><span class="p">(</span><span class="nx">srcVideo</span><span class="p">,</span> <span class="nx">targetCanvas</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">filters</span><span class="o">:</span> <span class="p">[</span>
+    <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-filter-grayscale&#39;</span><span class="p">),</span>
+    <span class="nx">myCustomFilterFunction</span>
+  <span class="p">]</span>
 <span class="p">});</span>
 </pre></div>
 
-<p>A more complete example is shown below:</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">processor</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-videoproc&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">vid</span><span class="p">;</span>
-
-<span class="kd">function</span> <span class="nx">handleDraw</span><span class="p">(</span><span class="nx">imageData</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">channels</span> <span class="o">=</span> <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">rgb</span> <span class="o">=</span> <span class="p">[];</span>
-  <span class="kd">var</span> <span class="nx">rgbAvg</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">alpha</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">ii</span><span class="p">;</span>
-
-  <span class="c1">// check that we have channels is divisible by four (just as a safety)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">channels</span><span class="p">.</span><span class="nx">length</span> <span class="o">%</span> <span class="mi">4</span> <span class="o">!==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="c1">// iterate through the data</span>
-  <span class="c1">// NOTE: decrementing loops are fast but you need to know that you will</span>
-  <span class="c1">// hit 0 using this logic otherwise it will run forever (only 0 is falsy)</span>
-  <span class="k">for</span> <span class="p">(</span><span class="nx">ii</span> <span class="o">=</span> <span class="nx">channels</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">ii</span> <span class="o">-=</span> <span class="mi">4</span><span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// get the rgb tuple</span>
-    <span class="nx">rgb</span> <span class="o">=</span> <span class="p">[</span><span class="nx">channels</span><span class="p">[</span><span class="nx">ii</span><span class="p">],</span> <span class="nx">channels</span><span class="p">[</span><span class="nx">ii</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="nx">channels</span><span class="p">[</span><span class="nx">ii</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]];</span>
-
-    <span class="c1">// get the alpha value</span>
-    <span class="nx">alpha</span> <span class="o">=</span> <span class="nx">channels</span><span class="p">[</span><span class="nx">ii</span> <span class="o">+</span> <span class="mi">3</span><span class="p">];</span>
-
-    <span class="c1">// calculate the rgb average</span>
-    <span class="nx">rgbAvg</span> <span class="o">=</span> <span class="p">(</span><span class="nx">rgb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="nx">rgb</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nx">rgb</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="p">)</span> <span class="o">/</span> <span class="mi">3</span><span class="p">;</span>
-
-    <span class="c1">// update the values to the rgb average</span>
-    <span class="nx">channels</span><span class="p">[</span><span class="nx">ii</span><span class="p">]</span> <span class="o">=</span> <span class="nx">channels</span><span class="p">[</span><span class="nx">ii</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nx">channels</span><span class="p">[</span><span class="nx">ii</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="nx">rgbAvg</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+<h2 id="writing-a-filter-function">Writing a Filter Function</h2>
+<p>Writing a filter function is very simple, and they use the following
+function signature:</p>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">filter</span><span class="p">(</span><span class="nx">imageData</span><span class="p">,</span> <span class="nx">tick</span><span class="p">)</span> <span class="p">{</span>
 <span class="p">}</span>
-
-<span class="c1">// capture media</span>
-<span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nx">vid</span> <span class="o">=</span> <span class="nx">processor</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">));</span>
-
-<span class="c1">// handle draw events on the fake video</span>
-<span class="nx">vid</span><span class="p">.</span><span class="nx">pipeline</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">handleDraw</span><span class="p">);</span>
 </pre></div>
 
-<h3 id="using-the-internal-filters">Using the internal filters</h3>
-<p>From <code>rtc-videoproc@0.6</code> onwards, we have begun including some simple
-filters as part of the library, which can be used by simply requiring
-<code>rtc-videoproc/filters/%filtername%</code> and letting browserify do the rest.</p>
-<p>An example of doing a grayscale transformation using the internal
-filters is shown below:</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">processor</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-videoproc&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">vid</span><span class="p">;</span>
-
-<span class="c1">// capture media</span>
-<span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nx">vid</span> <span class="o">=</span> <span class="nx">processor</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">));</span>
-
-<span class="c1">// handle draw events on the fake video</span>
-<span class="nx">vid</span><span class="p">.</span><span class="nx">pipeline</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-videoproc/filters/grayscale&#39;</span><span class="p">));</span>
-</pre></div>
-
+<p>The <code>imageData</code> arg is an
+<a href="http://www.w3.org/TR/2dcontext/#imagedata">ImageData</a>, and the <code>tick</code>
+argument refers to the tick that has been captured as part of the capture
+loop (be aware that it could be a high resolution timer value if rAF is
+being used).</p>
+<p>If you are writing an analysis filter, then simply do what you need to do
+and exit the function.  If you have written a filter that modifies the pixel
+data and you want this drawn back to the canvas then your <strong>filter must
+return <code>true</code></strong> to tell <code>rtc-videoproc</code> that it should draw the imageData
+back to the canvas.</p>
 <h2 id="listening-for-custom-frame-events">Listening for custom <code>frame</code> events</h2>
 <p>In addition to providing the opportunity to analyse and modify pixel data
-the <code>rtc-canvas</code> module also provides the a custom <code>frame</code> event for
+the <code>rtc-videoproc</code> module also provides the a custom <code>frame</code> event for
 detecting when a new frame has been drawn to the canvas.</p>
 <p>A simple example can be found below:</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">processor</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-videoproc&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">processor</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">videoproc</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-videoproc&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">crel</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;crel&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">video</span> <span class="o">=</span> <span class="nx">crel</span><span class="p">(</span><span class="s1">&#39;video&#39;</span><span class="p">);</span>
 
-<span class="c1">// capture the media and render to the fake canvas</span>
-<span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nx">canvas</span><span class="p">);</span>
-
-<span class="c1">// listen from frames in the canvas</span>
-<span class="nx">canvas</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;frame&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">evt</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;captured frame at &#39;</span> <span class="o">+</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">detail</span><span class="p">.</span><span class="nx">tick</span><span class="p">);</span>
+<span class="c1">// set up the video processing pipeline</span>
+<span class="nx">videoproc</span><span class="p">(</span><span class="nx">video</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;frame&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">imageData</span><span class="p">,</span> <span class="nx">tick</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;captured frame at: &#39;</span> <span class="o">+</span> <span class="nx">tick</span><span class="p">);</span>
 <span class="p">});</span>
+
+<span class="c1">// capture media and render to the video</span>
+<span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nx">video</span><span class="p">);</span>
+
+<span class="c1">// add the canvas to the dom</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">video</span><span class="p">);</span>
 </pre></div>
 
+<p>NOTE: The <code>frame</code> event occurs after the filter pipeline has been run and
+and the imageData may have been modified from the original video frame.</p>
 <h2 id="a-note-with-regards-to-cpu-usage">A Note with Regards to CPU Usage</h2>
-<p>By default rtc-canvas will draw at 25fps but this can be modified to capture
+<p>By default rtc-videoproc will draw at 25fps but this can be modified to capture
 at a lower frame rate for slower devices, or increased if you have a
 machine with plenty of grunt.</p>
 <h2 id="reference">Reference</h2>
-<h3 id="canvas-target-opts-">canvas(target, opts)</h3>
-<p>Create a fake video element for the specified target element.</p>
+<h3 id="videoproc-src-target-opts-">videoproc(src, target, opts?)</h3>
+<p>Create (or patch) a <code>&lt;canvas&gt;</code> element that will receive the video images
+from a video element.  The following options are supported.</p>
 <ul>
-<li><code>fps</code> - the redraw rate of the fake video (default = 25)</li>
+<li><p><code>canvas</code> - the canvas to draw video data to.  If not supplied a new 
+canvas element will be created.</p>
+</li>
+<li><p><code>video</code> - the video element that will be used as the source of the video.
+ If not supplied a new <code>&lt;video&gt;</code> element will be created.</p>
+</li>
+<li><p><code>fps</code> - the redraw rate of the fake video (default = 25)</p>
+</li>
+<li><p><code>greedy</code> - Specify <code>greedy: true</code> if you want the videoproc module to run
+it&#39;s capture loop using setTimeout rather than <code>requestAnimationFrame</code>.
+Doing this will mean you application will continue to capture and process
+frames even when it&#39;s tab / window becomes inactive. This is usually the
+desired behaviour with video conferencing applications.</p>
+</li>
 </ul>
 <h2 id="license-s-">License(s)</h2>
 <h3 id="apache-2-0">Apache 2.0</h3>
@@ -178,7 +160,7 @@ machine with plenty of grunt.</p>
   <p>
     <a href="http://nicta.com.au">
       <img src="images/nicta-logo.gif" alt="NICTA logo" />
-    </a>© NICTA 2013
+    </a>© NICTA 2013 - 2014
   </p>
   <p class="license">Project source code is licensed under the <a href="https://github.com/rtc-io/rtc/blob/master/LICENSE">Apache 2.0</a>.</p>
   <a class="closing" href="#top"></a>
