@@ -14,9 +14,17 @@ a remote peer using the rtc.io signaller.
 - [WebRTC Media Capture Tutorial](tutorial-capture-media.html)
 - [Using rtc-media for WebRTC media capture](tutorial-capture-rtc-media.html)
 
+<!--
+### Conferencing
+
+- [Creating a simple WebRTC chat application](tutorial-quickconnect-chat.html)
+- [Creating a simple video conferencing application](tutorial-quickconnect-videoconferencing.html)
+-->
+
 ### Stream Processing
 
 - [Simple Video Manipulation](tutorial-simple-manipulation.html)
+
 
 <!-- ### Signalling
 
