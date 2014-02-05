@@ -207,6 +207,24 @@ header nav li a:hover {
   width: 407px;
 }
 
+.main a.sample {
+  color: white;
+  background: #888;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.main a.sample::after {
+  content: '\25B6';
+  padding-left: 10px;
+  margin-top: -1px;
+}
+
+.main a.sample:hover {
+  background: #999;
+  text-decoration: none;
+}
+
 a.scroll-point {
   position: relative;
   top: -170px;

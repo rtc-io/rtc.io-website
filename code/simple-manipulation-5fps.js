@@ -1,9 +1,17 @@
+var crel = require('crel');
 var media = require('rtc-media');
-var canvas = require('rtc-videoproc');
-var vid;
+var videoproc = require('rtc-videoproc');
+var video = crel('video');
+var canvas = crel('canvas');
 
-// capture media
-media().render(vid = canvas(document.body, { fps: 5 }));
+// set up the video processing
+videoproc(video, canvas, {
+  fps: 5,
+  filter: require('rtc-filter-grayscale')
+});
 
-// add a draw handler to the pipeline
-vid.pipeline.add(require('rtc-filter-grayscale'));
+// capture and render the video
+media().render(video);
+
+// add the canvas to the document body
+document.body.appendChild(canvas);
