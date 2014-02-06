@@ -58,7 +58,7 @@ examples:</p>
 <h3 id="pure-node-http">Pure Node HTTP</h3>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">).</span><span class="nx">createServer</span><span class="p">();</span>
 <span class="kd">var</span> <span class="nx">switchboard</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./&#39;</span><span class="p">)(</span><span class="nx">server</span><span class="p">,</span> <span class="p">{</span> <span class="nx">servelib</span><span class="o">:</span> <span class="kc">true</span> <span class="p">});</span>
-<span class="kd">var</span> <span class="nx">port</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_PORT</span> <span class="o">||</span> <span class="nx">process</span><span class="p">.</span><span class="nx">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">10</span><span class="p">)</span> <span class="o">||</span> <span class="mi">3000</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">port</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_PORT</span> <span class="o">||</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PORT</span> <span class="o">||</span> <span class="nx">process</span><span class="p">.</span><span class="nx">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">10</span><span class="p">)</span> <span class="o">||</span> <span class="mi">3000</span><span class="p">;</span>
 
 <span class="c1">// start the server</span>
 <span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">port</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
@@ -132,6 +132,48 @@ client sends an <code>/img</code> command.</p>
 <span class="p">};</span>
 </pre></div>
 
+<h2 id="logging-and-analytics-using-the-data-event">Logging and Analytics using the <code>data</code> event</h2>
+<p>Every message that flows through the switchboard (whether handled or not)
+can be logged through tapping into the <code>data</code> event.  The example below
+demonstrates how this can be done with a node logging module like
+<a href="https://github.com/trentm/node-bunyan">bunyan</a>:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">).</span><span class="nx">Server</span><span class="p">(</span><span class="nx">app</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">port</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PORT</span> <span class="o">||</span> <span class="mi">3000</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">bunyan</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;bunyan&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">log</span> <span class="o">=</span> <span class="nx">bunyan</span><span class="p">.</span><span class="nx">createLogger</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;rtc-switchboard&#39;</span> <span class="p">});</span>
+
+<span class="c1">// create the switchboard</span>
+<span class="kd">var</span> <span class="nx">switchboard</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-switchboard&#39;</span><span class="p">)(</span><span class="nx">server</span><span class="p">);</span>
+
+<span class="c1">// we need to expose the primus library</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/rtc.io/primus.js&#39;</span><span class="p">,</span> <span class="nx">switchboard</span><span class="p">.</span><span class="nx">library</span><span class="p">());</span>
+
+<span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">port</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;server running at: http://localhost:&#39;</span> <span class="o">+</span> <span class="nx">port</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">switchboard</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">peerId</span><span class="p">,</span> <span class="nx">spark</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">log</span><span class="p">.</span><span class="nx">info</span><span class="p">({</span> <span class="nx">peer</span><span class="o">:</span> <span class="nx">peerId</span> <span class="p">},</span> <span class="s1">&#39;received: &#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>As can be seen in the example above, the handlers of the <code>data</code> event can
+expect to receive three arguments to the handler function, as per the code
+snippet below:</p>
+<div class="highlight"><pre><span class="nx">switchboard</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">peerId</span><span class="p">,</span> <span class="nx">spark</span><span class="p">)</span> <span class="p">{</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>The <code>data</code> is the raw data of that has been sent from the client, the
+<code>peerId</code> is the id of the peer sending the data (this will be <code>undefined</code> if
+it is a message received prior to an <code>/announce</code> command).  Finally we have
+the raw primus <code>spark</code> that can be examined for additional information.</p>
 <h2 id="reference">Reference</h2>
 <h3 id="switchboard-server-opts-">switchboard(server, opts?)</h3>
 <p>Create the switchboard which uses primus under the hood. By default calling

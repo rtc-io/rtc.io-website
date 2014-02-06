@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+<title>rtc.io</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css" />
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+<!-- responsive -->
+<link rel="stylesheet" media="screen and (max-width: 960px)" href="css/tablet.css" />
+<link rel="stylesheet" media="screen and (max-width: 710px)" href="css/phone.css" />
+<link rel="stylesheet" type="text/css" href="fonts/source-sans/stylesheet.css" />
+<link rel="stylesheet" type="text/css" href="css/code.css" />
+</head>
+<body>
+
+<a class="scroll-point pt-top" name="top"></a>
+<header>
+<a href="https://github.com/rtc-io/rtc-sharedcursor"><img class="fork" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub" /></a>
+<a class="scroll-point pt-top" name="top"></a>
+<div class="site">
+  <div class="logo" data-subtext="OpenSource WebRTC">
+    <a href="index.html">rtc.io</a>
+  </div>
+  <nav>
+    <ul>
+    <li><a href="index.html">About</a></li>
+    <li><a href="tutorials.html">Tutorials</a></li>
+    <li><a href="demos.html">Demos</a></li>
+    <li><a href="modules.html">Modules</a></li>
+    </ul>
+  </nav>
+</div>
+<div class="shadow"></div>
+</header>
+<div class="main" role="content"><h1 id="rtc-sharedcursor">rtc-sharedcursor</h1>
+<p>The <code>rtc-sharedcursor</code> module makes it simple to share and touch
+mouse events for a target element across the wire one or more
+peers across a data channel connection.</p>
+<p><a href="https://nodei.co/npm/rtc-sharedcursor/"><img src="https://nodei.co/npm/rtc-sharedcursor.png" alt="NPM" /></a></p>
+<p><a href="http://github.com/hughsk/stability-badges"><img src="http://hughsk.github.io/stability-badges/dist/experimental.svg" alt="experimental" /></a></p>
+<h2 id="example-usage">Example Usage</h2>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">quickconnect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-quickconnect&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">sharedcursor</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-sharedcursor&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">crel</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;crel&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">qc</span> <span class="o">=</span> <span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard/&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">cursor</span> <span class="o">=</span> <span class="nx">sharedcursor</span><span class="p">(</span><span class="nx">qc</span><span class="p">);</span>
+
+<span class="c1">// create some test elements</span>
+<span class="kd">var</span> <span class="nx">elements</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="nx">crel</span><span class="p">(</span><span class="s1">&#39;canvas&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">width</span><span class="o">:</span> <span class="mi">200</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="mi">200</span> <span class="p">}),</span>
+  <span class="nx">crel</span><span class="p">(</span><span class="s1">&#39;canvas&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">width</span><span class="o">:</span> <span class="mi">500</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="mi">500</span> <span class="p">}),</span>
+  <span class="nx">crel</span><span class="p">(</span><span class="s1">&#39;canvas&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">width</span><span class="o">:</span> <span class="mi">20</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="mi">100</span> <span class="p">}),</span>
+<span class="p">];</span>
+
+<span class="c1">// randomly select one of the canvases</span>
+<span class="kd">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="nx">elements</span><span class="p">[(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="nx">elements</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="o">|</span> <span class="mi">0</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="nx">target</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">&#39;2d&#39;</span><span class="p">);</span>
+
+<span class="c1">// add our test elements to the dom</span>
+<span class="nx">elements</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// color our target so we know the capture source</span>
+<span class="nx">context</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s1">&#39;rgb(200, 200, 200)&#39;</span><span class="p">;</span>
+<span class="nx">context</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">target</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">target</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span>
+
+<span class="c1">// attach the cursor the element now it is in the dom and has</span>
+<span class="c1">// valid DOM bounds</span>
+<span class="nx">cursor</span><span class="p">.</span><span class="nx">attach</span><span class="p">(</span><span class="nx">target</span><span class="p">);</span>
+
+<span class="nx">cursor</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// draw on the target</span>
+  <span class="nx">context</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s1">&#39;rgb(200, 200, 200)&#39;</span><span class="p">;</span>
+  <span class="nx">context</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">target</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">target</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span>
+  <span class="nx">context</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="nx">type</span> <span class="o">===</span> <span class="s1">&#39;move&#39;</span> <span class="o">?</span> <span class="s1">&#39;green&#39;</span> <span class="o">:</span> <span class="s1">&#39;red&#39;</span><span class="p">;</span>
+  <span class="nx">context</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="nx">x</span> <span class="o">-</span> <span class="mi">5</span><span class="p">,</span> <span class="nx">y</span> <span class="o">-</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>Running the example in a few different windows, should display 
+something similar to what is shown below:</p>
+<p><img src="https://raw.github.com/rtc-io/rtc-sharedcursor/master/screenshot.png" alt="Screenshot" /></p>
+<h2 id="license-s-">License(s)</h2>
+<h3 id="apache-2-0">Apache 2.0</h3>
+<p>Copyright 2014 National ICT Australia Limited (NICTA)</p>
+<p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at</p>
+<pre><code> http://www.apache.org/licenses/LICENSE-2.0</code></pre>
+<p>   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.</p>
+</div>
+
+<footer>
+  <p>
+    <a href="http://nicta.com.au">
+      <img src="images/nicta-logo.gif" alt="NICTA logo" />
+    </a>© NICTA 2013 - 2014
+  </p>
+  <p class="license">Project source code is licensed under the <a href="https://github.com/rtc-io/rtc/blob/master/LICENSE">Apache 2.0</a>.</p>
+  <a class="closing" href="#top"></a>
+</footer>
+</body>
+<script src="js/app.js"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-26567546-2', 'rtc.io');
+  ga('send', 'pageview');
+
+</script>
+</html>
+

@@ -32,7 +32,8 @@
     "rtc-signaller": "~0.17.2",
     "rtc-filter-grayscale": "~0.1.0",
     "rtc-videoproc": "~0.10.1",
-    "rtc-glue": "~0.8.0"
+    "rtc-glue": "~0.8.0",
+    "rtc-quickconnect": "~0.11.2"
   },
   "dependencies": {}
 }

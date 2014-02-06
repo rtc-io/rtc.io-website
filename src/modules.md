@@ -42,6 +42,12 @@ The `rtc-core` module contains some lower-level, shared functionality that is us
 
 The `rtc-captureconfig` module is used in `rtc-glue` to convert simple string based attributes to valid WebRTC constraints that can be used in for media capture.
 
+### [rtc-sharedcursor](/module-rtc-sharedcursor.html)
+
+This module provides a simple way to implement cursor sharing in a WebRTC application.
+The module is designed to work in conjuction with `rtc-quickconnect` sends small (48-bit) payloads of relative
+mouse (or touch) changes via a WebRTC data channel to connected peers.
+
 ## Browser Processing Modules
 
 Once you are capturing realtime video and audio in the browser, there is a lot that can be done in terms of video and audio analysis. Listed below are modules that assist doing exactly that:
