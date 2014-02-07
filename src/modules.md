@@ -36,17 +36,19 @@ While in almost all our WebRTC implementations we have used websockets for signa
 
 The `rtc-core` module contains some lower-level, shared functionality that is used by most of the above client-side libraries.  It assists with cross-browser detection of `RTCPeerConnection` classes and other similar functions.
 
-## Browser Utility Modules
-
-### [rtc-captureconfig](/module-rtc-captureconfig.html)
-
-The `rtc-captureconfig` module is used in `rtc-glue` to convert simple string based attributes to valid WebRTC constraints that can be used in for media capture.
+## rtc-quickconnect plugins
 
 ### [rtc-sharedcursor](/module-rtc-sharedcursor.html)
 
 This module provides a simple way to implement cursor sharing in a WebRTC application.
 The module is designed to work in conjuction with `rtc-quickconnect` sends small (48-bit) payloads of relative
 mouse (or touch) changes via a WebRTC data channel to connected peers.
+
+## Browser Utility Modules
+
+### [rtc-captureconfig](/module-rtc-captureconfig.html)
+
+The `rtc-captureconfig` module is used in `rtc-glue` to convert simple string based attributes to valid WebRTC constraints that can be used in for media capture.
 
 ## Browser Processing Modules
 
