@@ -58,6 +58,10 @@ Once you are capturing realtime video and audio in the browser, there is a lot t
 
 The video processing module allows you to replace a standard video element with a simulated video element using a HTML5 canvas.  This custom canvas provides a video processing pipeline that permits analysis and optional modification of the pixel data that is being drawn to the canvas.
 
+### [rtc-audioproc](/module-rtc-audioproc.html)
+
+The audio processing module allows you to render a canvas to visualize audio from an audio or video element, or a getUserMedia stream. It uses the Web Audio API. This can be useful to display audio visually, or to track down when a video or audio element does not behave as you expect.
+
 ## Server Modules
 
 While the clientside modules make up 85% of the rtc.io suite, we do have some server-side node modules that are designed to work with our client side modules when building applications.
