@@ -3,6 +3,10 @@
 Here we provide some tutorials for working with WebRTC in general and also 
 the rtc.io toolset.
 
+There is also a presentation that was remotely given using WebRTC. It walks
+you through the core capabilities of the rtc.io toolset and is at
+[http://rtc.io/presentations/lca_2014_webrtc/](http://rtc.io/presentations/lca_2014_webrtc/). 
+
 ## Getting Started
 
 The following tutorials are designed to help you "dip your toe" in with 
