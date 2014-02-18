@@ -44,6 +44,12 @@ header .site {
   position: relative;
 }
 
+header div.mascot {
+  position: absolute;
+  left: 0px;
+  display: block;
+}
+
 header div.logo {
   position: absolute;
   left: 70px;
