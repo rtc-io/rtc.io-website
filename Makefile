@@ -32,9 +32,13 @@ tutorial-%.html: prepare
 	@echo "generating $@"
 	@cat src/tutorials/$(patsubst tutorial-%.html,%.md,$@) | $(injectcode) | $(blockdown) template.html > $@
 
+buildstatus.html:
+	@echo "generating build status doc"
+	@$(blockdown) --repo="https://github.com/rtc-io" template.html < src/buildstatus.md > $@
+
 %.html: prepare
 	@echo "generating $@"
-	@$(blockdown) --repo="https://github.com/rtc-io" template.html < build/$(patsubst %.html,%.md,$@) > $@
+	@$(blockdown) --repo="https://github.com/rtc-io" template.html < src/$(patsubst %.html,%.md,$@) > $@
 
 node_modules:
 	@npm install
@@ -42,10 +46,7 @@ node_modules:
 prepare:
 	@rm -f $(outputfiles)
 	@rm -rf js/samples/
-	@rm -rf build/
 	@mkdir -p js/samples/
-	@mkdir -p build/
-	@cp src/*.md build/
 
 local: node_modules prepare app static updatelibs $(sourcedocs) $(tutorials) $(samples)
 
