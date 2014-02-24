@@ -23,18 +23,18 @@
   "devDependencies": {
     "blockdown": "~0.4.0",
     "injectcode": "~0.2.3",
-    "cog": "~0.4.1",
-    "rtc": "~0.14.0",
+    "cog": "~0.5.1",
+    "rtc": "~0.15.2",
     "rtc-core": "~0.7.1",
     "crel": "~1.1.0",
     "demo-console": "~1.1.1",
     "rtc-media": "~1.5.1",
-    "rtc-signaller": "~0.17.2",
+    "rtc-signaller": "~0.18.2",
     "rtc-filter-grayscale": "~0.1.0",
     "rtc-videoproc": "~0.10.1",
-    "rtc-audioproc": "~0.0.2",
+    "rtc-audioproc": "0.0.3",
     "rtc-glue": "~0.8.0",
-    "rtc-quickconnect": "~0.11.2"
+    "rtc-quickconnect": "~0.12.0"
   },
   "dependencies": {}
 }
