@@ -44,6 +44,7 @@ mesh to be created and kept in sync (using
 <a href="https://github.com/dominictarr/scuttlebutt">scuttlebutt</a>).</p>
 <p><a href="http://github.com/hughsk/stability-badges"><img src="http://hughsk.github.io/stability-badges/dist/experimental.svg" alt="experimental" /></a></p>
 <p><a href="https://nodei.co/npm/rtc-mesh/"><img src="https://nodei.co/npm/rtc-mesh.png" alt="NPM" /></a></p>
+<p><a href="https://travis-ci.org/rtc-io/rtc-mesh"><img src="https://travis-ci.org/rtc-io/rtc-mesh.png?branch=master" alt="Build Status" /></a></p>
 <h2 id="how-it-works">How it works</h2>
 <p>The <code>rtc-mesh</code> module works by setting up a data-only WebRTC peer connection
 as peers are discovered in a particular room
@@ -65,7 +66,7 @@ shared data of the mesh:</p>
     <span class="k">return</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;could not connect: &#39;</span><span class="p">,</span> <span class="nx">err</span><span class="p">);</span>
   <span class="p">}</span>
 
-  <span class="nx">m</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data:update&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">m</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;key: &#39;</span> <span class="o">+</span> <span class="nx">key</span> <span class="o">+</span> <span class="s1">&#39;, set to: &#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">);</span>
   <span class="p">});</span>
 
@@ -99,6 +100,11 @@ following code:</p>
 <div class="highlight"><pre><span class="nx">mesh</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard/&#39;</span><span class="p">);</span>
 </pre></div>
 
+<h3 id="broadcast-label-src-">Broadcast(label, src)</h3>
+<h4 id="_answer-pc-data-">_answer(pc, data)</h4>
+<h4 id="_candidates-pc-data-">_candidates(pc, data)</h4>
+<h4 id="_createoffer-">_createOffer()</h4>
+<p>Initiate the createOffer cycle on the peer connection</p>
 <h3 id="rtcmeshmember-attributes-opts-">RTCMeshMember(attributes, opts)</h3>
 <p>An <code>RTCMeshMember</code> instance is returned when you successfully join
 a mesh.  The member instance provides methods that enable to you communicate
@@ -110,6 +116,9 @@ instance (by default) that can be used to update the shared mesh data state.</p>
 exported by <code>rtc-mesh</code> then this is called for you automatically.  You can,
 however, call the method again if you wish to update any of your signalling
 specific data requires updating.</p>
+<h4 id="broadcast-streams-opts-">broadcast(streams, opts)</h4>
+<p>Broadcast one or more streams to all active peers within the mesh or to
+specified targets within the <code>opts</code>.</p>
 <h4 id="close-">close()</h4>
 <p>Close our connection to the mesh.</p>
 <h4 id="to-targetid-callback-">to(targetId, callback)</h4>
@@ -144,6 +153,10 @@ communicating with the target.</p>
 <h4 id="_initpeerconnection-targetid-">_initPeerConnection(targetId)</h4>
 <p>Create a new <code>RTCPeerConnection</code> for the specified target id.  This method
 also handles basic initialization of the peer connection.</p>
+<h4 id="_monitorincomingbroadcasts">_monitorIncomingBroadcasts</h4>
+<p>This method responds to incoming datastream events and checks to see
+if it is a negotiate type stream. If so we need to create a broadcast
+receiver.</p>
 <h4 id="_negotiate-targetid-pc-negotiatefn-">_negotiate(targetId, pc, negotiateFn)</h4>
 <p>Used to handle the <code>createOffer</code> or <code>createAnswer</code> interaction.</p>
 <h4 id="_waitforinitialsync-roominfo-">_waitForInitialSync(roomInfo)</h4>
@@ -153,7 +166,7 @@ to determine how many peers it needs to wait for to achieve data
 synchronization.</p>
 <h2 id="license-s-">License(s)</h2>
 <h3 id="apache-2-0">Apache 2.0</h3>
-<p>Copyright 2013 National ICT Australia Limited (NICTA)</p>
+<p>Copyright 2014 National ICT Australia Limited (NICTA)</p>
 <p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at</p>

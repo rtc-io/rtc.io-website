@@ -45,10 +45,61 @@ data channels.</p>
 <p><a href="https://nodei.co/npm/rtc-dcstream/"><img src="https://nodei.co/npm/rtc-dcstream.png" alt="NPM" /></a></p>
 <p><a href="https://travis-ci.org/rtc-io/rtc-dcstream"><img src="https://travis-ci.org/rtc-io/rtc-dcstream.png?branch=master" alt="Build Status" /></a>
 <a href="http://github.com/hughsk/stability-badges"><img src="http://hughsk.github.io/stability-badges/dist/unstable.svg" alt="unstable" /></a></p>
-<h2 id="note-work-in-progress">NOTE: Work in Progress</h2>
-<p>This module is currently an experimental work in progress, so I&#39;d recommend
-checking out one of the alternative implementation of data channel -&gt; node
-stream implementations:</p>
+<h2 id="example-usage">Example Usage</h2>
+<p>The example below shows how to use the <code>rtc-dcstream</code> module to stream data
+via a datachannel to <em>n</em> remote participants.  In this case we are using
+the W3C FileReader API and streaming dropped data files over the data
+channel:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">dropkick</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;dropkick&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">quickconnect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-quickconnect&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">fileReader</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;filestream/read&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">fileReceiver</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;filestream/write&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">createDataStream</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-dcstream&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">channels</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="kd">var</span> <span class="nx">peers</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="kd">var</span> <span class="nx">inbound</span> <span class="o">=</span> <span class="p">{};</span>
+
+<span class="kd">function</span> <span class="nx">prepStream</span><span class="p">(</span><span class="nx">dc</span><span class="p">,</span> <span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">createDataStream</span><span class="p">(</span><span class="nx">dc</span><span class="p">).</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">fileReceiver</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="nx">metadata</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;received file from: &#39;</span> <span class="o">+</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">metadata</span><span class="p">);</span>
+
+    <span class="c1">// get ready to receive another stream</span>
+    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">prepStream</span><span class="p">(</span><span class="nx">dc</span><span class="p">,</span> <span class="nx">id</span><span class="p">);</span>
+    <span class="p">},</span> <span class="mi">50</span><span class="p">);</span>
+  <span class="p">}));</span>
+<span class="p">}</span>
+
+<span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;filetx-test&#39;</span> <span class="p">})</span>
+  <span class="p">.</span><span class="nx">createDataChannel</span><span class="p">(</span><span class="s1">&#39;files&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;files:open&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dc</span><span class="p">,</span> <span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">channels</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">dc</span><span class="p">);</span>
+    <span class="nx">peers</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
+
+    <span class="nx">prepStream</span><span class="p">(</span><span class="nx">dc</span><span class="p">,</span> <span class="nx">id</span><span class="p">);</span>
+  <span class="p">})</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer:leave&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">peerIdx</span> <span class="o">=</span> <span class="nx">peers</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">peerIdx</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">peers</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">peerIdx</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+      <span class="nx">channels</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">peerIdx</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">})</span>
+
+<span class="nx">dropkick</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;file&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">channels</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">createDataStream</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">fileLoader</span><span class="p">(</span><span class="nx">file</span><span class="p">).</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">stream</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+
+<span class="c1">// give the document some size so we can drag and drop stuff</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="s1">&#39;100vw&#39;</span><span class="p">;</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="s1">&#39;100vw&#39;</span><span class="p">;</span>
+</pre></div>
+
+<h2 id="alternative-implementations">Alternative Implementations</h2>
+<p>In addition to this module, the following are other modules that wrap
+WebRTC data channel communication via a node streaming interface:</p>
 <ul>
 <li><a href="https://github.com/kumavis/rtc-data-stream">rtc-data-stream</a></li>
 </ul>
@@ -56,7 +107,7 @@ stream implementations:</p>
 <p>To be completed.</p>
 <h2 id="license-s-">License(s)</h2>
 <h3 id="apache-2-0">Apache 2.0</h3>
-<p>Copyright 2013 National ICT Australia Limited (NICTA)</p>
+<p>Copyright 2014 National ICT Australia Limited (NICTA)</p>
 <p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at</p>
