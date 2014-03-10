@@ -22,15 +22,18 @@ updatelibs:
 
 $(rtcmods): prepare
 	@echo "fetching $@ module readme"
-	@curl -s https://raw.github.com/rtc-io/$@/master/README.md | \
-		$(blockdown) --repo="https://github.com/rtc-io/$@" template.html > module-$@.html
+	@curl -s https://raw.github.com/rtc-io/$@/master/README.md > tmp_$@
+	@$(blockdown) --repo="https://github.com/rtc-io/$@" template.html < tmp_$@ > module-$@.html
+	@rm tmp_$@
 
 js/samples/%.js: prepare
 	browserify --debug $(subst js/samples/,code/,$@) > $@
 
 tutorial-%.html: prepare
 	@echo "generating $@"
-	@cat src/tutorials/$(patsubst tutorial-%.html,%.md,$@) | $(injectcode) | $(blockdown) template.html > $@
+	@cat src/tutorials/$(patsubst tutorial-%.html,%.md,$@) | $(injectcode) > tmp_$@
+	@$(blockdown) template.html < tmp_$@ > $@
+	@rm tmp_$@
 
 buildstatus.html:
 	@echo "generating build status doc"
