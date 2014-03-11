@@ -69,9 +69,15 @@ data channel behaviour.  For more information on these options, I&#39;d
 recommend having a quick look at the WebRTC spec:</p>
 <p><a href="http://dev.w3.org/2011/webrtc/editor/webrtc.html#dictionary-rtcdatachannelinit-members">http://dev.w3.org/2011/webrtc/editor/webrtc.html#dictionary-rtcdatachannelinit-members</a></p>
 <p>If in doubt, I&#39;d recommend not passing through options.</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">quickconnect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-quickconnect&#39;</span><span class="p">);</span>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">freeice</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;freeice&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">quickconnect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-quickconnect&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">opts</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;qcexample-dctest&#39;</span><span class="p">,</span>
+  <span class="c1">// debug: true,</span>
+  <span class="nx">iceServers</span><span class="o">:</span> <span class="nx">freeice</span><span class="p">()</span>
+<span class="p">};</span>
 
-<span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard/&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">ns</span><span class="o">:</span> <span class="s1">&#39;dctest&#39;</span> <span class="p">})</span>
+<span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard/&#39;</span><span class="p">,</span> <span class="nx">opts</span><span class="p">)</span>
   <span class="c1">// tell quickconnect we want a datachannel called test</span>
   <span class="p">.</span><span class="nx">createDataChannel</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
   <span class="c1">// when the test channel is open, let us know</span>
