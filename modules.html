@@ -46,8 +46,6 @@
 <p>Provides a high level wrapper around the lower-level client libraries and is designed to get you building WebRTC applications very quickly.</p>
 <h3 id="-rtc-glue-module-rtc-glue-html-"><a href="module-rtc-glue.html">rtc-glue</a></h3>
 <p>Designed to provide a pure HTML tag based approach to building WebRTC applications, <code>rtc-glue</code> does not require any Javascript code to be written to create an application.  Simply include the provided <code>glue.js</code> file in your HTML page, provide some additional HTML attributes on well known HTML elements and you will be well on your way to creating simple applications.</p>
-<h3 id="-rtc-mesh-module-rtc-mesh-html-"><a href="module-rtc-mesh.html">rtc-mesh</a></h3>
-<p>This is an experimental module that provides a simple way to synchronize data across peer connections using data channels.  Our testing has shown that interoperability between Chrome 32+ (currently beta) and Firefox 26 data channels is now quite solid.  Which opens up the opportunity for broader experimentation using data channels.</p>
 <h3 id="-rtc-dcstream-module-rtc-dcstream-html-"><a href="module-rtc-dcstream.html">rtc-dcstream</a></h3>
 <p>This is a node compatible stream (streams2) module for working with WebRTC data channels.  As per <code>rtc-mesh</code> this module has been tested against Chrome 32+ and Firefox 26 and shown excellent interoperability.</p>
 <h3 id="-rtc-module-rtc-html-"><a href="module-rtc.html">rtc</a></h3>
@@ -58,6 +56,8 @@
 <h3 id="-rtc-core-module-rtc-core-html-"><a href="module-rtc-core.html">rtc-core</a></h3>
 <p>The <code>rtc-core</code> module contains some lower-level, shared functionality that is used by most of the above client-side libraries.  It assists with cross-browser detection of <code>RTCPeerConnection</code> classes and other similar functions.</p>
 <h2 id="rtc-quickconnect-plugins">rtc-quickconnect plugins</h2>
+<h3 id="-rtc-mesh-module-rtc-mesh-html-"><a href="module-rtc-mesh.html">rtc-mesh</a></h3>
+<p>This plugin provides a simple way to use WebRTC data channels to provide synchronized client state using <a href="https://github.com/dominictarr/scuttlebutt">ScuttleButt</a> and it&#39;s derivatives.</p>
 <h3 id="-rtc-sharedcursor-module-rtc-sharedcursor-html-"><a href="module-rtc-sharedcursor.html">rtc-sharedcursor</a></h3>
 <p>This module provides a simple way to implement cursor sharing in a WebRTC application.
 The module is designed to work in conjuction with <code>rtc-quickconnect</code> sends small (48-bit) payloads of relative
