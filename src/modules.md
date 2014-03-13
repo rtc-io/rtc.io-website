@@ -14,10 +14,6 @@ Provides a high level wrapper around the lower-level client libraries and is des
 
 Designed to provide a pure HTML tag based approach to building WebRTC applications, `rtc-glue` does not require any Javascript code to be written to create an application.  Simply include the provided `glue.js` file in your HTML page, provide some additional HTML attributes on well known HTML elements and you will be well on your way to creating simple applications.
 
-### [rtc-mesh](module-rtc-mesh.html)
-
-This is an experimental module that provides a simple way to synchronize data across peer connections using data channels.  Our testing has shown that interoperability between Chrome 32+ (currently beta) and Firefox 26 data channels is now quite solid.  Which opens up the opportunity for broader experimentation using data channels.
-
 ### [rtc-dcstream](module-rtc-dcstream.html)
 
 This is a node compatible stream (streams2) module for working with WebRTC data channels.  As per `rtc-mesh` this module has been tested against Chrome 32+ and Firefox 26 and shown excellent interoperability.
@@ -37,6 +33,10 @@ While in almost all our WebRTC implementations we have used websockets for signa
 The `rtc-core` module contains some lower-level, shared functionality that is used by most of the above client-side libraries.  It assists with cross-browser detection of `RTCPeerConnection` classes and other similar functions.
 
 ## rtc-quickconnect plugins
+
+### [rtc-mesh](module-rtc-mesh.html)
+
+This plugin provides a simple way to use WebRTC data channels to provide synchronized client state using [ScuttleButt](https://github.com/dominictarr/scuttlebutt) and it's derivatives.
 
 ### [rtc-sharedcursor](module-rtc-sharedcursor.html)
 
