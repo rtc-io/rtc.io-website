@@ -276,3 +276,7 @@ footer img {
 #about strong {
   text-transform: uppercase;
 }
+
+article.decker section {
+  top: 200px;
+}
