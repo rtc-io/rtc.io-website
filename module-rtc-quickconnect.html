@@ -46,7 +46,8 @@ configuration you should drill down into lower level components of the
 <a href="http://www.rtc.io">rtc.io</a> suite.  In particular you should check out
 <a href="https://github.com/rtc-io/rtc">rtc</a>.</p>
 <p><a href="https://nodei.co/npm/rtc-quickconnect/"><img src="https://nodei.co/npm/rtc-quickconnect.png" alt="NPM" /></a></p>
-<p><a href="http://github.com/hughsk/stability-badges"><img src="http://hughsk.github.io/stability-badges/dist/unstable.svg" alt="unstable" /></a></p>
+<p><img src="https://img.shields.io/badge/stability-unstable-yellowgreen.svg" alt="unstable" /></p>
+<p><a href="https://gitter.im/rtc-io/discuss"><img src="https://badges.gitter.im/rtc-io/discuss.png" alt="Gitter chat" /></a></p>
 <h2 id="example-usage">Example Usage</h2>
 <p>In the simplest case you simply call quickconnect with a single string
 argument which tells quickconnect which server to use for signaling:</p>
@@ -226,11 +227,10 @@ name instead.  <strong>NOTE:</strong> Use of the <code>room</code> option takes 
 <a href="https://github.com/rtc-io/rtc#createconnectionopts-constraints">rtc.createConnection</a>
 function:</p>
 <ul>
-<li><p><code>constraints</code></p>
-<p>Used to provide specific constraints when creating a new
-peer connection.</p>
-</li>
+<li><code>iceServers</code></li>
 </ul>
+<p>This provides a list of ice servers that can be used to help negotiate a
+connection between peers.</p>
 <h4 id="options-for-p2p-negotiation">Options for P2P negotiation</h4>
 <p>Under the hood, quickconnect uses the
 <a href="https://github.com/rtc-io/rtc#rtccouple">rtc/couple</a> logic, and the options

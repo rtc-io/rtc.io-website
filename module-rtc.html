@@ -51,7 +51,8 @@ modules that uses the <code>rtc</code> module under the hood.  Such as:</p>
 <li><a href="https://github.com/rtc-io/rtc-glue">rtc-glue</a></li>
 </ul>
 <p><a href="https://nodei.co/npm/rtc/"><img src="https://nodei.co/npm/rtc.png" alt="NPM" /></a></p>
-<p><a href="http://github.com/hughsk/stability-badges"><img src="http://hughsk.github.io/stability-badges/dist/unstable.svg" alt="unstable" /></a></p>
+<p><a href="https://travis-ci.org/rtc-io/rtc"><img src="https://img.shields.io/travis/rtc-io/rtc.svg?branch=master" alt="Build Status" /></a>
+<img src="https://img.shields.io/badge/stability-unstable-yellowgreen.svg" alt="unstable" /></p>
 <h2 id="getting-started">Getting Started</h2>
 <p>If you decide that the <code>rtc</code> module is a better fit for you than either
 <a href="https://github.com/rtc-io/rtc-quickconnect">rtc-quickconnect</a> or
@@ -130,14 +131,6 @@ that to the local interface.</li>
 <p>A simple function for filtering SDP as part of the peer
 connection handshake (see the Using Filters details below).</p>
 </li>
-<li><p><code>maxAttempts</code> (default: 1)</p>
-<p>How many times should negotiation be attempted.  This is
-<strong>experimental</strong> functionality for attempting connection negotiation
-if it fails.</p>
-</li>
-<li><p><code>attemptDelay</code> (default: 3000)</p>
-<p>The amount of ms to wait between connection negotiation attempts.</p>
-</li>
 </ul>
 <h4 id="example-usage">Example Usage</h4>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">couple</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc/couple&#39;</span><span class="p">);</span>
@@ -193,51 +186,28 @@ on a connections state.</p>
 <span class="kd">var</span> <span class="nx">pc</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RTCPeerConnection</span><span class="p">(</span><span class="nx">config</span><span class="p">);</span>
 
 <span class="c1">// watch pc and when active do something</span>
-<span class="nx">monitor</span><span class="p">(</span><span class="nx">pc</span><span class="p">).</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;active&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<span class="nx">monitor</span><span class="p">(</span><span class="nx">pc</span><span class="p">).</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;connected&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
   <span class="c1">// active and ready to go</span>
 <span class="p">});</span>
 </pre></div>
 
-<p>Events provided by the monitor are as follows:</p>
-<ul>
-<li><code>active</code>: triggered when the connection is active and ready for use</li>
-<li><code>stable</code>: triggered when the connection is in a stable signalling state</li>
-<li><code>unstable</code>: trigger when the connection is renegotiating.</li>
-</ul>
-<p>It should be noted, that the monitor does a check when it is first passed
-an <code>RTCPeerConnection</code> object to see if the <code>active</code> state passes checks.
-If so, the <code>active</code> event will be fired in the next tick.</p>
-<p>If you require a synchronous check of a connection&#39;s &quot;openness&quot; then
-use the <code>monitor.isActive</code> test outlined below.</p>
+<p>The monitor is reporting the changes in <code>iceConnectionState</code> of the peer
+connection, hence why the example above is looking for the <code>connected</code>
+event.  If you do want to monitor the general <code>iceConnectionState</code> of the
+peer connection then you can also listen for <code>change</code> with the monitor.</p>
 <h3 id="monitor-getstate-pc-">monitor.getState(pc)</h3>
-<p>Provides a unified state definition for the RTCPeerConnection based
-on a few checks.</p>
-<p>In emerging versions of the spec we have various properties such as
-<code>readyState</code> that provide a definitive answer on the state of the 
-connection.  In older versions we need to look at things like
-<code>signalingState</code> and <code>iceGatheringState</code> to make an educated guess 
-as to the connection state.</p>
+<p>The <code>getState</code> method of the monitor provides the state combination for
+the specified peer connection as a 3 element array comprised of the
+following (in order):</p>
+<ul>
+<li><code>iceConnectionState</code></li>
+<li><code>signalingState</code></li>
+<li><code>iceGatheringState</code></li>
+</ul>
 <h3 id="monitor-isactive-pc-boolean">monitor.isActive(pc) -&gt; Boolean</h3>
 <p>Test an <code>RTCPeerConnection</code> to see if it&#39;s currently open.  The test for
 &quot;openness&quot; looks at a combination of current <code>signalingState</code> and
 <code>iceGatheringState</code>.</p>
-<h2 id="internal-rtc-helper-libraries">Internal RTC Helper Libraries</h2>
-<p>The RTC library uses a number of helper modules that are contained within
-the <code>lib/</code> folder of the <code>rtc-io/rtc</code> repository.  While these are designed
-primarily for internal use, they can be accessed by directly requiring
-the modules, e.g. <code>require(&#39;rtc/lib/helpermodule&#39;)</code></p>
-<h2 id="rtc-lib-listen">rtc/lib/listen</h2>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">listen</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc/lib/listen&#39;</span><span class="p">);</span>
-
-<span class="c1">// listen for negotiation needed events</span>
-<span class="nx">listen</span><span class="p">(</span><span class="nx">pc</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;negotiationneeded&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">evt</span><span class="p">)</span> <span class="p">{</span>
-
-<span class="p">});</span>
-</pre></div>
-
-<p>The <code>listen</code> helper provides an event emitter for a peer connection object
-that will bind to each of the core events WebRTC events (unless overriden
-by providing the listen function additional arguments).</p>
 <h2 id="license-s-">License(s)</h2>
 <h3 id="apache-2-0">Apache 2.0</h3>
 <p>Copyright 2014 National ICT Australia Limited (NICTA)</p>
