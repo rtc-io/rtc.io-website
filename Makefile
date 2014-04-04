@@ -5,6 +5,7 @@ outputfiles = $(filter-out template.html,$(wildcard *.html))
 sourcedocs = $(patsubst %.md,%.html,$(subst src/,,$(wildcard src/*.md)))
 tutorials = $(patsubst %.md,tutorial-%.html,$(subst src/tutorials/,,$(wildcard src/tutorials/*.md)))
 samples = $(subst code/,js/samples/,$(wildcard code/*.js))
+baseurl_remote ?= https://raw.githubusercontent.com/rtc-io
 
 default: all
 
@@ -46,6 +47,10 @@ buildstatus.html:
 node_modules:
 	@npm install
 
+fetch_remote:
+	@echo "fetching remote resources (docs, etc)"
+	@curl -s ${baseurl_remote}/rtc-signaller/master/docs/protocol.md  > src/signalling-protocol.md
+
 prepare:
 	@rm -f $(outputfiles)
 	@rm -rf js/samples/
@@ -53,4 +58,4 @@ prepare:
 
 local: node_modules prepare app static updatelibs $(sourcedocs) $(tutorials) $(samples)
 
-all: local $(rtcmods)
+all: fetch_remote local $(rtcmods)
