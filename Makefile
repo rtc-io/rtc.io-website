@@ -5,7 +5,8 @@ outputfiles = $(filter-out template.html,$(wildcard *.html))
 sourcedocs = $(patsubst %.md,%.html,$(subst src/,,$(wildcard src/*.md)))
 tutorials = $(patsubst %.md,tutorial-%.html,$(subst src/tutorials/,,$(wildcard src/tutorials/*.md)))
 samples = $(subst code/,js/samples/,$(wildcard code/*.js))
-baseurl_remote ?= https://raw.githubusercontent.com/rtc-io
+githubcontent = https://raw.githubusercontent.com
+baseurl_remote ?= ${githubcontent}/rtc-io
 
 default: all
 
@@ -50,6 +51,7 @@ node_modules:
 fetch_remote:
 	@echo "fetching remote resources (docs, etc)"
 	@curl -s ${baseurl_remote}/rtc-signaller/master/docs/protocol.md  > src/signalling-protocol.md
+	@curl -s ${baseurl_remote}/webrtc-testing-on-travis/master/README.md > src/testing-process.md
 
 prepare:
 	@rm -f $(outputfiles)

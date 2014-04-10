@@ -46,19 +46,80 @@ configuration you should drill down into lower level components of the
 <a href="http://www.rtc.io">rtc.io</a> suite.  In particular you should check out
 <a href="https://github.com/rtc-io/rtc">rtc</a>.</p>
 <p><a href="https://nodei.co/npm/rtc-quickconnect/"><img src="https://nodei.co/npm/rtc-quickconnect.png" alt="NPM" /></a></p>
-<p><img src="https://img.shields.io/badge/stability-unstable-yellowgreen.svg" alt="unstable" /></p>
+<p><a href="https://travis-ci.org/rtc-io/rtc-quickconnect"><img src="https://img.shields.io/travis/rtc-io/rtc-quickconnect.svg?branch=master" alt="Build Status" /></a>
+<img src="https://img.shields.io/badge/stability-unstable-yellowgreen.svg" alt="unstable" /></p>
 <p><a href="https://gitter.im/rtc-io/discuss"><img src="https://badges.gitter.im/rtc-io/discuss.png" alt="Gitter chat" /></a></p>
 <h2 id="example-usage">Example Usage</h2>
 <p>In the simplest case you simply call quickconnect with a single string
 argument which tells quickconnect which server to use for signaling:</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">quickconnect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-quickconnect&#39;</span><span class="p">);</span>
 
-<span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard/&#39;</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">pc</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">monitor</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;got a new friend, id: &#39;</span> <span class="o">+</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">pc</span><span class="p">);</span>
+<span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard/&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;qc-simple-demo&#39;</span> <span class="p">})</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;call:started&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">pc</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;we have a new connection to: &#39;</span> <span class="o">+</span> <span class="nx">id</span><span class="p">);</span>
   <span class="p">});</span>
 </pre></div>
 
+<h2 id="events">Events</h2>
+<p>The following events are emitted from the signalling object created by
+calling <code>quickconnect()</code>:</p>
+<h3 id="call-level-events">Call Level Events</h3>
+<p>A &quot;call&quot; in quickconnect is equivalent to an established <code>RTCPeerConnection</code>
+between this quickconnect instance a remote peer.</p>
+<ul>
+<li><p><code>call:started =&gt; function(id, peerconnection, data)</code></p>
+<p>Triggered once a peer connection has been established been established
+between this quickconnect instance and another.</p>
+</li>
+<li><p><code>call:ended =&gt; function(id)</code></p>
+<p>Triggered when a peer connection has been closed.  This may be due to the
+peer connection itself indicating that it has been closed, or we may have
+lost connection with the remote signaller and the connection has timed out.</p>
+</li>
+</ul>
+<h3 id="data-channel-level-events">Data Channel Level Events</h3>
+<ul>
+<li><p><code>channel:opened =&gt; function(id, datachannel, data)</code></p>
+<p>The <code>channel:opened</code> event is triggered whenever an <code>RTCDataChannel</code> has
+been opened (it&#39;s ready to send data) to a remote peer.</p>
+</li>
+<li><p><code>channel:opened:%label% =&gt; function(id, datachannel, data)</code></p>
+<p>This is equivalent of the <code>channel:opened</code> event, but only triggered for
+a channel with label <code>%label%</code>.  For example:</p>
+<div class="highlight"><pre><span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;test&#39;</span> <span class="p">})</span>
+  <span class="p">.</span><span class="nx">createDataChannel</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">createDataChannel</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;channel:opened:foo&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">dc</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;channel foo opened for peer: &#39;</span> <span class="o">+</span> <span class="nx">id</span><span class="p">);</span>
+  <span class="p">});</span>
+</pre></div>
+
+<p>In the case above the console message would only be displayed for the
+<code>foo</code> channel once open, and when the <code>bar</code> channel is opened no handler
+would be invoked.</p>
+</li>
+<li><p><code>channel:closed =&gt; function(id, label)</code></p>
+<p>Emitted when the channel has been closed, works when a connection has
+been closed or the channel itself has been closed.</p>
+</li>
+<li><p><code>channel:closed:%label% =&gt; function(id, label)</code></p>
+<p>The label specific equivalent of <code>channel:closed</code>.</p>
+</li>
+</ul>
+<h3 id="stream-level-events">Stream Level Events</h3>
+<ul>
+<li><p><code>stream:added =&gt; function(id, stream, data)</code></p>
+<p>The <code>stream:added</code> event is triggered when an <code>RTCPeerConnection</code> has
+successfully been established to another peer that contains remote
+streams.  Additionally, if you are using quickconnect in it&#39;s &quot;reactive&quot;
+mode then you will also receive <code>stream:added</code> events as streams are
+dynamically added to the connection by the remote peer.</p>
+</li>
+<li><p><code>stream:removed =&gt; function(id)</code></p>
+<p>As per the <code>stream:added</code> event but triggered when a stream has been
+removed.</p>
+</li>
+</ul>
 <h2 id="example-usage-using-data-channels-">Example Usage (using data channels)</h2>
 <p>When working with WebRTC data channels, you can call the <code>createDataChannel</code>
 function helper that is attached to the object returned from the
@@ -82,7 +143,7 @@ recommend having a quick look at the WebRTC spec:</p>
   <span class="c1">// tell quickconnect we want a datachannel called test</span>
   <span class="p">.</span><span class="nx">createDataChannel</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
   <span class="c1">// when the test channel is open, let us know</span>
-  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;test:open&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dc</span><span class="p">,</span> <span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;channel:opened:test&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">dc</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">dc</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">evt</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;peer &#39;</span> <span class="o">+</span> <span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39; says: &#39;</span> <span class="o">+</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
     <span class="p">};</span>
@@ -117,28 +178,17 @@ to use <code>rtc-quickconnect</code> to create a simple video conferencing appli
 <span class="c1">// once media is captured, connect</span>
 <span class="nx">localMedia</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;capture&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
   <span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard/&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;conftest&#39;</span> <span class="p">})</span>
-    <span class="c1">// create a chat channel</span>
-    <span class="p">.</span><span class="nx">createDataChannel</span><span class="p">(</span><span class="s1">&#39;chat&#39;</span><span class="p">)</span>
     <span class="c1">// broadcast our captured media to other participants in the room</span>
     <span class="p">.</span><span class="nx">broadcast</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span>
     <span class="c1">// when a peer is connected (and active) pass it to us for use</span>
-    <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer:connect&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">pc</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;call:started&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">pc</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;peer connected: &#39;</span><span class="p">,</span> <span class="nx">id</span><span class="p">);</span>
 
       <span class="c1">// render the remote streams</span>
       <span class="nx">pc</span><span class="p">.</span><span class="nx">getRemoteStreams</span><span class="p">().</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">renderRemote</span><span class="p">(</span><span class="nx">id</span><span class="p">));</span>
     <span class="p">})</span>
-    <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;chat:open&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dc</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">dc</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">evt</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;received chat message: &#39;</span> <span class="o">+</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
-      <span class="p">};</span>
-
-      <span class="nx">setInterval</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="nx">dc</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">);</span>
-      <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
-    <span class="p">})</span>
     <span class="c1">// when a peer leaves, remove teh media</span>
-    <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer:leave&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;call:ended&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
       <span class="c1">// remove media for the target peer from the dom</span>
       <span class="p">(</span><span class="nx">peerMedia</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span> <span class="o">||</span> <span class="p">[]).</span><span class="nx">splice</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">el</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span>
@@ -180,24 +230,6 @@ testing and development you are more than welcome to use this also, but
 just be aware that we use this for our testing so it may go up and down
 a little.  If you need something more stable, why not consider deploying
 an instance of the switchboard yourself - it&#39;s pretty easy :)</p>
-<h2 id="handling-peer-disconnection">Handling Peer Disconnection</h2>
-<p><strong>NOTE:</strong> This functionality is experimental and still in testing, it is
-recommended that you continue to use the <code>peer:leave</code> events at this stage.</p>
-<p>Since version <code>0.11</code> the following events are also emitted by quickconnect
-objects:</p>
-<ul>
-<li><code>peer:disconnect</code></li>
-<li><code>%label%:close</code> where <code>%label%</code> is the label of the channel
- you provided in a <code>createDataChannel</code> call.</li>
-</ul>
-<p>Basically the <code>peer:disconnect</code> can be used as a more accurate version
-of the <code>peer:leave</code> message.  While the <code>peer:leave</code> event triggers when
-the background signaller disconnects, the <code>peer:disconnect</code> event is
-trigger when the actual WebRTC peer connection is closed.</p>
-<p>At present (due to limited browser support for handling peer close events
-and the like) this is implemented by creating a heartbeat data channel
-which sends messages on a regular basis between the peers.  When these
-messages are stopped being received the connection is considered closed.</p>
 <h2 id="reference">Reference</h2>
 <pre><code>quickconnect(signalhost, opts?) =&gt; rtc-sigaller instance (+ helpers)</code></pre>
 <h3 id="valid-quick-connect-options">Valid Quick Connect Options</h3>
@@ -239,9 +271,10 @@ passed to quickconnect are also passed onto this function.</p>
 <p>The following are functions that are patched into the <code>rtc-signaller</code>
 instance that make working with and creating functional WebRTC applications
 a lot simpler.</p>
-<h4 id="broadcast-stream-">broadcast(stream)</h4>
-<p>Add the stream to the set of local streams that we will broadcast
-to other peers.</p>
+<h4 id="addstream">addStream</h4>
+<pre><code>addStream(stream:MediaStream) =&gt; qc</code></pre>
+<p>Add the stream to active calls and also save the stream so that it
+can be added to future calls.</p>
 <h4 id="close-">close()</h4>
 <p>The <code>close</code> function provides a convenient way of closing all associated
 peer connections.</p>
@@ -256,10 +289,32 @@ call:</p>
 
 <p>Then when the data channel is ready for use, a <code>test:open</code> event would
 be emitted by <code>qc</code>.</p>
+<h4 id="reactive-">reactive()</h4>
+<p>Flag that this session will be a reactive connection.</p>
+<h4 id="requestchannel">requestChannel</h4>
+<pre><code>requestChannel(targetId, label, callback)</code></pre>
+<p>This is a function that can be used to respond to remote peers supplying
+a data channel as part of their configuration.  As per the <code>receiveStream</code>
+function this function will either fire the callback immediately if the
+channel is already available, or once the channel has been discovered on
+the call.</p>
+<h4 id="requeststream">requestStream</h4>
+<pre><code>requestStream(targetId, idx, callback)</code></pre>
+<p>Used to request a remote stream from a quickconnect instance. If the
+stream is already available in the calls remote streams, then the callback
+will be triggered immediately, otherwise this function will monitor
+<code>stream:added</code> events and wait for a match.</p>
+<p>In the case that an unknown target is requested, then an exception will
+be thrown.</p>
 <h4 id="profile-data-">profile(data)</h4>
 <p>Update the profile data with the attached information, so when 
 the signaller announces it includes this data in addition to any
 room and id information.</p>
+<h4 id="waitforcall">waitForCall</h4>
+<pre><code>waitForCall(targetId, callback)</code></pre>
+<p>Wait for a call from the specified targetId.  If the call is already
+active the callback will be fired immediately, otherwise we will wait
+for a <code>call:started</code> event that matches the requested <code>targetId</code></p>
 <h2 id="license-s-">License(s)</h2>
 <h3 id="apache-2-0">Apache 2.0</h3>
 <p>Copyright 2014 National ICT Australia Limited (NICTA)</p>
