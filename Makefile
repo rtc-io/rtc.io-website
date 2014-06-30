@@ -24,7 +24,7 @@ updatelibs:
 
 $(rtcmods): prepare
 	@echo "fetching $@ module readme"
-	@curl -s https://raw.github.com/rtc-io/$@/master/README.md > tmp_$@
+	@curl -s ${baseurl_remote}/$@/master/README.md > tmp_$@
 	@$(blockdown) --repo="https://github.com/rtc-io/$@" template.html < tmp_$@ > module-$@.html
 	@rm tmp_$@
 
