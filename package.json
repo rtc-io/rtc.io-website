@@ -22,19 +22,19 @@
   },
   "devDependencies": {
     "blockdown": "~0.4.0",
-    "injectcode": "~0.2.3",
-    "cog": "~0.5.1",
-    "rtc": "~0.15.2",
-    "rtc-core": "~0.7.1",
+    "cog": "^1.0.0",
     "crel": "~1.1.0",
-    "demo-console": "~1.1.1",
-    "rtc-media": "~1.5.1",
-    "rtc-signaller": "~0.18.2",
-    "rtc-filter-grayscale": "~0.1.0",
-    "rtc-videoproc": "^0.11.0",
+    "demo-console": "^1.5.0",
+    "injectcode": "~0.2.3",
     "rtc-audioproc": "0.0.3",
-    "rtc-glue": "^0.9.0",
-    "rtc-quickconnect": "~0.12.0"
+    "rtc-core": "^3.0.0",
+    "rtc-filter-grayscale": "~0.1.0",
+    "rtc-glue": "^0.10.3",
+    "rtc-media": "^1.9.0",
+    "rtc-quickconnect": "^2.1.0",
+    "rtc-signaller": "^2.3.0",
+    "rtc-tools": "^2.3.0",
+    "rtc-videoproc": "^0.11.0"
   },
   "dependencies": {}
 }
