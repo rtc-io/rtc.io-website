@@ -38,7 +38,117 @@
 </div>
 <div class="shadow"></div>
 </header>
-<div class="main" role="content"></div>
+<div class="main" role="content"><h1 id="rtc-mesh">rtc-mesh</h1>
+<p><strong>NOTE:</strong> From version <code>0.5</code> onwards <code>rtc-mesh</code> is now an
+<a href="https://github.com/rtc-io/rtc-quickconnect">rtc-quickconnect</a> plugin
+(which is heaps better and cleaner).</p>
+<p>The <code>rtc-mesh</code> module provides a way of sharing data between clients using
+<a href="https://github.com/dominictarr/scuttlebutt">scuttlebutt</a>.</p>
+<p><a href="https://nodei.co/npm/rtc-mesh/"><img src="https://nodei.co/npm/rtc-mesh.png" alt="NPM" /></a></p>
+<p><img src="https://img.shields.io/badge/stability-unstable-yellowgreen.svg" alt="unstable" />
+<a href="https://travis-ci.org/rtc-io/rtc-mesh"><img src="https://img.shields.io/travis/rtc-io/rtc-mesh.svg?branch=master" alt="Build Status" /></a></p>
+<h2 id="simple-example">Simple Example</h2>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">quickconnect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-quickconnect&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">mesh</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-mesh&#39;</span><span class="p">);</span>
+
+<span class="c1">// initialise the connection</span>
+<span class="kd">var</span> <span class="nx">qc</span> <span class="o">=</span> <span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;meshdemo-simple&#39;</span>
+<span class="p">});</span>
+
+<span class="c1">// create the model</span>
+<span class="kd">var</span> <span class="nx">model</span> <span class="o">=</span> <span class="nx">mesh</span><span class="p">(</span><span class="nx">qc</span><span class="p">);</span>
+
+<span class="c1">// report data change events</span>
+<span class="nx">model</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;captured change key: &quot;&#39;</span> <span class="o">+</span> <span class="nx">key</span> <span class="o">+</span> <span class="s1">&#39;&quot; set to &#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">model</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;lastjoin&#39;</span><span class="p">,</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">());</span>
+</pre></div>
+
+<h2 id="using-scuttlebutt-subclasses">Using Scuttlebutt Subclasses</h2>
+<p>Here&#39;s an example using
+<a href="https://github.com/dominictarr/crdt">CRDT</a>:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">quickconnect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-quickconnect&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">mesh</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-mesh&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">Doc</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;crdt&#39;</span><span class="p">).</span><span class="nx">Doc</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">uuid</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;uuid&#39;</span><span class="p">);</span>
+
+<span class="c1">// initialise the connection</span>
+<span class="kd">var</span> <span class="nx">qc</span> <span class="o">=</span> <span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;meshdemo-crdt&#39;</span>
+<span class="p">});</span>
+
+<span class="c1">// create the model</span>
+<span class="kd">var</span> <span class="nx">model</span> <span class="o">=</span> <span class="nx">mesh</span><span class="p">(</span><span class="nx">qc</span><span class="p">,</span> <span class="p">{</span> <span class="nx">model</span><span class="o">:</span> <span class="k">new</span> <span class="nx">Doc</span><span class="p">()</span> <span class="p">});</span>
+
+<span class="nx">model</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;add&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">row</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;new row created: &#39;</span><span class="p">,</span> <span class="nx">row</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">model</span><span class="p">.</span><span class="nx">add</span><span class="p">({</span> <span class="nx">id</span><span class="o">:</span> <span class="nx">uuid</span><span class="p">.</span><span class="nx">v4</span><span class="p">(),</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Fred&#39;</span> <span class="p">});</span>
+</pre></div>
+
+<h2 id="synchronizing-multiple-datasets">Synchronizing Multiple Datasets</h2>
+<p>It&#39;s also possible to create invoke multiple meshes on a single data
+channel using custom channel names (by default the a channel is created with
+the name of <code>mesh</code>).</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">quickconnect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-quickconnect&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">mesh</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-mesh&#39;</span><span class="p">);</span>
+
+<span class="c1">// initialise the connection</span>
+<span class="kd">var</span> <span class="nx">qc</span> <span class="o">=</span> <span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;meshdemo-multichannel&#39;</span>
+<span class="p">});</span>
+
+<span class="c1">// create the models</span>
+<span class="kd">var</span> <span class="nx">modelA</span> <span class="o">=</span> <span class="nx">mesh</span><span class="p">(</span><span class="nx">qc</span><span class="p">,</span> <span class="p">{</span> <span class="nx">channelName</span><span class="o">:</span> <span class="s1">&#39;m1&#39;</span> <span class="p">});</span>
+<span class="kd">var</span> <span class="nx">modelB</span> <span class="o">=</span> <span class="nx">mesh</span><span class="p">(</span><span class="nx">qc</span><span class="p">,</span> <span class="p">{</span> <span class="nx">channelName</span><span class="o">:</span> <span class="s1">&#39;m2&#39;</span> <span class="p">});</span>
+
+<span class="c1">// report data change events</span>
+<span class="nx">modelA</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;captured change for item in a: &#39;</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">modelB</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;captured change for item in b: &#39;</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+<span class="p">})</span>
+
+<span class="c1">// update some keys</span>
+<span class="nx">modelA</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;lastjoin&#39;</span><span class="p">,</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">());</span>
+<span class="nx">modelB</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;lastRandom&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">10000</span><span class="p">)</span> <span class="o">|</span> <span class="mi">0</span><span class="p">);</span>
+</pre></div>
+
+<h2 id="reference">Reference</h2>
+<h3 id="mesh">mesh</h3>
+<pre><code>mesh(qc, opts?) =&gt; Model</code></pre>
+<p>As displayed in the examples, the <code>mesh</code> function expects to be passed a
+<a href="https://github.com/rtc-io/rtc-quickconnect">quickconnect</a> created signaller. Using
+this object, it will create a data channel that will be responsible for sharing
+<a href="https://github.com/dominictarr/scuttlebutt">scuttlebutt</a> model information with peers.</p>
+<p>In addition to the functions exposed by a scuttlebutt Model, the following helpers
+have also been added:</p>
+<h4 id="retrieve">retrieve</h4>
+<pre><code>retrieve(key, callback)</code></pre>
+<p>Get the value of the specified key and pass the result back through the
+provided <code>callback</code> (node error first style).  If the value is already
+available in the local Model, then the callback will be triggered immediately.
+If not, the callback will be triggered once the value has been set in the
+local Model.</p>
+<h2 id="license-s-">License(s)</h2>
+<h3 id="apache-2-0">Apache 2.0</h3>
+<p>Copyright 2014 National ICT Australia Limited (NICTA)</p>
+<p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at</p>
+<pre><code> http://www.apache.org/licenses/LICENSE-2.0</code></pre>
+<p>   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.</p>
+</div>
 
 <footer>
   <p>

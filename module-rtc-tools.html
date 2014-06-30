@@ -38,7 +38,165 @@
 </div>
 <div class="shadow"></div>
 </header>
-<div class="main" role="content"></div>
+<div class="main" role="content"><h1 id="rtc-tools">rtc-tools</h1>
+<p>The <code>rtc-tools</code> module does most of the heavy lifting within the
+<a href="http://rtc.io">rtc.io</a> suite.  Primarily it handles the logic of coupling
+a local <code>RTCPeerConnection</code> with it&#39;s remote counterpart via an
+<a href="https://github.com/rtc-io/rtc-signaller">rtc-signaller</a> signalling
+channel.</p>
+<p><a href="https://nodei.co/npm/rtc-tools/"><img src="https://nodei.co/npm/rtc-tools.png" alt="NPM" /></a></p>
+<p><a href="https://travis-ci.org/rtc-io/rtc-tools"><img src="https://img.shields.io/travis/rtc-io/rtc-tools.svg?branch=master" alt="Build Status" /></a> <a href="https://github.com/dominictarr/stability#unstable"><img src="https://img.shields.io/badge/stability-unstable-yellowgreen.svg" alt="unstable" /></a> 
+<a href="https://gitter.im/rtc-io/discuss"><img src="https://badges.gitter.im/rtc-io/discuss.png" alt="Gitter chat" /></a></p>
+<h2 id="getting-started">Getting Started</h2>
+<p>If you decide that the <code>rtc-tools</code> module is a better fit for you than either
+<a href="https://github.com/rtc-io/rtc-quickconnect">rtc-quickconnect</a> or
+<a href="https://github.com/rtc-io/rtc-glue">rtc-glue</a> then the code snippet below
+will provide you a guide on how to get started using it in conjunction with
+the <a href="https://github.com/rtc-io/rtc-signaller">rtc-signaller</a> and
+<a href="https://github.com/rtc-io/rtc-media">rtc-media</a> modules:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">signaller</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-signaller&#39;</span><span class="p">)(</span><span class="s1">&#39;http://rtc.io/switchboard/&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">rtc</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-tools&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">localMedia</span> <span class="o">=</span> <span class="nx">media</span><span class="p">();</span>
+
+<span class="c1">// render the local media to the document body</span>
+<span class="nx">localMedia</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+
+<span class="c1">// capture local media first as firefox</span>
+<span class="c1">// will want a local stream and doesn&#39;t support onnegotiationneeded event</span>
+<span class="nx">localMedia</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;capture&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">localStream</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// look for friends</span>
+  <span class="nx">signaller</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer:announce&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// create a peer connection for our new friend</span>
+    <span class="kd">var</span> <span class="nx">pc</span> <span class="o">=</span> <span class="nx">rtc</span><span class="p">.</span><span class="nx">createConnection</span><span class="p">();</span>
+
+    <span class="c1">// couple our connection via the signalling channel</span>
+    <span class="kd">var</span> <span class="nx">monitor</span> <span class="o">=</span> <span class="nx">rtc</span><span class="p">.</span><span class="nx">couple</span><span class="p">(</span><span class="nx">pc</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="nx">signaller</span><span class="p">);</span>
+
+    <span class="c1">// add the stream to the connection</span>
+    <span class="nx">pc</span><span class="p">.</span><span class="nx">addStream</span><span class="p">(</span><span class="nx">localStream</span><span class="p">);</span>
+
+    <span class="c1">// once the connection is active, log a console message</span>
+    <span class="nx">monitor</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;connected&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;connection active to: &#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+
+      <span class="nx">pc</span><span class="p">.</span><span class="nx">getRemoteStreams</span><span class="p">().</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">media</span><span class="p">(</span><span class="nx">stream</span><span class="p">).</span><span class="nx">render</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+
+
+    <span class="nx">monitor</span><span class="p">.</span><span class="nx">createOffer</span><span class="p">();</span>
+  <span class="p">});</span>
+
+  <span class="c1">// announce ourself in the rtc-getting-started room</span>
+  <span class="nx">signaller</span><span class="p">.</span><span class="nx">announce</span><span class="p">({</span> <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;rtc-getting-started&#39;</span> <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>This code definitely doesn&#39;t cover all the cases that you need to consider
+(i.e. peers leaving, etc) but it should demonstrate how to:</p>
+<ol>
+<li>Capture video and add it to a peer connection</li>
+<li>Couple a local peer connection with a remote peer connection</li>
+<li>Deal with the remote steam being discovered and how to render
+that to the local interface.</li>
+</ol>
+<h2 id="reference">Reference</h2>
+<h3 id="createconnection">createConnection</h3>
+<pre><code>createConnection(opts?, constraints?) =&gt; RTCPeerConnection</code></pre>
+<p>Create a new <code>RTCPeerConnection</code> auto generating default opts as required.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">conn</span><span class="p">;</span>
+
+<span class="c1">// this is ok</span>
+<span class="nx">conn</span> <span class="o">=</span> <span class="nx">rtc</span><span class="p">.</span><span class="nx">createConnection</span><span class="p">();</span>
+
+<span class="c1">// and so is this</span>
+<span class="nx">conn</span> <span class="o">=</span> <span class="nx">rtc</span><span class="p">.</span><span class="nx">createConnection</span><span class="p">({</span>
+  <span class="nx">iceServers</span><span class="o">:</span> <span class="p">[]</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3 id="rtc-tools-cleanup">rtc-tools/cleanup</h3>
+<pre><code>cleanup(pc)</code></pre>
+<p>The <code>cleanup</code> function is used to ensure that a peer connection is properly
+closed and ready to be cleaned up by the browser.</p>
+<h3 id="rtc-tools-couple">rtc-tools/couple</h3>
+<h4 id="couple-pc-targetid-signaller-opts-">couple(pc, targetId, signaller, opts?)</h4>
+<p>Couple a WebRTC connection with another webrtc connection identified by
+<code>targetId</code> via the signaller.</p>
+<p>The following options can be provided in the <code>opts</code> argument:</p>
+<ul>
+<li><p><code>sdpfilter</code> (default: null)</p>
+<p>A simple function for filtering SDP as part of the peer
+connection handshake (see the Using Filters details below).</p>
+</li>
+</ul>
+<h5 id="example-usage">Example Usage</h5>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">couple</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc/couple&#39;</span><span class="p">);</span>
+
+<span class="nx">couple</span><span class="p">(</span><span class="nx">pc</span><span class="p">,</span> <span class="s1">&#39;54879965-ce43-426e-a8ef-09ac1e39a16d&#39;</span><span class="p">,</span> <span class="nx">signaller</span><span class="p">);</span>
+</pre></div>
+
+<h5 id="using-filters">Using Filters</h5>
+<p>In certain instances you may wish to modify the raw SDP that is provided
+by the <code>createOffer</code> and <code>createAnswer</code> calls.  This can be done by passing
+a <code>sdpfilter</code> function (or array) in the options.  For example:</p>
+<div class="highlight"><pre><span class="c1">// run the sdp from through a local tweakSdp function.</span>
+<span class="nx">couple</span><span class="p">(</span><span class="nx">pc</span><span class="p">,</span> <span class="s1">&#39;54879965-ce43-426e-a8ef-09ac1e39a16d&#39;</span><span class="p">,</span> <span class="nx">signaller</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">sdpfilter</span><span class="o">:</span> <span class="nx">tweakSdp</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3 id="rtc-tools-detect">rtc-tools/detect</h3>
+<p>Provide the <a href="https://github.com/rtc-io/rtc-core#detect">rtc-core/detect</a>
+functionality.</p>
+<h3 id="rtc-tools-generators">rtc-tools/generators</h3>
+<p>The generators package provides some utility methods for generating
+constraint objects and similar constructs.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">generators</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc/generators&#39;</span><span class="p">);</span>
+</pre></div>
+
+<h4 id="generators-config-config-">generators.config(config)</h4>
+<p>Generate a configuration object suitable for passing into an W3C
+RTCPeerConnection constructor first argument, based on our custom config.</p>
+<h4 id="generators-connectionconstraints-flags-constraints-">generators.connectionConstraints(flags, constraints)</h4>
+<p>This is a helper function that will generate appropriate connection
+constraints for a new <code>RTCPeerConnection</code> object which is constructed
+in the following way:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">conn</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RTCPeerConnection</span><span class="p">(</span><span class="nx">flags</span><span class="p">,</span> <span class="nx">constraints</span><span class="p">);</span>
+</pre></div>
+
+<p>In most cases the constraints object can be left empty, but when creating
+data channels some additional options are required.  This function
+can generate those additional options and intelligently combine any
+user defined constraints (in <code>constraints</code>) with shorthand flags that
+might be passed while using the <code>rtc.createConnection</code> helper.</p>
+<h3 id="rtc-tools-monitor">rtc-tools/monitor</h3>
+<pre><code>monitor(pc, targetId, signaller, opts?) =&gt; EventEmitter</code></pre>
+<p>The monitor is a useful tool for determining the state of <code>pc</code> (an
+<code>RTCPeerConnection</code>) instance in the context of your application. The
+monitor uses both the <code>iceConnectionState</code> information of the peer
+connection and also the various
+<a href="https://github.com/rtc-io/rtc-signaller#signaller-events">signaller events</a>
+to determine when the connection has been <code>connected</code> and when it has
+been <code>disconnected</code>.</p>
+<p>A monitor created <code>EventEmitter</code> is returned as the result of a
+<a href="https://github.com/rtc-io/rtc#rtccouple">couple</a> between a local peer
+connection and it&#39;s remote counterpart.</p>
+<h2 id="license-s-">License(s)</h2>
+<h3 id="apache-2-0">Apache 2.0</h3>
+<p>Copyright 2014 National ICT Australia Limited (NICTA)</p>
+<p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at</p>
+<pre><code> http://www.apache.org/licenses/LICENSE-2.0</code></pre>
+<p>   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.</p>
+</div>
 
 <footer>
   <p>

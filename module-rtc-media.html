@@ -38,7 +38,179 @@
 </div>
 <div class="shadow"></div>
 </header>
-<div class="main" role="content"></div>
+<div class="main" role="content"><h1 id="rtc-media">rtc-media</h1>
+<p>Simple <a href="http://dev.w3.org/2011/webrtc/editor/getusermedia.html">getUserMedia</a>
+cross-browser wrappers.  Part of the <a href="http://rtc.io/">rtc.io</a> suite, which is
+sponsored by <a href="http://opennicta.com">NICTA</a> and released under an
+<a href="/LICENSE">Apache 2.0 license</a>.</p>
+<p><a href="https://nodei.co/npm/rtc-media/"><img src="https://nodei.co/npm/rtc-media.png" alt="NPM" /></a></p>
+<p><a href="https://travis-ci.org/rtc-io/rtc-media"><img src="https://img.shields.io/travis/rtc-io/rtc-media.svg?branch=master" alt="Build Status" /></a> <a href="https://github.com/badges/stability-badges"><img src="https://img.shields.io/badge/stability-unstable-yellowgreen.svg" alt="unstable" /></a> <a href="https://david-dm.org/rtc-io/rtc-media"><img src="https://david-dm.org/rtc-io/rtc-media.svg" alt="Dependency Status" /></a> </p>
+<h2 id="example-usage">Example Usage</h2>
+<p>Capturing media on your machine is as simple as:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">)();</span>
+</pre></div>
+
+<p>While this will in fact start the user media capture process, it won&#39;t
+do anything with it.  Lets take a look at a more realistic example:</p>
+<div class="highlight"><pre><span class="c1">// require the media capture helper from rtc.io</span>
+<span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
+
+<span class="c1">// capture video and render it to the document body</span>
+<span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+</pre></div>
+
+<p><a href="http://requirebin.com/?gist=6085450">run on requirebin</a></p>
+<p>In the code above, we are creating a new instance of our userMedia wrapper
+using the <code>media()</code> call and then telling it to render to the
+<code>document.body</code> once video starts streaming.  We can further expand the
+code out to the following to aid our understanding of what is going on:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">Media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">userMedia</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Media</span><span class="p">({</span> <span class="nx">start</span><span class="o">:</span> <span class="kc">true</span> <span class="p">});</span>
+
+<span class="nx">userMedia</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+</pre></div>
+
+<p>The code above is written in a more traditional JS style, but feel free
+to use the first style as it&#39;s quite safe (thanks to some checks in the
+code).</p>
+<h3 id="events">Events</h3>
+<p>Once a media object has been created, it will provide a number of events
+through the standard node EventEmitter API.</p>
+<h4 id="-capture-"><code>capture</code></h4>
+<p>The <code>capture</code> event is triggered once the requested media stream has
+been captured by the browser.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">localMedia</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">)();</span>
+
+<span class="nx">localMedia</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+<span class="nx">localMedia</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;capture&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// stream references underlying media stream that was captured</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;capture complete&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<h4 id="-render-"><code>render</code></h4>
+<p>The <code>render</code> event is triggered once the stream has been rendered
+to the any supplied (or created) video elements.</p>
+<p>While it might seem a little confusing that when the <code>render</code> event
+fires that it returns an array of elements rather than a single element
+(which is what is provided when calling the <code>render</code> method).</p>
+<p>This occurs because it is completely valid to render a single captured
+media stream to multiple media elements on a page.  The <code>render</code> event
+is reporting once the render operation has completed for all targets that
+have been registered with the capture stream.</p>
+<h2 id="reference">Reference</h2>
+<h3 id="media">media</h3>
+<pre><code>media(opts?)</code></pre>
+<p>Capture media using the underlying
+<a href="http://www.w3.org/TR/mediacapture-streams/">getUserMedia</a> API.</p>
+<p>The function accepts a single argument which can be either be:</p>
+<ul>
+<li>a. An options object (see below), or;</li>
+<li>b. An existing
+<a href="http://www.w3.org/TR/mediacapture-streams/#mediastream">MediaStream</a> that
+the media object will bind to and provide you some DOM helpers for.</li>
+</ul>
+<p>The function supports the following options:</p>
+<ul>
+<li><p><code>capture</code> - Whether capture should be initiated automatically. Defaults
+to true, but toggled to false automatically if an existing stream is
+provided.</p>
+</li>
+<li><p><code>muted</code> - Whether the video element created for this stream should be
+muted.  Default is true but is set to false when an existing stream is
+passed.</p>
+</li>
+<li><p><code>constraints</code> - The constraint option allows you to specify particular
+media capture constraints which can allow you do do some pretty cool
+tricks.  By default, the contraints used to request the media are
+fairly standard defaults:</p>
+<div class="highlight"><pre>  <span class="p">{</span>
+    <span class="nx">video</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">mandatory</span><span class="o">:</span> <span class="p">{},</span>
+      <span class="nx">optional</span><span class="o">:</span> <span class="p">[]</span>
+    <span class="p">},</span>
+    <span class="nx">audio</span><span class="o">:</span> <span class="kc">true</span>
+  <span class="p">}</span>
+</pre></div>
+
+</li>
+</ul>
+<h3 id="capture">capture</h3>
+<pre><code>capture(constraints, callback)</code></pre>
+<p>Capture media.  If constraints are provided, then they will
+override the default constraints that were used when the media object was
+created.</p>
+<h3 id="render">render</h3>
+<div class="highlight"><pre><span class="nx">render</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">opts</span><span class="o">?</span><span class="p">,</span> <span class="nx">callback</span><span class="o">?</span><span class="p">)</span>
+</pre></div>
+
+<p>Render the captured media to the specified target element.  While previous
+versions of rtc-media accepted a selector string or an array of elements
+this has been dropped in favour of <strong>one single target element</strong>.</p>
+<p>If the target element is a valid MediaElement then it will become the
+target of the captured media stream.  If, however, it is a generic DOM
+element it will a new Media element will be created that using the target
+as it&#39;s parent.</p>
+<p>A simple example of requesting default media capture and rendering to the
+document body is shown below:</p>
+<div class="highlight"><pre><span class="c1">// require the media capture helper from rtc.io</span>
+<span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
+
+<span class="c1">// capture video and render it to the document body</span>
+<span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+</pre></div>
+
+<p>You may optionally provide a callback to this function, which is
+will be triggered once each of the media elements has started playing
+the stream:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
+
+<span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;captured and playing to media element: &#39;</span><span class="p">,</span> <span class="nx">el</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3 id="stop-">stop()</h3>
+<p>Stop the media stream</p>
+<h2 id="debugging-tips">Debugging Tips</h2>
+<p>Chrome and Chromium can both be started with the following flag:</p>
+<pre><code>--use-fake-device-for-media-stream</code></pre>
+<p>This uses a fake stream for the getUserMedia() call rather than attempting
+to capture the actual camera.  This is useful when doing automated testing
+and also if you want to test connectivity between two browser instances and
+want to distinguish between the two local videos.</p>
+<h2 id="internal-methods">Internal Methods</h2>
+<p>There are a number of internal methods that are used in the <code>rtc-media</code>
+implementation. These are outlined below, but not expected to be of
+general use.</p>
+<h3 id="_prepareelement-opts-element-">_prepareElement(opts, element)</h3>
+<p>The prepareElement function is used to prepare DOM elements that will
+receive the media streams once the stream have been successfully captured.</p>
+<h3 id="_bindstream-stream-">_bindStream(stream)</h3>
+<p>Bind a stream to previously prepared DOM elements.</p>
+<h3 id="_unbind-">_unbind()</h3>
+<p>Gracefully detach elements that are using the stream from the
+current stream.</p>
+<h3 id="_createobjecturl-stream-">_createObjectUrl(stream)</h3>
+<p>This method is used to create an object url that can be attached to a video
+or audio element.  Object urls are cached to ensure only one is created
+per stream.</p>
+<h3 id="_handlesuccess-stream-">_handleSuccess(stream)</h3>
+<p>Handle the success condition of a <code>getUserMedia</code> call.</p>
+<h2 id="license-s-">License(s)</h2>
+<h3 id="apache-2-0">Apache 2.0</h3>
+<p>Copyright 2014 National ICT Australia Limited (NICTA)</p>
+<p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at</p>
+<pre><code> http://www.apache.org/licenses/LICENSE-2.0</code></pre>
+<p>   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.</p>
+</div>
 
 <footer>
   <p>

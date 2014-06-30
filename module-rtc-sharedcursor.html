@@ -38,7 +38,68 @@
 </div>
 <div class="shadow"></div>
 </header>
-<div class="main" role="content"></div>
+<div class="main" role="content"><h1 id="rtc-sharedcursor">rtc-sharedcursor</h1>
+<p>The <code>rtc-sharedcursor</code> module makes it simple to share and touch
+mouse events for a target element across the wire one or more
+peers across a data channel connection.</p>
+<p><a href="https://nodei.co/npm/rtc-sharedcursor/"><img src="https://nodei.co/npm/rtc-sharedcursor.png" alt="NPM" /></a></p>
+<p><img src="https://img.shields.io/badge/stability-experimental-red.svg" alt="experimental" /></p>
+<h2 id="example-usage">Example Usage</h2>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">quickconnect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-quickconnect&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">sharedcursor</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-sharedcursor&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">crel</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;crel&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">qc</span> <span class="o">=</span> <span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard/&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">cursor</span> <span class="o">=</span> <span class="nx">sharedcursor</span><span class="p">(</span><span class="nx">qc</span><span class="p">);</span>
+
+<span class="c1">// create some test elements</span>
+<span class="kd">var</span> <span class="nx">elements</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="nx">crel</span><span class="p">(</span><span class="s1">&#39;canvas&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">width</span><span class="o">:</span> <span class="mi">200</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="mi">200</span> <span class="p">}),</span>
+  <span class="nx">crel</span><span class="p">(</span><span class="s1">&#39;canvas&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">width</span><span class="o">:</span> <span class="mi">500</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="mi">500</span> <span class="p">}),</span>
+  <span class="nx">crel</span><span class="p">(</span><span class="s1">&#39;canvas&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">width</span><span class="o">:</span> <span class="mi">20</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="mi">100</span> <span class="p">}),</span>
+<span class="p">];</span>
+
+<span class="c1">// randomly select one of the canvases</span>
+<span class="kd">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="nx">elements</span><span class="p">[(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="nx">elements</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="o">|</span> <span class="mi">0</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="nx">target</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">&#39;2d&#39;</span><span class="p">);</span>
+
+<span class="c1">// add our test elements to the dom</span>
+<span class="nx">elements</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// color our target so we know the capture source</span>
+<span class="nx">context</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s1">&#39;rgb(200, 200, 200)&#39;</span><span class="p">;</span>
+<span class="nx">context</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">target</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">target</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span>
+
+<span class="c1">// attach the cursor the element now it is in the dom and has</span>
+<span class="c1">// valid DOM bounds</span>
+<span class="nx">cursor</span><span class="p">.</span><span class="nx">attach</span><span class="p">(</span><span class="nx">target</span><span class="p">);</span>
+
+<span class="nx">cursor</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// draw on the target</span>
+  <span class="nx">context</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s1">&#39;rgb(200, 200, 200)&#39;</span><span class="p">;</span>
+  <span class="nx">context</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">target</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">target</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span>
+  <span class="nx">context</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="nx">type</span> <span class="o">===</span> <span class="s1">&#39;move&#39;</span> <span class="o">?</span> <span class="s1">&#39;green&#39;</span> <span class="o">:</span> <span class="s1">&#39;red&#39;</span><span class="p">;</span>
+  <span class="nx">context</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="nx">x</span> <span class="o">-</span> <span class="mi">5</span><span class="p">,</span> <span class="nx">y</span> <span class="o">-</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>Running the example in a few different windows, should display 
+something similar to what is shown below:</p>
+<p><img src="https://raw.github.com/rtc-io/rtc-sharedcursor/master/screenshot.png" alt="Screenshot" /></p>
+<h2 id="license-s-">License(s)</h2>
+<h3 id="apache-2-0">Apache 2.0</h3>
+<p>Copyright 2014 National ICT Australia Limited (NICTA)</p>
+<p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at</p>
+<pre><code> http://www.apache.org/licenses/LICENSE-2.0</code></pre>
+<p>   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.</p>
+</div>
 
 <footer>
   <p>
