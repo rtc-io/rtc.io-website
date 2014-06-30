@@ -18,9 +18,9 @@ Designed to provide a pure HTML tag based approach to building WebRTC applicatio
 
 This is a node compatible stream (streams2) module for working with WebRTC data channels.  As per `rtc-mesh` this module has been tested against Chrome 32+ and Firefox 26 and shown excellent interoperability.
 
-### [rtc](module-rtc.html)
+### [rtc-tools](module-rtc-tools.html)
 
-The `rtc` module is a collection of reusable functions that assist developers wanting to work with WebRTC at a lower level.  It is designed to assist with some of the repetitive tasks that are associated with developing WebRTC applications.
+The `rtc-tools` module is a collection of reusable functions that assist developers wanting to work with WebRTC at a lower level.  It is designed to assist with some of the repetitive tasks that are associated with developing WebRTC applications.
 
 ### [rtc-signaller](module-rtc-signaller.html)
 
