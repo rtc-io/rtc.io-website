@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+<title>rtc.io</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css" />
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+<!-- responsive -->
+<link rel="stylesheet" media="screen and (max-width: 960px)" href="css/tablet.css" />
+<link rel="stylesheet" media="screen and (max-width: 710px)" href="css/phone.css" />
+<link rel="stylesheet" type="text/css" href="fonts/source-sans/stylesheet.css" />
+<link rel="stylesheet" type="text/css" href="css/code.css" />
+</head>
+<body>
+
+<a class="scroll-point pt-top" name="top"></a>
+<header>
+<a href=""><img class="fork" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub" /></a>
+<a class="scroll-point pt-top" name="top"></a>
+<div class="site">
+  <div class="mascot">
+    <img src="images/artsio.png" />
+  </div>
+  <div class="logo" data-subtext="OpenSource WebRTC">
+    <a href="index.html">rtc.io</a>
+  </div>
+  <nav>
+    <ul>
+    <li><a href="index.html">About</a></li>
+    <li><a href="tutorials.html">Tutorials</a></li>
+    <li><a href="demos.html">Demos</a></li>
+    <li><a href="modules.html">Modules</a></li>
+    </ul>
+  </nav>
+</div>
+<div class="shadow"></div>
+</header>
+<div class="main" role="content"><h1 id="simple-video-mirror">Simple video mirror</h1>
+<p>In order to share video streams we can use the <a href="/module-rtc-media.html">rtc-media</a> module to help us manage the video and audio feed for each user. This very simple demo shows how to get access to the local user&#39;s video and audio stream and render it to the browser.</p>
+<p>Include the rtc-media module. This will return a reference to the local rtc-media object.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">mediaMod</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
+</pre></div>
+
+<p>Now we can call the returned media object with options - in this case we just need to tell the browser to start streaming media immediately.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">mediaObj</span> <span class="o">=</span> <span class="nx">mediaMod</span><span class="p">({</span> <span class="nx">start</span><span class="o">:</span> <span class="kc">true</span> <span class="p">});</span>
+</pre></div>
+
+<p>We&#39;ll also need a reference to the DOM element that we want to render the video stream to. Given a <code>&lt;video&gt;</code> element rtc-media will render the new stream to that element. Given any other element rtc-media will create a <code>&lt;video&gt;</code> element as a child element.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">mirrorWindow</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;mirror&#39;</span><span class="p">);</span>
+</pre></div>
+
+<p>Now we simply call <code>render</code> with the target element as the argument, to display the video feed.</p>
+<div class="highlight"><pre><span class="nx">mediaObj</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">mirrorWindow</span><span class="p">);</span>
+</pre></div>
+
+<p>To create a realistic mirror experience we will flip the rendered video.</p>
+<div class="highlight"><pre><span class="nx">mirrorWindow</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">transform</span> <span class="o">=</span> <span class="s1">&#39;rotateY(180deg)&#39;</span><span class="p">;</span>
+</pre></div>
+
+<p>The result is a local video mirror!</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">mediaMod</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">mediaObj</span> <span class="o">=</span> <span class="nx">mediaMod</span><span class="p">({</span> <span class="nx">start</span><span class="o">:</span> <span class="kc">true</span> <span class="p">});</span>
+<span class="kd">var</span> <span class="nx">mirrorWindow</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;mirror&#39;</span><span class="p">);</span>
+
+<span class="c1">// Render local video</span>
+<span class="nx">mediaObj</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">mirrorWindow</span><span class="p">);</span>
+
+<span class="c1">// Flip rendered video so the user views their own</span>
+<span class="c1">// feed as a mirror image</span>
+<span class="nx">mirrorWindow</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">transform</span> <span class="o">=</span> <span class="s1">&#39;rotateY(180deg)&#39;</span><span class="p">;</span>
+</pre></div>
+
+</div>
+
+<footer>
+  <p>
+    <a href="http://nicta.com.au">
+      <img src="images/nicta-logo.gif" alt="NICTA logo" />
+    </a>© NICTA 2013 - 2014
+  </p>
+  <p class="license">Project source code is licensed under the <a href="https://github.com/rtc-io/rtc/blob/master/LICENSE">Apache 2.0</a>.</p>
+  <a class="closing" href="#top"></a>
+</footer>
+</body>
+<script src="js/app.js"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-26567546-2', 'rtc.io');
+  ga('send', 'pageview');
+
+</script>
+</html>
+

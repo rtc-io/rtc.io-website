@@ -66,7 +66,17 @@ argument which tells quickconnect which server to use for signaling:</p>
 </pre></div>
 
 <h2 id="events">Events</h2>
-<p>The following events are emitted from the signalling object created by calling <code>quickconnect()</code>:</p>
+<p>The following events are emitted from the signalling object created by calling <code>quickconnect()</code>. Additionally, any of the underlying <a href="https://github.com/rtc-io/rtc-signaller#signaller-events">signaller events</a> can also be used.</p>
+<h3 id="peer-level-events">Peer Level Events</h3>
+<p>The peer level events provided in quickconnect provide you the ability to tap into the various stages of the lifecycle for connecting with a peer, before the connection actually migrates to the status of a connected &quot;call&quot;.</p>
+<ul>
+<li><p><code>peer:connect =&gt; function(id, peerconnection, data)</code></p>
+<p>The <code>peer:connect</code> event is emitted when we first create a connection to a discovered peer.  The <code>peerconnection</code> argument is a standard <code>RTCPeerConnection</code> instance.</p>
+</li>
+<li><p><code>peer:couple =&gt; funtion(id, peerconnection, data, monitor)</code></p>
+<p>The <code>peer:couple</code> event is emitted when once quickconnect has <a href="https://github.com/rtc-io/rtc-tools#rtc-toolscouple">coupled</a> to it&#39;s remote counterpart.</p>
+</li>
+</ul>
 <h3 id="call-level-events">Call Level Events</h3>
 <p>A &quot;call&quot; in quickconnect is equivalent to an established <code>RTCPeerConnection</code> between this quickconnect instance a remote peer.</p>
 <ul>
@@ -254,9 +264,15 @@ a lot simpler.</p>
 <pre><code>addStream(stream:MediaStream) =&gt; qc</code></pre>
 <p>Add the stream to active calls and also save the stream so that it
 can be added to future calls.</p>
+<h4 id="endcalls-">endCalls()</h4>
+<p>The <code>endCalls</code> function terminates all the active calls that have been
+created in this quickconnect instance.  Calling <code>endCalls</code> does not
+kill the connection with the signalling server.</p>
 <h4 id="close-">close()</h4>
 <p>The <code>close</code> function provides a convenient way of closing all associated
-peer connections.</p>
+peer connections.  This function simply uses the <code>endCalls</code> function and
+the underlying <code>leave</code> function of the signaller to do a &quot;full cleanup&quot;
+of all connections.</p>
 <h4 id="createdatachannel-label-config-">createDataChannel(label, config)</h4>
 <p>Request that a data channel with the specified <code>label</code> is created on
 the peer connection.  When the data channel is open and available, an

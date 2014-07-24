@@ -1,9 +1,6 @@
-# What is WebRTC?
+## Introducing rtc.io
 
-WebRTC is enabling a revolution of web communications, but it can be tricky
-to get started.
-
-The rtc.io suite is a collection of open source node.js modules that can be installed with npm to:
+rtc.io is a collection of node.js modules that simplify WebRTC development.
 
 - access local camera and microphone
 - create audio and video calls between browsers
@@ -11,7 +8,18 @@ The rtc.io suite is a collection of open source node.js modules that can be inst
 - provide communication management
 - set up a signalling server
 
-You get to pick and choose as needed.
+## Getting started with rtc.io
+
+rtc.io uses npm for dependency management. You'll also need Browserify to prepare node modules for the browser.
+
+- Install [Node and NPM](https://www.npmjs.org/)
+- Install [Browserify](http://http://browserify.org/)
+- `npm install -g rtc-quickconnect`
+- `npm install -g rtc-media`
+
+You can install any rtc.io module via npm. `rtc-quickconnect` and `rtc-media` are the modules you will need to complete our 'Getting Started' tutorial.
+
+The [Tutorial](tutorials.html) page has a step by step guide to introduce you to the basics of building WebRTC apps with rtc.io. If you already know what you're looking for, check out our complete [module list](modules.html)
 
 ## Testing and WebRTC
 

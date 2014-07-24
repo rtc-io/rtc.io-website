@@ -1,22 +1,25 @@
-# WebRTC Tutorials
+# Tutorials
 
-Here we provide some tutorials for working with WebRTC in general and also 
-the rtc.io toolset.
+These tutorials will step you through some basic demos to get you up to speed quickly using rtc.io. If you are looking for more advanced demos check our [demos](demos.html) page or see the full list of [modules](modules.html) for detailed documentation.
 
-There is also a presentation that was remotely given using WebRTC. It walks
-you through the core capabilities of the rtc.io toolset and is at
-[http://rtc.io/presentations/lca_2014_webrtc/](http://rtc.io/presentations/lca_2014_webrtc/). 
+rtc.io components are node modules which can be easily included as dependencies in your project using 'require'. However we'll need to use Browserify to bundle our app with it's dependencies to run in the browser - see the [Browserify site](http://http://browserify.org/) for usage instructions.
 
 ## Getting Started
 
-The following tutorials are designed to help you "dip your toe" in with 
-WebRTC.  We will cover capturing media and establishing communication with 
-a remote peer using the rtc.io signaller.
+Learn how rtc.io can help you build the basic components of a WebRTC
+application.
 
-### Media Capture
+### Establishing a connection with rtc-quickconnect
+- [Shared text box](tutorial-simple-text-share.html)
 
-- [WebRTC Media Capture Tutorial](tutorial-capture-media.html)
-- [Using rtc-media for WebRTC media capture](tutorial-capture-rtc-media.html)
+### Capturing user video and audio with rtc-media
+- [Video mirror](tutorial-simple-video-mirror.html)
+
+### Sharing video streams
+- [Basic video chat](tutorial-simple-video-chat.html)
+
+### Stream Processing
+- [Simple Video Manipulation](tutorial-simple-manipulation.html)
 
 <!--
 ### Conferencing
@@ -25,13 +28,13 @@ a remote peer using the rtc.io signaller.
 - [Creating a simple video conferencing application](tutorial-quickconnect-videoconferencing.html)
 -->
 
-### Stream Processing
-
-- [Simple Video Manipulation](tutorial-simple-manipulation.html)
-
-
 <!-- ### Signalling
 
 - [Simple Signalling using Socket.IO (Part 1)](tutorial-simple-signalling-socket-io-part1.html)
 - [Simple Signalling using Socket.IO (Part 2)](tutorial-simple-signalling-socket-io-part2.html)
  -->
+ 
+## Further Reading
+
+A presentation on the core capabilities of the rtc.io toolset 
+[http://rtc.io/presentations/lca_2014_webrtc/](http://rtc.io/presentations/lca_2014_webrtc/). 

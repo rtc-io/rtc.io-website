@@ -97,6 +97,9 @@ it comes with support for understanding how to connect to an
 <li><p><code>disconnected</code></p>
 <p>The connection has been lost (possibly temporarily) with the signalling server (or transport).  It is possible that the connection will be re-established so this does not necessarily mean the end.</p>
 </li>
+<li><p><code>local:announce</code></p>
+<p>This event is trigged when an <code>/announce</code> message is sent via the messenging channel.  The event includes a single <code>data</code> argument which contains the object data that has been sent.</p>
+</li>
 </ul>
 <h3 id="events-regarding-peer-state">Events regarding peer state</h3>
 <p>The following events relate to information that has been relayed to this signaller about other peers:</p>
