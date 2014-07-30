@@ -10,14 +10,30 @@ rtc.io is a collection of node.js modules that simplify WebRTC development.
 
 ## Getting started with rtc.io
 
-rtc.io uses npm for dependency management. You'll also need Browserify to prepare node modules for the browser.
+The rtc module is a pre-bundled collection of the rtc.io modules you need to get started building your own WebRTC application. You can load this module directly in your HTML page or include it as a require.js module.
+
+Grab the latest build of rtc from https://github.com/rtc-io/rtc.
+
+```html
+<script src="path/to/rtc.js"></script>
+```
+
+```js
+var rtc = RTC({room: 'test-room' });
+
+rtc.on('ready', yourInitFunction);
+```
+
+The full suite of rtc.io modules are available individually via npm and can be included using `require()`. You'll need Browserify to prepare your CommonJS modules for the browser. For exmaple, to use [rtc-quickconnect](module-rtc-quickconnect.html):
 
 - Install [Node and NPM](https://www.npmjs.org/)
 - Install [Browserify](http://http://browserify.org/)
-- `npm install -g rtc-quickconnect`
-- `npm install -g rtc-media`
+- `npm install rtc-quickconnect`
 
-You can install any rtc.io module via npm. `rtc-quickconnect` and `rtc-media` are the modules you will need to complete our 'Getting Started' tutorial.
+```js
+var qc = require(rtc-quickconnect);
+var connection = qc(opts);
+```
 
 The [Tutorial](tutorials.html) page has a step by step guide to introduce you to the basics of building WebRTC apps with rtc.io. If you already know what you're looking for, check out our complete [module list](modules.html)
 

@@ -48,15 +48,27 @@
 <li>set up a signalling server</li>
 </ul>
 <h2 id="getting-started-with-rtc-io">Getting started with rtc.io</h2>
-<p>rtc.io uses npm for dependency management. You&#39;ll also need Browserify to prepare node modules for the browser.</p>
+<p>The rtc module is a pre-bundled collection of the rtc.io modules you need to get started building your own WebRTC application. You can load this module directly in your HTML page or include it as a require.js module.</p>
+<p>Grab the latest build of rtc from <a href="https://github.com/rtc-io/rtc">https://github.com/rtc-io/rtc</a>.</p>
+<div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;path/to/rtc.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">rtc</span> <span class="o">=</span> <span class="nx">RTC</span><span class="p">({</span><span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;test-room&#39;</span> <span class="p">});</span>
+
+<span class="nx">rtc</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;ready&#39;</span><span class="p">,</span> <span class="nx">yourInitFunction</span><span class="p">);</span>
+</pre></div>
+
+<p>The full suite of rtc.io modules are available individually via npm and can be included using <code>require()</code>. You&#39;ll need Browserify to prepare your CommonJS modules for the browser. For exmaple, to use <a href="module-rtc-quickconnect.html">rtc-quickconnect</a>:</p>
 <ul>
 <li>Install <a href="https://www.npmjs.org/">Node and NPM</a></li>
 <li>Install <a href="http://http://browserify.org/">Browserify</a></li>
-<li><code>npm install -g rtc-quickconnect</code></li>
-<li><code>npm install -g rtc-media</code></li>
+<li><code>npm install rtc-quickconnect</code></li>
 </ul>
-<p>You can install any rtc.io module via npm. <code>rtc-quickconnect</code> and <code>rtc-media</code> are the modules you will need to complete our &#39;Getting Started&#39; tutorial.</p>
-<p>The <a href="tutorials.html">Tutorial</a> page has a step by step guide to introduce you to the basics of building WebRTC apps with rtc.io. If you already know what you&#39;re looking for check out our complete <a href="modules.html">module list</a></p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">qc</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">rtc</span><span class="o">-</span><span class="nx">quickconnect</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">connection</span> <span class="o">=</span> <span class="nx">qc</span><span class="p">(</span><span class="nx">opts</span><span class="p">);</span>
+</pre></div>
+
+<p>The <a href="tutorials.html">Tutorial</a> page has a step by step guide to introduce you to the basics of building WebRTC apps with rtc.io. If you already know what you&#39;re looking for, check out our complete <a href="modules.html">module list</a></p>
 <h2 id="testing-and-webrtc">Testing and WebRTC</h2>
 <p>All of the stable modules in the rtc.io suite (and some of the unstable ones too) are being tested using continuous integration (a big thanks to <a href="https://travis-ci.org/">Travis CI</a> for their excellent service).  We have further information on <a href="testing-process.html">our testing process</a> if you are interested, and the current build status is displayed with each of our <a href="modules.html">modules</a>.</p>
 </div>

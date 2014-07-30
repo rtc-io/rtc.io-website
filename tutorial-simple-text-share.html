@@ -39,12 +39,12 @@
 <div class="shadow"></div>
 </header>
 <div class="main" role="content"><h1 id="simple-shared-text-box">Simple shared text box</h1>
-<p>The essential part of any WebRTC application is a connection between peers. We will use the <a href="/module-rtc-quickconnect.html">rtc-quickconnect</a> module to allow us to easily create a connection and share data.</p>
+<p>The essential part of any WebRTC application is a connection between peers. We will use the <a href="module-rtc-quickconnect.html">rtc-quickconnect</a> module to allow us to easily create a connection and share data.</p>
 <p>First, we need to include the rtc-quickconnect module:</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">quickConnectMod</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-quickconnect&#39;</span><span class="p">);</span>
 </pre></div>
 
-<p>Next, call the quickconnect module with the location of your signalling server and your connection options - this will return a reference to our connection object. For now we will use the rtc.io signalling server at <a href="http://rtc.io/switchboard/">http://rtc.io/switchboard/</a> (for testing purposes only). The <a href="/module-rtc-switchboard">rtc-switchboard</a> module can be deployed on your own servers.</p>
+<p>Next, call the quickconnect module with the location of your signalling server and your connection options - this will return a reference to our connection object. For now we will use the rtc.io signalling server at <a href="http://rtc.io/switchboard/">http://rtc.io/switchboard/</a> (for testing purposes only). The <a href="module-rtc-switchboard.html">rtc-switchboard</a> module can be deployed on your own servers.</p>
 <p>In our options object we will include a room name to tell the siganlling server which peers should be connected to each other.</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">quickConnectObj</span> <span class="o">=</span> <span class="nx">quickConnectMod</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard/&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;rtcio-text-demo&#39;</span> <span class="p">});</span>
 </pre></div>
@@ -57,7 +57,7 @@
 <div class="highlight"><pre><span class="nx">quickConnectObj</span><span class="p">.</span><span class="nx">createDataChannel</span><span class="p">(</span><span class="s1">&#39;shared-text&#39;</span><span class="p">);</span>
 </pre></div>
 
-<p>Once our channel is created we can listen on our connection object for it&#39;s events. For a full list of the events available, see the documentation for the <a href="/module-rtc-quickconnect.html">rtc-quickconnect</a> module.</p>
+<p>Once our channel is created we can listen on our connection object for it&#39;s events. For a full list of the events available, see the documentation for the <a href="module-rtc-quickconnect.html">rtc-quickconnect</a> module.</p>
 <div class="highlight"><pre><span class="nx">quickConnectObj</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;channel:opened:shared-text&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">dataChannel</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">bindDataEvents</span><span class="p">(</span><span class="nx">dataChannel</span><span class="p">);</span>
 <span class="p">});</span>

@@ -1,6 +1,6 @@
 # Video mirror
 
-In order to share video streams we can use the [rtc-media](/module-rtc-media.html) module to help us manage the video and audio feed for each user. This demo shows how to get access to the local user's video and audio stream and render it to the browser. We'll learn how to share audio and video streams in the [next tutorial](tutorials-simple-video-share.html).
+In order to share video streams we can use the [rtc-media](module-rtc-media.html) module to help us manage the video and audio feed for each user. This demo shows how to get access to the local user's video and audio stream and render it to the browser.
 
 Include the rtc-media module. This will return a reference to the rtc-media object.
 
