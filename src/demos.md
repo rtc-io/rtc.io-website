@@ -9,11 +9,13 @@ A simple demo making use of the `rtc-quickconnect` module to demonstrate how you
 
 https://github.com/rtc-io/rtcio-demo-quickconnect
 
+<!--
 ### rtc-glue demo
 
 This demo shows how you can use `rtc-glue` to create a WebRTC conferencing application with very little JS code.
 
 https://github.com/rtc-io/rtcio-demo-peerconnection
+-->
 
 ### rtc-mesh demo
 

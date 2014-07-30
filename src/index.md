@@ -10,9 +10,9 @@ rtc.io is a collection of node.js modules that simplify WebRTC development.
 
 ## Getting started with rtc.io
 
-The rtc module is a pre-bundled collection of the rtc.io modules you need to get started building your own WebRTC application. You can load this module directly in your HTML page or include it as a require.js module.
+The [rtc](module-rtc.html) module is a pre-bundled collection of the rtc.io modules you need to get started building your own WebRTC application. You can load this module directly in your HTML page or include it as a require.js module.
 
-Grab the latest build of rtc from https://github.com/rtc-io/rtc.
+Grab the latest build of [rtc](module-rtc.html) from https://github.com/rtc-io/rtc.
 
 ```html
 <script src="path/to/rtc.js"></script>

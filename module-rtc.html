@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+<title>rtc.io</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css" />
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+<!-- responsive -->
+<link rel="stylesheet" media="screen and (max-width: 960px)" href="css/tablet.css" />
+<link rel="stylesheet" media="screen and (max-width: 710px)" href="css/phone.css" />
+<link rel="stylesheet" type="text/css" href="fonts/source-sans/stylesheet.css" />
+<link rel="stylesheet" type="text/css" href="css/code.css" />
+</head>
+<body>
+
+<a class="scroll-point pt-top" name="top"></a>
+<header>
+<a href="https://github.com/rtc-io/rtc"><img class="fork" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub" /></a>
+<a class="scroll-point pt-top" name="top"></a>
+<div class="site">
+  <div class="mascot">
+    <img src="images/artsio.png" />
+  </div>
+  <div class="logo" data-subtext="OpenSource WebRTC">
+    <a href="index.html">rtc.io</a>
+  </div>
+  <nav>
+    <ul>
+    <li><a href="index.html">About</a></li>
+    <li><a href="tutorials.html">Tutorials</a></li>
+    <li><a href="demos.html">Demos</a></li>
+    <li><a href="modules.html">Modules</a></li>
+    </ul>
+  </nav>
+</div>
+<div class="shadow"></div>
+</header>
+<div class="main" role="content"><h1 id="rtc">rtc</h1>
+<p>This is a package that will provide you a &quot;one-stop shop&quot; for building
+WebRTC applications.  It aggregates together a variety of packages (primarily
+from the <a href="https://github.com/rtc-io">rtc.io</a> suite) to deliver a single
+package for building a WebRTC application.</p>
+<p><a href="https://nodei.co/npm/rtc/"><img src="https://nodei.co/npm/rtc.png" alt="NPM" /></a></p>
+<p><a href="https://github.com/dominictarr/stability#experimental"><img src="https://img.shields.io/badge/stability-experimental-red.svg" alt="experimental" /></a></p>
+<h2 id="getting-started">Getting Started</h2>
+<p>Grab the latest distribution build of rtc at:</p>
+<p><a href="https://cdn.rawgit.com/rtc-io/rtc/3973cd643cf59b89d17792a49b4821cf7c9ba2ed/dist/rtc.min.js">https://cdn.rawgit.com/rtc-io/rtc/3973cd643cf59b89d17792a49b4821cf7c9ba2ed/dist/rtc.min.js</a></p>
+<p>Also available via bower:</p>
+<pre><code>  bower install rtc</code></pre>
+<p>Or if you prefer to work directly with the CommonJS module you can install it via npm:</p>
+<pre><code>  npm install rtc --save</code></pre>
+<p>We use <a href="https://browserify.org">browserify</a> to bundle our CommonJS modules for use in the browser.</p>
+<h2 id="basic-usage">Basic Usage</h2>
+<p>Establish a connection and render local and remote video feeds.</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;r-video&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;l-video&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;/path/to/rtc.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+
+<div class="highlight"><pre><span class="c1">// rtc needs a named room and a signalling server location to create a session.</span>
+<span class="c1">// switchboard.rtc.io may be used for testing, or you can host your own signaller</span>
+<span class="c1">// with rtc-switchboard module.</span>
+<span class="kd">var</span> <span class="nx">rtcOpts</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;test-room&#39;</span><span class="p">,</span>
+      <span class="nx">signaller</span><span class="o">:</span> <span class="s1">&#39;//switchboard.rtc.io&#39;</span>
+    <span class="p">};</span>
+<span class="c1">// call RTC module</span>
+<span class="kd">var</span> <span class="nx">rtc</span> <span class="o">=</span> <span class="nx">RTC</span><span class="p">(</span><span class="nx">rtcOpts</span><span class="p">);</span>
+<span class="c1">// A div element to show our local video stream</span>
+<span class="kd">var</span> <span class="nx">localVideo</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;l-video&#39;</span><span class="p">);</span>
+<span class="c1">// A div element to show our remote video streams</span>
+<span class="kd">var</span> <span class="nx">remoteVideo</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;r-video&#39;</span><span class="p">);</span>
+
+<span class="c1">// Display local and remote video streams</span>
+<span class="nx">localVideo</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">rtc</span><span class="p">.</span><span class="nx">local</span><span class="p">);</span>
+<span class="nx">remoteVideo</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">rtc</span><span class="p">.</span><span class="nx">remote</span><span class="p">);</span>
+</pre></div>
+
+<h2 id="sharing-video-audio-and-data-streams">Sharing Video, Audio and Data Streams</h2>
+<p>Add a data channel to share text messages</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;messages&quot;</span> <span class="na">contenteditable</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;r-video&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;l-video&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;/path/to/rtc.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+
+<div class="highlight"><pre><span class="c1">// Set RTC options.</span>
+<span class="kd">var</span> <span class="nx">rtcOpts</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;test-room-2&#39;</span><span class="p">,</span>
+    <span class="nx">signaller</span><span class="o">:</span> <span class="s1">&#39;//switchboard.rtc.io&#39;</span>
+  <span class="p">};</span>
+<span class="c1">// call RTC module</span>
+<span class="kd">var</span> <span class="nx">rtc</span> <span class="o">=</span> <span class="nx">RTC</span><span class="p">(</span><span class="nx">rtcOpts</span><span class="p">);</span>
+<span class="c1">// A contenteditable element to show our messages</span>
+<span class="kd">var</span> <span class="nx">messageWindow</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;messages&#39;</span><span class="p">);</span>
+<span class="c1">// A div element to show our local video stream</span>
+<span class="kd">var</span> <span class="nx">localVideo</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;l-video&#39;</span><span class="p">);</span>
+<span class="c1">// A div element to show our remote video streams</span>
+<span class="kd">var</span> <span class="nx">remoteVideo</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;r-video&#39;</span><span class="p">);</span>
+
+<span class="c1">// Bind to events happening on the data channel</span>
+<span class="kd">function</span> <span class="nx">bindDataChannelEvents</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">channel</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">,</span> <span class="nx">connection</span><span class="p">)</span> <span class="p">{</span>
+
+  <span class="c1">// Receive message</span>
+  <span class="nx">channel</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">evt</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">messageWindow</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+  <span class="p">};</span>
+
+  <span class="c1">// Send message</span>
+  <span class="nx">messageWindow</span><span class="p">.</span><span class="nx">onkeyup</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">channel</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">innerHTML</span><span class="p">);</span>
+  <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="c1">// Start working with the established session</span>
+<span class="kd">function</span> <span class="nx">init</span><span class="p">(</span><span class="nx">session</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">session</span><span class="p">.</span><span class="nx">createDataChannel</span><span class="p">(</span><span class="s1">&#39;chat&#39;</span><span class="p">);</span>
+  <span class="nx">session</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;channel:opened:chat&#39;</span><span class="p">,</span> <span class="nx">bindDataChannelEvents</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Display local and remote video streams</span>
+<span class="nx">localVideo</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">rtc</span><span class="p">.</span><span class="nx">local</span><span class="p">);</span>
+<span class="nx">remoteVideo</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">rtc</span><span class="p">.</span><span class="nx">remote</span><span class="p">);</span>
+
+<span class="c1">// Detect when RTC has established a session</span>
+<span class="nx">rtc</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;ready&#39;</span><span class="p">,</span> <span class="nx">init</span><span class="p">);</span>
+</pre></div>
+
+<h2 id="license-s-">License(s)</h2>
+<h3 id="apache-2-0">Apache 2.0</h3>
+<p>Copyright 2014 National ICT Australia Limited (NICTA)</p>
+<p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at</p>
+<pre><code> http://www.apache.org/licenses/LICENSE-2.0</code></pre>
+<p>   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.</p>
+</div>
+
+<footer>
+  <p>
+    <a href="http://nicta.com.au">
+      <img src="images/nicta-logo.gif" alt="NICTA logo" />
+    </a>© NICTA 2013 - 2014
+  </p>
+  <p class="license">Project source code is licensed under the <a href="https://github.com/rtc-io/rtc/blob/master/LICENSE">Apache 2.0</a>.</p>
+  <a class="closing" href="#top"></a>
+</footer>
+</body>
+<script src="js/app.js"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-26567546-2', 'rtc.io');
+  ga('send', 'pageview');
+
+</script>
+</html>
+

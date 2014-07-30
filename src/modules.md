@@ -6,13 +6,18 @@ The rtc.io suite is made up of a number of modules, which cater for different ne
 
 The following is a list of modules that are designed for use within a browser.  Each of these modules (unless otherwise specified) is designed to be built into an application using [browserify](http://browserify.org/). In our experience, using browserify in conjunction with [npm](https://npmjs.org/) provides a very smooth development experience.
 
+### [rtc](module-rtc.html)
+Bundled module for getting a your WebRTC app up and running quickly.
+
 ### [rtc-quickconnect](module-rtc-quickconnect.html)
 
 Provides a high level wrapper around the lower-level client libraries and is designed to get you building WebRTC applications very quickly.
 
+<!--
 ### [rtc-glue](module-rtc-glue.html)
 
 Designed to provide a pure HTML tag based approach to building WebRTC applications, `rtc-glue` does not require any Javascript code to be written to create an application.  Simply include the provided `glue.js` file in your HTML page, provide some additional HTML attributes on well known HTML elements and you will be well on your way to creating simple applications.
+-->
 
 ### [rtc-dcstream](module-rtc-dcstream.html)
 
