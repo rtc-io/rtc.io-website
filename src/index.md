@@ -31,7 +31,7 @@ The full suite of rtc.io modules are available individually via npm and can be i
 - `npm install rtc-quickconnect`
 
 ```js
-var qc = require(rtc-quickconnect);
+var qc = require('rtc-quickconnect');
 var connection = qc(opts);
 ```
 
