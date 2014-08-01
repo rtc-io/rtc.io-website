@@ -10,7 +10,7 @@ rtc.io is a collection of node.js modules that simplify WebRTC development.
 
 ## Getting started with rtc.io
 
-The [rtc](module-rtc.html) module is a pre-bundled collection of the rtc.io modules you need to get started building your own WebRTC application. You can load this module directly in your HTML page or include it as a require.js module.
+The [rtc](module-rtc.html) module is a pre-bundled collection of the essential rtc.io modules you need to get started building your own WebRTC application. You can load this module directly in your HTML page or include it as a require.js module.
 
 Grab the latest build of [rtc](module-rtc.html) from https://github.com/rtc-io/rtc.
 
@@ -19,21 +19,27 @@ Grab the latest build of [rtc](module-rtc.html) from https://github.com/rtc-io/r
 ```
 
 ```js
-var rtc = RTC({room: 'test-room' });
+var rtcSession = RTC({room: 'test-room' });
 
-rtc.on('ready', yourInitFunction);
+rtcSession.on('ready', yourInitFunction);
 ```
 
-The full suite of rtc.io modules are available individually via npm and can be included using `require()`. You'll need Browserify to prepare your CommonJS modules for the browser. For exmaple, to use [rtc-quickconnect](module-rtc-quickconnect.html):
+## Using CommonJS?
+
+The full suite of rtc.io modules, including [rtc](module-rtc.html), are available individually via npm and can be included using `require()`. You'll need Browserify (or a similar service) to prepare your CommonJS modules for the browser.
 
 - Install [Node and NPM](https://www.npmjs.org/)
 - Install [Browserify](http://http://browserify.org/)
-- `npm install rtc-quickconnect`
+- `npm install rtc`
 
 ```js
-var qc = require('rtc-quickconnect');
-var connection = qc(opts);
+var rtc = require('rtc');
+var rtcSession = rtc({room: 'test-room'});
+
+rtcSession.on('ready', yourInitFunction);
 ```
+
+- `browserify yourjsfile.js -o bundle.js`
 
 The [Tutorial](tutorials.html) page has a step by step guide to introduce you to the basics of building WebRTC apps with rtc.io. If you already know what you're looking for, check out our complete [module list](modules.html)
 
