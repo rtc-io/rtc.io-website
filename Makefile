@@ -19,8 +19,8 @@ static: prepare
 	@cp src/static/* .
 
 updatelibs:
-	@echo "Updating rtc-glue"
-	@cp ./node_modules/rtc-glue/dist/* .
+	@echo "Updating rtc"
+	@cp ./node_modules/rtc/dist/* .
 
 $(rtcmods): prepare
 	@echo "fetching $@ module readme"
