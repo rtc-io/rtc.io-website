@@ -41,7 +41,7 @@ buildstatus.html:
 	@echo "generating build status doc"
 	@$(blockdown) --repo="https://github.com/rtc-io" template.html < src/buildstatus.md > $@
 
-%.html: prepare
+%.html:
 	@echo "generating $@"
 	@$(blockdown) --repo="https://github.com/rtc-io" template.html < src/$(patsubst %.html,%.md,$@) > $@
 
