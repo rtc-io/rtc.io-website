@@ -38,5 +38,8 @@ Stream Processing
 
 ## Further Reading
 
-A presentation on the core capabilities of the rtc.io toolset
-[http://rtc.io/presentations/lca_2014_webrtc/](http://rtc.io/presentations/lca_2014_webrtc/).
+Some presentations on the core capabilities of the rtc.io toolset:
+
+- [http://rtc.io/presentations/lca_2014_webrtc/](http://rtc.io/presentations/lca_2014_webrtc/).
+
+- [http://rtc.io/presentations/WDCNZ2014/](http://rtc.io/presentations/WDCNZ2014/).
