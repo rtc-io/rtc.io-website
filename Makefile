@@ -31,7 +31,7 @@ $(rtcmods): prepare
 js/samples/%.js: prepare
 	browserify --debug $(subst js/samples/,code/,$@) > $@
 
-tutorial-%.html: src/tutorials/tutorial-%.md
+tutorial-%.html: src/tutorials/%.md
 	@echo "generating $@"
 	@cat src/tutorials/$(patsubst tutorial-%.html,%.md,$@) | $(injectcode) > tmp_$@
 	@$(blockdown) template.html < tmp_$@ > $@
