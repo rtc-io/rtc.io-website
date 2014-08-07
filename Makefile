@@ -31,17 +31,17 @@ $(rtcmods): prepare
 js/samples/%.js: prepare
 	browserify --debug $(subst js/samples/,code/,$@) > $@
 
-tutorial-%.html:
+tutorial-%.html: src/tutorials/tutorial-%.md
 	@echo "generating $@"
 	@cat src/tutorials/$(patsubst tutorial-%.html,%.md,$@) | $(injectcode) > tmp_$@
 	@$(blockdown) template.html < tmp_$@ > $@
 	@rm tmp_$@
 
-buildstatus.html:
+buildstatus.html: src/buildstatus.md
 	@echo "generating build status doc"
 	@$(blockdown) --repo="https://github.com/rtc-io" template.html < src/buildstatus.md > $@
 
-%.html:
+%.html: src/%.md
 	@echo "generating $@"
 	@$(blockdown) --repo="https://github.com/rtc-io" template.html < src/$(patsubst %.html,%.md,$@) > $@
 
