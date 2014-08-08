@@ -40,6 +40,6 @@ Stream Processing
 
 Some presentations on the core capabilities of the rtc.io toolset:
 
-- [http://rtc.io/presentations/lca_2014_webrtc/](http://rtc.io/presentations/lca_2014_webrtc/).
+- [http://rtc.io/presentations/lca_2014_webrtc/](http://rtc.io/presentations/lca_2014_webrtc/). More info about this in [Silvia's blog post](http://gingertech.net/2014/01/08/use-deck-js-as-a-remote-presentation-tool/), though we have since deprecated rtc-glue and are now recommending the use of rtc.
 
-- [http://rtc.io/presentations/WDCNZ2014/](http://rtc.io/presentations/WDCNZ2014/).
+- [http://rtc.io/presentations/WDCNZ2014/](http://rtc.io/presentations/WDCNZ2014/). This presentation uses rtc for its demos.
