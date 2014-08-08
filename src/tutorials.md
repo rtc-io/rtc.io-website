@@ -17,16 +17,17 @@ rtc.io components are CommonJS modules which can be installed via npm and includ
 Establishing a connection with rtc-quickconnect
 - [Shared text box](tutorial-simple-text-share.html)
 
+Establishing a data channel connection with rtc-quickconnect
+- [Creating a simple WebRTC chat application](tutorial-quickconnect-chat.html)
+
 Capturing user video and audio with rtc-media
 - [Video mirror](tutorial-simple-video-mirror.html)
 
 Stream Processing
 - [Simple Video Manipulation](tutorial-simple-manipulation.html)
 
-<!--
-### Conferencing
 
-- [Creating a simple WebRTC chat application](tutorial-quickconnect-chat.html)
+<!--
 - [Creating a simple video conferencing application](tutorial-quickconnect-videoconferencing.html)
 -->
 
