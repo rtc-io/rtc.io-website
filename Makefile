@@ -19,8 +19,8 @@ static: prepare
 	@cp src/static/* .
 
 updatelibs:
-	@echo "Updating rtc-glue"
-	@cp ./node_modules/rtc-glue/dist/* .
+	@echo "Updating rtc"
+	@cp ./node_modules/rtc/dist/* .
 
 $(rtcmods): prepare
 	@echo "fetching $@ module readme"
@@ -31,17 +31,17 @@ $(rtcmods): prepare
 js/samples/%.js: prepare
 	browserify --debug $(subst js/samples/,code/,$@) > $@
 
-tutorial-%.html: prepare
+tutorial-%.html: src/tutorials/%.md
 	@echo "generating $@"
 	@cat src/tutorials/$(patsubst tutorial-%.html,%.md,$@) | $(injectcode) > tmp_$@
 	@$(blockdown) template.html < tmp_$@ > $@
 	@rm tmp_$@
 
-buildstatus.html:
+buildstatus.html: src/buildstatus.md
 	@echo "generating build status doc"
 	@$(blockdown) --repo="https://github.com/rtc-io" template.html < src/buildstatus.md > $@
 
-%.html: prepare
+%.html: src/%.md
 	@echo "generating $@"
 	@$(blockdown) --repo="https://github.com/rtc-io" template.html < src/$(patsubst %.html,%.md,$@) > $@
 

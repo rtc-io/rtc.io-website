@@ -46,11 +46,16 @@
 
 <p>Next, call the quickconnect module with the location of your signalling server and your connection options - this will return a reference to our connection object. For now we will use the rtc.io signalling server at <a href="http://rtc.io/switchboard/">http://rtc.io/switchboard/</a> (for testing purposes only). The <a href="module-rtc-switchboard.html">rtc-switchboard</a> module can be deployed on your own servers.</p>
 <p>In our options object we will include a room name to tell the siganlling server which peers should be connected to each other.</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">quickConnectObj</span> <span class="o">=</span> <span class="nx">quickConnectMod</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard/&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;rtcio-text-demo&#39;</span> <span class="p">});</span>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">quickConnectObj</span> <span class="o">=</span> <span class="nx">quickConnectMod</span><span class="p">(</span><span class="s1">&#39;//switchboard.rtc.io&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;rtcio-text-demo&#39;</span> <span class="p">});</span>
 </pre></div>
 
-<p>We&#39;ll also need a reference to a contenteditable DOM element where our users will type text to share.</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">messageWindow</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;messages&#39;</span><span class="p">);</span>
+<p>We&#39;ll also need to create and reference a contenteditable DOM element where our users will type text to share.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">messageWindow</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;textarea&#39;</span><span class="p">);</span>
+<span class="nx">messageWindow</span><span class="p">.</span><span class="nx">rows</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+<span class="nx">messageWindow</span><span class="p">.</span><span class="nx">cols</span> <span class="o">=</span> <span class="mi">80</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">bodyElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+<span class="nx">bodyElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">messageWindow</span><span class="p">);</span>
 </pre></div>
 
 <p>Now that we have a reference to our connection object we use it to create a data channel to send our text over.</p>
@@ -67,12 +72,12 @@
 <div class="highlight"><pre><span class="kd">function</span> <span class="nx">bindDataEvents</span><span class="p">(</span><span class="nx">channel</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// Receive message</span>
     <span class="nx">channel</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">evt</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">messageWindow</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+        <span class="nx">messageWindow</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
     <span class="p">};</span>
 
     <span class="c1">// Send message</span>
     <span class="nx">messageWindow</span><span class="p">.</span><span class="nx">onkeyup</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">evt</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">channel</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">innerHTML</span><span class="p">);</span>
+        <span class="nx">channel</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
     <span class="p">};</span>
 <span class="p">}</span>
 </pre></div>
@@ -80,8 +85,15 @@
 <p>This creates a basic shared text box.</p>
 <div class="highlight"><pre><span class="c1">// rtc-quickconnect requires a signalling server location and a room name.</span>
 <span class="kd">var</span> <span class="nx">quickConnectMod</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-quickconnect&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">quickConnectObj</span> <span class="o">=</span> <span class="nx">quickConnectMod</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard/&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;rtcio-text-demo&#39;</span> <span class="p">});</span>
-<span class="kd">var</span> <span class="nx">messageWindow</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;messages&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">quickConnectObj</span> <span class="o">=</span> <span class="nx">quickConnectMod</span><span class="p">(</span><span class="s1">&#39;//switchboard.rtc.io&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;rtcio-text-demo&#39;</span> <span class="p">});</span>
+
+<span class="c1">// Create the text area for chatting</span>
+<span class="kd">var</span> <span class="nx">messageWindow</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;textarea&#39;</span><span class="p">);</span>
+<span class="nx">messageWindow</span><span class="p">.</span><span class="nx">rows</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+<span class="nx">messageWindow</span><span class="p">.</span><span class="nx">cols</span> <span class="o">=</span> <span class="mi">80</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">bodyElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+<span class="nx">bodyElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">messageWindow</span><span class="p">);</span>
 
 <span class="c1">// Create a data channel and bind to it&#39;s events</span>
 <span class="nx">quickConnectObj</span><span class="p">.</span><span class="nx">createDataChannel</span><span class="p">(</span><span class="s1">&#39;shared-text&#39;</span><span class="p">);</span>
@@ -92,12 +104,12 @@
 <span class="kd">function</span> <span class="nx">bindDataEvents</span><span class="p">(</span><span class="nx">channel</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// Receive message</span>
     <span class="nx">channel</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">evt</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">messageWindow</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+        <span class="nx">messageWindow</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
     <span class="p">};</span>
 
     <span class="c1">// Send message</span>
     <span class="nx">messageWindow</span><span class="p">.</span><span class="nx">onkeyup</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">evt</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">channel</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">innerHTML</span><span class="p">);</span>
+        <span class="nx">channel</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
     <span class="p">};</span>
 <span class="p">}</span>
 </pre></div>

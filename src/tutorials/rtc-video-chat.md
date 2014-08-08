@@ -2,7 +2,7 @@
 
 This demo shows how to use the [rtc](https://github.com/rtc-io/rtc) module to start a shared session, render the local and remote users' video streams, and use a data channel to create a shared text area for users.
 
-Include the bundled rtc module in your HTML page (get the latest build from https://github.com/rtc-io/rtc). The rtc module can also be loaded using require.js.
+Include the bundled rtc module in your HTML page (get the latest build from https://github.com/rtc-io/rtc/build). The rtc module can also be loaded using require.js.
 
 ```html
 <script src="path/to/rtc.js"></script>
@@ -42,3 +42,7 @@ Finally, bind the data channel events so that our users can update the shared te
 Here's the full script:
 
 <<< code/rtc-video-chat.js
+
+And here's the full HTML page to go with it:
+
+<<< code/rtc-video-chat.html

@@ -40,7 +40,7 @@
 </header>
 <div class="main" role="content"><h1 id="video-chat-with-shared-text-area">Video chat with shared text area</h1>
 <p>This demo shows how to use the <a href="https://github.com/rtc-io/rtc">rtc</a> module to start a shared session, render the local and remote users&#39; video streams, and use a data channel to create a shared text area for users.</p>
-<p>Include the bundled rtc module in your HTML page (get the latest build from <a href="https://github.com/rtc-io/rtc">https://github.com/rtc-io/rtc</a>). The rtc module can also be loaded using require.js.</p>
+<p>Include the bundled rtc module in your HTML page (get the latest build from <a href="https://github.com/rtc-io/rtc/build">https://github.com/rtc-io/rtc/build</a>). The rtc module can also be loaded using require.js.</p>
 <div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;path/to/rtc.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
 </pre></div>
 
@@ -143,6 +143,24 @@
 
 <span class="c1">// Detect when RTC has established a session</span>
 <span class="nx">rtc</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;ready&#39;</span><span class="p">,</span> <span class="nx">init</span><span class="p">);</span>
+</pre></div>
+
+<p>And here&#39;s the full HTML page to go with it:</p>
+<div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;style&gt;</span>
+    <span class="nf">#messages</span> <span class="p">{</span>
+        <span class="k">border</span><span class="o">:</span> <span class="m">1px</span> <span class="k">solid</span> <span class="nb">black</span><span class="p">;</span>
+        <span class="k">min-height</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="nt">&lt;/style&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;../rtc.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;messages&quot;</span> <span class="na">contenteditable</span><span class="nt">&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;l-video&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;r-video&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;rtc-video-chat.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
 </pre></div>
 
 </div>

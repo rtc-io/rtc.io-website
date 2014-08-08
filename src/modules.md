@@ -13,12 +13,6 @@ Bundled module for getting a your WebRTC app up and running quickly.
 
 Provides a high level wrapper around the lower-level client libraries and is designed to get you building WebRTC applications very quickly.
 
-<!--
-### [rtc-glue](module-rtc-glue.html)
-
-Designed to provide a pure HTML tag based approach to building WebRTC applications, `rtc-glue` does not require any Javascript code to be written to create an application.  Simply include the provided `glue.js` file in your HTML page, provide some additional HTML attributes on well known HTML elements and you will be well on your way to creating simple applications.
--->
-
 ### [rtc-dcstream](module-rtc-dcstream.html)
 
 This is a node compatible stream (streams2) module for working with WebRTC data channels.  As per `rtc-mesh` this module has been tested against Chrome 32+ and Firefox 26 and shown excellent interoperability.
@@ -53,7 +47,7 @@ mouse (or touch) changes via a WebRTC data channel to connected peers.
 
 ### [rtc-captureconfig](module-rtc-captureconfig.html)
 
-The `rtc-captureconfig` module is used in `rtc-glue` to convert simple string based attributes to valid WebRTC constraints that can be used in for media capture.
+The `rtc-captureconfig` module is used in `rtc` to convert simple string based attributes to valid WebRTC constraints that can be used in for media capture.
 
 ## Browser Processing Modules
 

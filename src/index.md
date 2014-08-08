@@ -2,17 +2,22 @@
 
 rtc.io is a collection of node.js modules that simplify WebRTC development.
 
-- access local camera and microphone
+rtc.io does not only target node.js developers. It also provides a JavaScript library in the rtc module that can be used by any frontend application. That library was created using browserify and lives in the dist directory of the [rtc repository](https://github.com/rtc-io/rtc).
+
+Features supported by rtc.io:
+
+- access to local camera(s) and microphone(s)
 - create audio and video calls between browsers
 - set up data channels between browsers
 - provide communication management
 - set up a signalling server
 
+
 ## Getting started with rtc.io
 
 The [rtc](module-rtc.html) module is a pre-bundled collection of the essential rtc.io modules you need to get started building your own WebRTC application. You can load this module directly in your HTML page or include it as a require.js module.
 
-Grab the latest build of [rtc](module-rtc.html) from https://github.com/rtc-io/rtc.
+Grab the latest build of [rtc](module-rtc.html) from https://github.com/rtc-io/rtc/build/.
 
 ```html
 <script src="path/to/rtc.js"></script>

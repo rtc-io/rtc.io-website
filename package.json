@@ -29,7 +29,7 @@
     "rtc-audioproc": "0.0.3",
     "rtc-core": "^3.0.0",
     "rtc-filter-grayscale": "~0.1.0",
-    "rtc-glue": "^0.10.3",
+    "rtc": "^2.1.7",
     "rtc-media": "^1.9.0",
     "rtc-quickconnect": "^2.1.0",
     "rtc-signaller": "^2.3.0",
