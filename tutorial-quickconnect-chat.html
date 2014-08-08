@@ -41,13 +41,13 @@
 <div class="main" role="content"><h1 id="creating-a-simple-webrtc-chat-application">Creating a simple WebRTC chat application</h1>
 <p>There are no shortage of sample chat applications available on the web,
 but in this example we are going to use a simple chat application to
-demonstrate how simply you can leverage WebRTC to create simple
+demonstrate how you can leverage WebRTC to create simple
 multi-participant peer-to-peer chat systems.</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">quickconnect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-quickconnect&#39;</span><span class="p">);</span>
 
-<span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard/&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;chat-tutorial&#39;</span> <span class="p">})</span>
+<span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;//switchboard.rtc.io/&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;chat-tutorial&#39;</span> <span class="p">})</span>
   <span class="p">.</span><span class="nx">createDataChannel</span><span class="p">(</span><span class="s1">&#39;chat&#39;</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;chat:open&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dc</span><span class="p">,</span> <span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;channel:opened:chat&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">dc</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;a data channel has been opened to peer: &#39;</span> <span class="o">+</span> <span class="nx">id</span><span class="p">);</span>
   <span class="p">});</span>
 </pre></div>
