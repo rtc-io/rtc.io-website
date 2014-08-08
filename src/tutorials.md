@@ -27,6 +27,10 @@ Extablishing video connections with rtc-quickconnect
 - [Video conferencing application](tutorial-quickconnect-videoconferencing.html)
 
 
+## Signalling Server
+
+In the above examples, we have been using "//switchboard.rtc.io" as the signalling server. You can run your own signalling server using the [rtc-switchboard](module-rtc-switchboard.html) module.
+
 <!-- ### Signalling
 
 - [Simple Signalling using Socket.IO (Part 1)](tutorial-simple-signalling-socket-io-part1.html)
