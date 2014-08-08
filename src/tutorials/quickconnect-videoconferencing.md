@@ -9,3 +9,6 @@ the [Creating a simple chat application](tutorial-quickconnect-chat.html) tutori
 as it will cover some of the fundamentals of how `rtc-quickconnect` works.
 
 
+Here is an example that captures local video and allows one or more peers to connect via video conferencing:
+
+<<< code/quickconnect-videoconferencing.js

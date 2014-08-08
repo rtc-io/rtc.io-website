@@ -45,6 +45,67 @@ simple video conferencing application.</p>
 <p>Prior to completing this example it&#39;s recommended that you complete
 the <a href="tutorial-quickconnect-chat.html">Creating a simple chat application</a> tutorial
 as it will cover some of the fundamentals of how <code>rtc-quickconnect</code> works.</p>
+<p>Here is an example that captures local video and allows one or more peers to connect via video conferencing:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">quickconnect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-quickconnect&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">crel</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;crel&#39;</span><span class="p">);</span>
+
+<span class="c1">// create containers for our local and remote video</span>
+<span class="kd">var</span> <span class="nx">local</span> <span class="o">=</span> <span class="nx">crel</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="kr">class</span><span class="o">:</span> <span class="s1">&#39;local&#39;</span> <span class="p">});</span>
+<span class="kd">var</span> <span class="nx">remote</span> <span class="o">=</span> <span class="nx">crel</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="kr">class</span><span class="o">:</span> <span class="s1">&#39;remote&#39;</span> <span class="p">});</span>
+<span class="kd">var</span> <span class="nx">media</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">peerMedia</span> <span class="o">=</span> <span class="p">{};</span>
+
+<span class="c1">// capture local media</span>
+<span class="kd">var</span> <span class="nx">localMedia</span> <span class="o">=</span> <span class="nx">media</span><span class="p">();</span>
+
+<span class="c1">// once media is captured, connect</span>
+<span class="nx">localMedia</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;capture&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard/&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;conftest&#39;</span> <span class="p">})</span>
+    <span class="c1">// broadcast our captured media to other participants in the room</span>
+    <span class="p">.</span><span class="nx">addStream</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span>
+    <span class="c1">// when a peer is connected (and active) pass it to us for use</span>
+    <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;call:started&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">pc</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;peer connected: &#39;</span><span class="p">,</span> <span class="nx">id</span><span class="p">);</span>
+
+      <span class="c1">// render the remote streams</span>
+      <span class="nx">pc</span><span class="p">.</span><span class="nx">getRemoteStreams</span><span class="p">().</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">renderRemote</span><span class="p">(</span><span class="nx">id</span><span class="p">));</span>
+    <span class="p">})</span>
+    <span class="c1">// when a peer leaves, remove teh media</span>
+    <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;call:ended&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// remove media for the target peer from the dom</span>
+      <span class="p">(</span><span class="nx">peerMedia</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span> <span class="o">||</span> <span class="p">[]).</span><span class="nx">splice</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">el</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span>
+      <span class="p">});</span>
+    <span class="p">})</span>
+<span class="p">});</span>
+
+<span class="c1">// render the local media</span>
+<span class="nx">localMedia</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">local</span><span class="p">);</span>
+
+<span class="c1">// render a remote video</span>
+<span class="kd">function</span> <span class="nx">renderRemote</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// create the peer media list</span>
+  <span class="nx">peerMedia</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">peerMedia</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span> <span class="o">||</span> <span class="p">[];</span>
+
+  <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">peerMedia</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">peerMedia</span><span class="p">[</span><span class="nx">id</span><span class="p">].</span><span class="nx">concat</span><span class="p">(</span><span class="nx">media</span><span class="p">(</span><span class="nx">stream</span><span class="p">).</span><span class="nx">render</span><span class="p">(</span><span class="nx">remote</span><span class="p">));</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/* extra code to handle dynamic html and css creation */</span>
+
+<span class="c1">// add some basic styling</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">head</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">crel</span><span class="p">(</span><span class="s1">&#39;style&#39;</span><span class="p">,</span> <span class="p">[</span>
+  <span class="s1">&#39;.local { position: absolute;  right: 10px; }&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;.local video { max-width: 200px; }&#39;</span>
+<span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">)));</span>
+
+<span class="c1">// add the local and remote elements</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">local</span><span class="p">);</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">remote</span><span class="p">);</span>
+</pre></div>
+
 </div>
 
 <footer>

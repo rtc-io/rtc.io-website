@@ -23,12 +23,13 @@ Capturing user video and audio with rtc-media
 Stream Processing
 - [Simple Video Manipulation](tutorial-simple-manipulation.html)
 
-<!--
-### Conferencing
+Extablishing video connections with rtc-quickconnect
+- [Video conferencing application](tutorial-quickconnect-videoconferencing.html)
 
-- [Creating a simple WebRTC chat application](tutorial-quickconnect-chat.html)
-- [Creating a simple video conferencing application](tutorial-quickconnect-videoconferencing.html)
--->
+
+## Signalling Server
+
+In the above examples, we have been using "//switchboard.rtc.io" as the signalling server. You can run your own signalling server using the [rtc-switchboard](module-rtc-switchboard.html) module.
 
 <!-- ### Signalling
 

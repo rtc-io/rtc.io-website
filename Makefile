@@ -10,7 +10,7 @@ baseurl_remote ?= ${githubcontent}/rtc-io
 
 default: all
 
-app: prepare
+app: src/app.js
 	@echo "Building site application code"
 	@browserify --debug src/app.js > js/app.js
 
@@ -28,7 +28,7 @@ $(rtcmods): prepare
 	@$(blockdown) --repo="https://github.com/rtc-io/$@" template.html < tmp_$@ > module-$@.html
 	@rm tmp_$@
 
-js/samples/%.js: prepare
+js/samples/%.js: code/%.js
 	browserify --debug $(subst js/samples/,code/,$@) > $@
 
 tutorial-%.html: src/tutorials/%.md
