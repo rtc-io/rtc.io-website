@@ -12,21 +12,21 @@ In our options object we will include a room name to tell the siganlling server 
 
 <<< code/simple-text-share.js[3:3]
 
-We'll also need a reference to a contenteditable DOM element where our users will type text to share.
+We'll also need to create and reference a contenteditable DOM element where our users will type text to share.
 
-<<< code/simple-text-share.js[4:4]
+<<< code/simple-text-share.js[6:11]
 
 Now that we have a reference to our connection object we use it to create a data channel to send our text over.
 
-<<< code/simple-text-share.js[7:7]
+<<< code/simple-text-share.js[14:14]
 
 Once our channel is created we can listen on our connection object for it's events. For a full list of the events available, see the documentation for the [rtc-quickconnect](module-rtc-quickconnect.html) module.
 
-<<< code/simple-text-share.js[8:10]
+<<< code/simple-text-share.js[15:17]
 
 Now that our peers are connected in a named room and have a data channel open we can start sending and receiving data over the connection.
 
-<<< code/simple-text-share.js[12:]
+<<< code/simple-text-share.js[19:]
 
 This creates a basic shared text box.
 
