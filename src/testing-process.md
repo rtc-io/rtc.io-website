@@ -2,6 +2,8 @@
 
 This is a set of scripts designed to help you get up and running testing WebRTC applications on [travis](http://travis-ci.org). The scripts themselves are designed to be fetched during a travis `before_install` process and used to prepare your environment.
 
+[![Build Status](https://travis-ci.org/rtc-io/webrtc-testing-on-travis.svg?branch=master)](https://travis-ci.org/rtc-io/webrtc-testing-on-travis)
+
 ## Usage
 
 First, create a `.travis.yml` folder in your project that looks similar to the followng:
@@ -18,14 +20,24 @@ env:
     - BROWSER=chrome  BVER=unstable
     - BROWSER=firefox BVER=stable
     - BROWSER=firefox BVER=beta
-    - BROWSER=firefox BVER=aurora
+    - BROWSER=firefox BVER=nightly
+
+matrix:
+  fast_finish: true
+
+  allowed_failures:
+    - env: BROWSER=chrome  BVER=unstable
+    - env: BROWSER=firefox BVER=nightly
 
 before_install:
-  - mkdir -p .travis
-  - curl -s https://codeload.github.com/rtc-io/webrtc-testing-on-travis/tar.gz/master | tar -xz --strip-components=1 --directory .travis
-  - ./.travis/setup.sh
+  - ./setup.sh
+
+before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
+
+after_failure:
+  - for file in *.log; do echo $file; echo "======================"; cat $file; done || true
 ```
 
 The most interesting part of the configuration file above is definitely the [`before_install`](http://docs.travis-ci.com/user/build-configuration/#before_install) section which defines a number of commands that will be executed in the TRAVIS environment prior to running the language appropriate `install` command.

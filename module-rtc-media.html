@@ -44,7 +44,7 @@ cross-browser wrappers.  Part of the <a href="http://rtc.io/">rtc.io</a> suite, 
 sponsored by <a href="http://opennicta.com">NICTA</a> and released under an
 <a href="/LICENSE">Apache 2.0 license</a>.</p>
 <p><a href="https://nodei.co/npm/rtc-media/"><img src="https://nodei.co/npm/rtc-media.png" alt="NPM" /></a></p>
-<p><a href="https://travis-ci.org/rtc-io/rtc-media"><img src="https://img.shields.io/travis/rtc-io/rtc-media.svg?branch=master" alt="Build Status" /></a> <a href="https://github.com/badges/stability-badges"><img src="https://img.shields.io/badge/stability-unstable-yellowgreen.svg" alt="unstable" /></a> <a href="https://david-dm.org/rtc-io/rtc-media"><img src="https://david-dm.org/rtc-io/rtc-media.svg" alt="Dependency Status" /></a> </p>
+<p><a href="https://travis-ci.org/rtc-io/rtc-media"><img src="https://img.shields.io/travis/rtc-io/rtc-media.svg?branch=master" alt="Build Status" /></a> <a href="https://github.com/dominictarr/stability#unstable"><img src="https://img.shields.io/badge/stability-unstable-yellowgreen.svg" alt="unstable" /></a> <a href="https://david-dm.org/rtc-io/rtc-media"><img src="https://david-dm.org/rtc-io/rtc-media.svg" alt="Dependency Status" /></a> </p>
 <h2 id="example-usage">Example Usage</h2>
 <p>Capturing media on your machine is as simple as:</p>
 <div class="highlight"><pre><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">)();</span>
@@ -198,6 +198,40 @@ or audio element.  Object urls are cached to ensure only one is created
 per stream.</p>
 <h3 id="_handlesuccess-stream-">_handleSuccess(stream)</h3>
 <p>Handle the success condition of a <code>getUserMedia</code> call.</p>
+<h3 id="utility-functions">Utility Functions</h3>
+<h4 id="-clone-inputstream-opts-mediastream"><code>clone(inputStream, opts?)</code> =&gt; MediaStream</h4>
+<p>The <code>clone</code> helper function accepts an existing <code>MediaStream</code> and creates
+a new <code>MediaStream</code> with a cloned copy of each of the audio and video
+tracks contained within.</p>
+<p>This can be useful when you wish to mute (disable) either an audio or
+video stream sent over the wire, but keep the locally rendered stream
+active.</p>
+<p><strong>NOTE:</strong> At this time it is not possible to clone a <code>MediaStreamTrack</code> in
+firefox (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=910249">https://bugzilla.mozilla.org/show_bug.cgi?id=910249</a>).  When this
+function is called in firefox, the original stream is returned rather than
+throwing an error.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">clone</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media/clone&#39;</span><span class="p">);</span>
+
+<span class="nx">media</span><span class="p">().</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;capture&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// create a clone of the stream</span>
+  <span class="kd">var</span> <span class="nx">cloned</span> <span class="o">=</span> <span class="nx">clone</span><span class="p">(</span><span class="nx">stream</span><span class="p">);</span>
+
+  <span class="c1">// using the cloned stream, we will be able to enable and disable tracks without</span>
+  <span class="c1">// affecting the originally cloned stream</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>An additional <code>opts</code> argument can be passed to this function to
+selectively filter which tracks are cloned:</p>
+<ul>
+<li><p><code>filterAudio</code> - a filter <strong>function</strong> that can be used to decide
+whether an audio track is cloned into the new <code>MediaStream</code>.</p>
+</li>
+<li><p><code>filterVideo</code> - as per the <code>filterAudio</code> option but for video
+tracks.</p>
+</li>
+</ul>
 <h2 id="license-s-">License(s)</h2>
 <h3 id="apache-2-0">Apache 2.0</h3>
 <p>Copyright 2014 National ICT Australia Limited (NICTA)</p>

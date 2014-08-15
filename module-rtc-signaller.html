@@ -281,10 +281,23 @@ communication channel between the two parties:</p>
 <span class="p">);</span>
 </pre></div>
 
-<h3 id="loadprimus-signalhost-callback-">loadPrimus(signalhost, callback)</h3>
+<h3 id="loadprimus-signalhost-opts-callback-">loadPrimus(signalhost, opts?, callback)</h3>
 <p>This is a convenience function that is patched into the signaller to assist
 with loading the <code>primus.js</code> client library from an <code>rtc-switchboard</code>
 signaling server.</p>
+<p>In the case that you wish to load <code>primus.js</code> from a location other than
+the default location of <code>/rtc.io/primus.js</code> you can
+provide an options object which allows for the following customizations:</p>
+<ul>
+<li><p><code>primusPath</code> (default: <code>/rtc.io/primus.js</code>)</p>
+<p>The path at which the <code>primus.js</code> file can be found on the signalhost.</p>
+<p><strong>NOTE:</strong> The above options are passed through when creating a
+signaller object, and thus packages such as
+<a href="https://github.com/rtc-io/rtc-quickconnect">rtc-quickconnect</a>
+will allow you to make the customisation with it&#39;s top level
+options also.</p>
+</li>
+</ul>
 <h3 id="signaller-process-handling">signaller process handling</h3>
 <p>When a signaller&#39;s underling messenger emits a <code>data</code> event this is
 delegated to a simple message parser, which applies the following simple

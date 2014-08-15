@@ -40,6 +40,7 @@
 </header>
 <div class="main" role="content"><h1 id="testing-webrtc">Testing WebRTC</h1>
 <p>This is a set of scripts designed to help you get up and running testing WebRTC applications on <a href="http://travis-ci.org">travis</a>. The scripts themselves are designed to be fetched during a travis <code>before_install</code> process and used to prepare your environment.</p>
+<p><a href="https://travis-ci.org/rtc-io/webrtc-testing-on-travis"><img src="https://travis-ci.org/rtc-io/webrtc-testing-on-travis.svg?branch=master" alt="Build Status" /></a></p>
 <h2 id="usage">Usage</h2>
 <p>First, create a <code>.travis.yml</code> folder in your project that looks similar to the followng:</p>
 <div class="highlight"><pre><span class="l-Scalar-Plain">language</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">node_js</span>
@@ -53,14 +54,24 @@
     <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">BROWSER=chrome  BVER=unstable</span>
     <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">BROWSER=firefox BVER=stable</span>
     <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">BROWSER=firefox BVER=beta</span>
-    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">BROWSER=firefox BVER=aurora</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">BROWSER=firefox BVER=nightly</span>
+
+<span class="l-Scalar-Plain">matrix</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">fast_finish</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
+
+  <span class="l-Scalar-Plain">allowed_failures</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">env</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">BROWSER=chrome  BVER=unstable</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">env</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">BROWSER=firefox BVER=nightly</span>
 
 <span class="l-Scalar-Plain">before_install</span><span class="p-Indicator">:</span>
-  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">mkdir -p .travis</span>
-  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">curl -s https://codeload.github.com/rtc-io/webrtc-testing-on-travis/tar.gz/master | tar -xz --strip-components=1 --directory .travis</span>
-  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">./.travis/setup.sh</span>
+  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">./setup.sh</span>
+
+<span class="l-Scalar-Plain">before_script</span><span class="p-Indicator">:</span>
   <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">export DISPLAY=:99.0</span>
   <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">sh -e /etc/init.d/xvfb start</span>
+
+<span class="l-Scalar-Plain">after_failure</span><span class="p-Indicator">:</span>
+  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">for file in *.log; do echo $file; echo &quot;======================&quot;; cat $file; done || true</span>
 </pre></div>
 
 <p>The most interesting part of the configuration file above is definitely the <a href="http://docs.travis-ci.com/user/build-configuration/#before_install"><code>before_install</code></a> section which defines a number of commands that will be executed in the TRAVIS environment prior to running the language appropriate <code>install</code> command.</p>
