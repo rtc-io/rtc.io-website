@@ -5,7 +5,7 @@ var main = qsa('.main')[0];
 var reStatusOK = /^(2|3)\d{2}$/;
 var reStripExt = /^(.*)\.js$/;
 var baseScripts = [
-  'http://rtc.io/switchboard/rtc.io/primus.js'
+  '//rtc.io/switchboard/rtc.io/primus.js'
 ];
 
 function createCodeFrame(sample, anchor, callback) {
