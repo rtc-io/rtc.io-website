@@ -34,7 +34,7 @@ js/samples/%.js: code/%.js
 tutorial-%.html: src/tutorials/%.md
 	@echo "generating $@"
 	@cat src/tutorials/$(patsubst tutorial-%.html,%.md,$@) | $(injectcode) > tmp_$@
-	@$(blockdown) template.html < tmp_$@ > $@
+	@$(blockdown) --repo="https://github.com/rtc-io" template.html < tmp_$@ > $@
 	@rm tmp_$@
 
 buildstatus.html: src/buildstatus.md

@@ -7,7 +7,7 @@ Include the bundled rtc module in your HTML page (get the latest build from http
 ```html
 <script src="path/to/rtc.js"></script>
 ```
-First we will need to define the options to pass into RTC. A room and a signalling server are required - you can use our hosted signalling server `//switchboard.rtc.io` for testing purposes. Make sure to add the 'capture: false' option so you are not being asked to acces a camera or microphone. The [rtc-switchboard](module-rtc-switchboard.html) module is also available to deploy on your own servers.
+First we will need to define the options to pass into RTC. A room and a signalling server are required - you can use our hosted signalling server `//switchboard.rtc.io` for testing purposes. Make sure to add the 'capture: false' option so you are not being asked to access a camera or microphone. The [rtc-switchboard](module-rtc-switchboard.html) module is also available to deploy on your own servers.
 
 <<< code/rtc-text-chat.js[2:6]
 
