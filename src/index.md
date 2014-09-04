@@ -17,7 +17,7 @@ Features supported by rtc.io:
 
 The [rtc](module-rtc.html) module is a pre-bundled collection of the essential rtc.io modules you need to get started building your own WebRTC application. You can load this module directly in your HTML page or include it as a require.js module.
 
-Grab the latest build of [rtc](module-rtc.html) from https://github.com/rtc-io/rtc/build/.
+Grab the latest build of [rtc](module-rtc.html) from https://github.com/rtc-io/rtc/.
 
 ```html
 <script src="path/to/rtc.js"></script>
