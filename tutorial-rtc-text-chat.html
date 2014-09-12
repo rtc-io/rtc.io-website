@@ -40,6 +40,7 @@
 </header>
 <div class="main" role="content"><h1 id="text-chat-using-the-data-channel">Text chat using the data channel</h1>
 <p>This demo shows how to use the <a href="https://github.com/rtc-io/rtc">rtc</a> module to set up a data channel and exchange text messages without requiring access to audio or video devices.</p>
+<p>NOTE - this simple example works for 2 peer connections only, to properly support text messaging for multiple peers some data channel management is required - see the <a href="https://github.com/rtc-io/rtcio-demo-quickconnect">rtc-quickconnect</a> demo for a fuller example.</p>
 <p>Include the bundled rtc module in your HTML page (get the latest build from <a href="https://github.com/rtc-io/rtc/build">https://github.com/rtc-io/rtc/build</a>). The rtc module can also be loaded using require.js.</p>
 <div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;path/to/rtc.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
 </pre></div>
