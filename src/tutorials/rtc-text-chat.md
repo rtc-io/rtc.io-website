@@ -2,6 +2,8 @@
 
 This demo shows how to use the [rtc](https://github.com/rtc-io/rtc) module to set up a data channel and exchange text messages without requiring access to audio or video devices.
 
+NOTE - this simple example works for 2 peer connections only, to properly support text messaging for multiple peers some data channel management is required - see the [rtc-quickconnect](https://github.com/rtc-io/rtcio-demo-quickconnect) demo for a fuller example.
+
 Include the bundled rtc module in your HTML page (get the latest build from https://github.com/rtc-io/rtc/build). The rtc module can also be loaded using require.js.
 
 ```html
