@@ -179,7 +179,7 @@ can generate those additional options and intelligently combine any
 user defined constraints (in <code>constraints</code>) with shorthand flags that
 might be passed while using the <code>rtc.createConnection</code> helper.</p>
 <h3 id="rtc-tools-monitor">rtc-tools/monitor</h3>
-<pre><code>monitor(pc, targetId, signaller, opts?) =&gt; EventEmitter</code></pre>
+<pre><code>monitor(pc, targetId, signaller, parentBus) =&gt; mbus</code></pre>
 <p>The monitor is a useful tool for determining the state of <code>pc</code> (an
 <code>RTCPeerConnection</code>) instance in the context of your application. The
 monitor uses both the <code>iceConnectionState</code> information of the peer
@@ -187,7 +187,7 @@ connection and also the various
 <a href="https://github.com/rtc-io/rtc-signaller#signaller-events">signaller events</a>
 to determine when the connection has been <code>connected</code> and when it has
 been <code>disconnected</code>.</p>
-<p>A monitor created <code>EventEmitter</code> is returned as the result of a
+<p>A monitor created <code>mbus</code> is returned as the result of a
 <a href="https://github.com/rtc-io/rtc#rtccouple">couple</a> between a local peer
 connection and it&#39;s remote counterpart.</p>
 <h2 id="license-s-">License(s)</h2>
