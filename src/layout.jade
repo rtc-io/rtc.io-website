@@ -1,0 +1,47 @@
+doctype html
+html
+
+	//- HTML HEADER
+	head
+		meta(charset="utf-8")
+		meta(name="viewport", content="width=device-width, initial-scale=1.0")
+		meta(http-equiv="X-UA-Compatible" content="IE=edge")
+
+		title= title || 'rtc.io'
+		link(rel="shortcut icon", href="/images/favicon.ico", type="image/x-icon")
+		link(href="/css/index.css", rel="stylesheet")
+
+		block css
+		block head
+
+	//- HTML BODY
+	body(ng-app="build")
+
+		//- HEADER
+		header.site-header: nav(role="navigation").site-nav
+			ul.nav-user
+				li.logo: a(href='/') rtc.<strong>io</strong>
+				li: a(href="/getting-started.html") Getting Started
+				li: a(href="/packages") Packages
+			ul.nav-general
+
+		//- BODY
+		#body
+
+			block intro
+			block content
+
+		//- FOOTER
+		footer.page-footer
+			.container
+				.row
+					.column-2
+						.content
+							p &copy; NICTA 2014
+							p <a href="/terms">Terms of Use</a> | <a href="http://nicta.com.au/privacy">Privacy</a> | <a href="http://groups.google.com/d/forum/build-rtc-io">Discussion and Support</a>
+					.column-2
+						.content
+							.contact
+
+		//- Include template-specific javascript files by extending the js block
+		block js
