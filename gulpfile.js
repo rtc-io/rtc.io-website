@@ -24,12 +24,15 @@ gulp.task('serve', 'Serve the local files using a development server', ['build-p
 });
 
 gulp.task('build-pages', 'Build the pages for the site', function() {
-  return gulp.src('src/pages/*.jade')
-    .pipe(data(function(file) {
-      var content = fm(String(file.contents));
-      file.contents = new Buffer(content.body);
-      return content.attributes;
-    }))
-    .pipe(jade())
-    .pipe(gulp.dest('./'));
+  return gulp.src([
+    'src/pages/*.jade',
+    'src/pages/about/*.jade'
+  ], { base: 'src/pages' })
+  .pipe(data(function(file) {
+    var content = fm(String(file.contents));
+    file.contents = new Buffer(content.body);
+    return content.attributes;
+  }))
+  .pipe(jade())
+  .pipe(gulp.dest('./'));
 });
