@@ -1,0 +1,27 @@
+{
+  "name": "rtc.io",
+  "version": "0.3.1",
+  "description": "rtc.io website",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rtc-io/rtc.io.git"
+  },
+  "keywords": [
+    "rtc.io",
+    "webrtc",
+    "website"
+  ],
+  "author": "Damon Oehlman <damon.oehlman@nicta.com.au>",
+  "license": "Apache 2.0",
+  "bugs": {
+    "url": "https://github.com/rtc-io/rtc.io/issues"
+  },
+  "devDependencies": {
+  },
+  "dependencies": {}
+}
