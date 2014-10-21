@@ -10,6 +10,8 @@ var http = require('http');
 var port = process.env.PORT || 3000;
 var Readable = require('readable-stream').Readable;
 var File = require('vinyl');
+var through = require('through');
+var indent = require('indent-string');
 
 var packages = [
   'rtc',
@@ -70,8 +72,8 @@ gulp.task('build-packages', 'Fetch the various project readmes from the project 
 
       stream.push(new File({
         cwd: '/',
-        base: '.',
-        path: package + '.md',
+        base: 'src/pages',
+        path: 'src/pages/packages/' + package + '.md',
         contents: new Buffer(data)
       }));
 
@@ -85,5 +87,10 @@ gulp.task('build-packages', 'Fetch the various project readmes from the project 
 
   stream._read = function () {};
 
-  return stream.pipe(gulp.dest('./packages'));
+  return stream
+    .pipe(through(function(entry) {
+      entry.contents = new Buffer(indent(String(entry.contents), ' ', 4));
+      this.queue(entry);
+    }))
+    .pipe(gulp.dest('./'));
 });
