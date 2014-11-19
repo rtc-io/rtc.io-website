@@ -44,23 +44,16 @@ element with a canvas element.  This can be useful when you want to
 do pixel manipulation of the rendered images, or in situations when
 a video element does not behave as you expect.</p>
 <p><a href="https://nodei.co/npm/rtc-videoproc/"><img src="https://nodei.co/npm/rtc-videoproc.png" alt="NPM" /></a></p>
-<p><a href="https://travis-ci.org/rtc-io/rtc-videoproc"><img src="https://img.shields.io/travis/rtc-io/rtc-videoproc.svg?branch=master" alt="Build Status" /></a> <a href="https://github.com/badges/stability-badges"><img src="https://img.shields.io/badge/stability-unstable-yellowgreen.svg" alt="unstable" /></a> </p>
+<p><a href="https://travis-ci.org/rtc-io/rtc-videoproc"><img src="https://img.shields.io/travis/rtc-io/rtc-videoproc.svg?branch=master" alt="Build Status" /></a> <a href="https://github.com/dominictarr/stability#unstable"><img src="https://img.shields.io/badge/stability-unstable-yellowgreen.svg" alt="unstable" /></a> </p>
 <h2 id="example-usage">Example Usage</h2>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">crel</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;crel&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">videoproc</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-videoproc&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">vid</span> <span class="o">=</span> <span class="nx">crel</span><span class="p">(</span><span class="s1">&#39;video&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">video</span> <span class="o">=</span> <span class="nx">crel</span><span class="p">(</span><span class="s1">&#39;video&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">src</span><span class="o">:</span> <span class="s1">&#39;../test/assets/tennis.webm&#39;</span><span class="p">,</span> <span class="nx">autoplay</span><span class="o">:</span> <span class="kc">true</span> <span class="p">});</span>
 <span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">crel</span><span class="p">(</span><span class="s1">&#39;canvas&#39;</span><span class="p">);</span>
-
-<span class="c1">// create the processor</span>
-<span class="kd">var</span> <span class="nx">processor</span> <span class="o">=</span> <span class="nx">videoproc</span><span class="p">(</span><span class="nx">vid</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">,</span> <span class="p">{</span>
+<span class="kd">var</span> <span class="nx">processor</span> <span class="o">=</span> <span class="nx">videoproc</span><span class="p">(</span><span class="nx">video</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">,</span> <span class="p">{</span>
   <span class="nx">filter</span><span class="o">:</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-filter-grayscale&#39;</span><span class="p">)</span>
 <span class="p">});</span>
 
-<span class="c1">// capture media and render</span>
-<span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nx">vid</span><span class="p">);</span>
-
-<span class="c1">// add the canvas to the document</span>
 <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">canvas</span><span class="p">);</span>
 </pre></div>
 
@@ -102,18 +95,14 @@ back to the canvas.</p>
 the <code>rtc-videoproc</code> module also provides the a custom <code>frame</code> event for
 detecting when a new frame has been drawn to the canvas.</p>
 <p>A simple example can be found below:</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">videoproc</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-videoproc&#39;</span><span class="p">);</span>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">videoproc</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-videoproc&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">crel</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;crel&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">video</span> <span class="o">=</span> <span class="nx">crel</span><span class="p">(</span><span class="s1">&#39;video&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">video</span> <span class="o">=</span> <span class="nx">crel</span><span class="p">(</span><span class="s1">&#39;video&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">src</span><span class="o">:</span> <span class="s1">&#39;../test/assets/tennis.webm&#39;</span><span class="p">,</span> <span class="nx">autoplay</span><span class="o">:</span> <span class="kc">true</span> <span class="p">});</span>
 
 <span class="c1">// set up the video processing pipeline</span>
 <span class="nx">videoproc</span><span class="p">(</span><span class="nx">video</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;frame&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">tick</span><span class="p">)</span> <span class="p">{</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;captured frame at: &#39;</span> <span class="o">+</span> <span class="nx">tick</span><span class="p">);</span>
 <span class="p">});</span>
-
-<span class="c1">// capture media and render to the video</span>
-<span class="nx">media</span><span class="p">().</span><span class="nx">render</span><span class="p">(</span><span class="nx">video</span><span class="p">);</span>
 
 <span class="c1">// add the canvas to the dom</span>
 <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">video</span><span class="p">);</span>

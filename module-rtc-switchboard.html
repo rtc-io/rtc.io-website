@@ -83,6 +83,7 @@ examples:</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">).</span><span class="nx">createServer</span><span class="p">();</span>
 <span class="kd">var</span> <span class="nx">switchboard</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./&#39;</span><span class="p">)(</span><span class="nx">server</span><span class="p">,</span> <span class="p">{</span> <span class="nx">servelib</span><span class="o">:</span> <span class="kc">true</span> <span class="p">});</span>
 <span class="kd">var</span> <span class="nx">port</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_PORT</span> <span class="o">||</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PORT</span> <span class="o">||</span> <span class="nx">process</span><span class="p">.</span><span class="nx">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">10</span><span class="p">)</span> <span class="o">||</span> <span class="mi">3000</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">replify</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;replify&#39;</span><span class="p">);</span>
 
 <span class="nx">server</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;request&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">url</span> <span class="o">===</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="p">{</span>
@@ -100,6 +101,28 @@ examples:</p>
   <span class="p">}</span>
 
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;server running at http://localhost:&#39;</span> <span class="o">+</span> <span class="nx">port</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// add the repl</span>
+<span class="nx">replify</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;switchboard&#39;</span><span class="p">,</span>
+  <span class="nx">app</span><span class="o">:</span> <span class="nx">switchboard</span><span class="p">,</span>
+  <span class="nx">contexts</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">server</span><span class="o">:</span> <span class="nx">server</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="nx">switchboard</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;room:create&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">room</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;room &#39;</span> <span class="o">+</span> <span class="nx">room</span> <span class="o">+</span> <span class="s1">&#39; created, now have &#39;</span> <span class="o">+</span> <span class="nx">switchboard</span><span class="p">.</span><span class="nx">rooms</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="s1">&#39; active rooms&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">switchboard</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;room:destroy&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">room</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;room &#39;</span> <span class="o">+</span> <span class="nx">room</span> <span class="o">+</span> <span class="s1">&#39; destroyed, &#39;</span> <span class="o">+</span> <span class="nx">switchboard</span><span class="p">.</span><span class="nx">rooms</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="s1">&#39; active rooms remain&#39;</span><span class="p">);</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">gc</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;gc&#39;</span><span class="p">);</span>
+    <span class="nx">gc</span><span class="p">();</span>
+  <span class="p">}</span>
 <span class="p">});</span>
 </pre></div>
 
@@ -217,32 +240,6 @@ the raw primus <code>spark</code> that can be examined for additional informatio
 <p>Create the switchboard which uses primus under the hood. By default calling
 this function will create a new <code>Primus</code> instance and use the
 pure <a href="https://github.com/primus/primus#websockets">websockets adapter</a>.</p>
-<h3 id="connectionmanager-primus-opts-">ConnectionManager(primus, opts)</h3>
-<p>The <code>ConnectionManager</code> is used to route messages from one peer to another.
-When a peer announces itself to the signalling server, if it has specified
-a room, then general messages will only be routed to other peers in the
-same room.</p>
-<p>An exeption to this case is <code>/to</code> messages which are routed directly to
-the specified peer.</p>
-<h4 id="connect-spark-">connect(spark)</h4>
-<p>Return a <a href="https://github.com/dominictarr/through">through</a> stream for the
-spark that we can pipe the incoming data from the spark into to be handled
-correctly.</p>
-<h4 id="createsocket-url-">createSocket(url)</h4>
-<p>Create a websocket client connection the underlying primus server.</p>
-<h4 id="joinroom-name-spark-">joinRoom(name, spark)</h4>
-<p>Join the room specified by <code>name</code>.</p>
-<h4 id="library-req-res-">library(req, res)</h4>
-<p>Write the library to the response</p>
-<h4 id="_cleanuppeer-data-">_cleanupPeer(data)</h4>
-<p>Cleanup a peer when we receive a leave notification.</p>
-<h3 id="room-name-">Room(name)</h3>
-<p>This is a simple helper class for encapsulating room details.</p>
-<h4 id="leave-spark-">leave(spark)</h4>
-<p>Remove the specified spark from the room</p>
-<h4 id="write-message-source-">write(message, source)</h4>
-<p>Write <code>message</code> to all the sparks in the room, with the exception of the
-<code>source</code> spark.</p>
 <h2 id="custom-message-handlers">Custom Message Handlers</h2>
 <p>The socket server is configured to handle some specific rtc.io signaller
 messages.  The handlers are stored in the <code>handlers/</code> folder of the

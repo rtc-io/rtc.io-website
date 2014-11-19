@@ -50,11 +50,12 @@ channel.</p>
 <h2 id="getting-started">Getting Started</h2>
 <p>If you decide that the <code>rtc-tools</code> module is a better fit for you than either
 <a href="https://github.com/rtc-io/rtc-quickconnect">rtc-quickconnect</a> or
-<a href="https://github.com/rtc-io/rtc-glue">rtc-glue</a> then the code snippet below
+<a href="https://github.com/rtc-io/rtc">rtc</a> then the code snippet below
 will provide you a guide on how to get started using it in conjunction with
-the <a href="https://github.com/rtc-io/rtc-signaller">rtc-signaller</a> and
-<a href="https://github.com/rtc-io/rtc-media">rtc-media</a> modules:</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">signaller</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-signaller&#39;</span><span class="p">)(</span><span class="s1">&#39;http://rtc.io/switchboard/&#39;</span><span class="p">);</span>
+the <a href="https://github.com/rtc-io/rtc-signaller">rtc-signaller</a> (version 5.0 and above)
+and <a href="https://github.com/rtc-io/rtc-media">rtc-media</a> modules:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">messenger</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-switchboard-messenger&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">signaller</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-signaller&#39;</span><span class="p">)(</span><span class="nx">messenger</span><span class="p">(</span><span class="s1">&#39;http://rtc.io/switchboard/&#39;</span><span class="p">));</span>
 <span class="kd">var</span> <span class="nx">rtc</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-tools&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">localMedia</span> <span class="o">=</span> <span class="nx">media</span><span class="p">();</span>

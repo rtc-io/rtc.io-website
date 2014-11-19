@@ -56,6 +56,21 @@ you could do the following:</p>
 <p>This would provide whatever the browser prefixed version of the
 RTCPeerConnection is available (<code>webkitRTCPeerConnection</code>,
 <code>mozRTCPeerConnection</code>, etc).</p>
+<h3 id="-rtc-core-genice-"><code>rtc-core/genice</code></h3>
+<p>Respond appropriately to options that are passed to packages like
+<code>rtc-quickconnect</code> and trigger a <code>callback</code> (error first) with iceServer
+values.</p>
+<p>The function looks for either of the following keys in the options, in
+the following order or precedence:</p>
+<ol>
+<li><p><code>ice</code> - this can either be an array of ice server values or a generator
+function (in the same format as this function).  If this key contains a
+value then any servers specified in the <code>iceServers</code> key (2) will be
+ignored.</p>
+</li>
+<li><p><code>iceServers</code> - an array of ice server values.</p>
+</li>
+</ol>
 <h3 id="-rtc-core-reset-"><code>rtc-core/reset</code></h3>
 <p>This is a simple, cross-browser method for resetting a media element
 back to a initial state after having media attached.</p>

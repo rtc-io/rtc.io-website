@@ -43,15 +43,13 @@
 mechanism for WebRTC.</p>
 <p><a href="https://nodei.co/npm/rtc-signaller/"><img src="https://nodei.co/npm/rtc-signaller.png" alt="NPM" /></a></p>
 <p><a href="https://travis-ci.org/rtc-io/rtc-signaller"><img src="https://img.shields.io/travis/rtc-io/rtc-signaller.svg?branch=master" alt="Build Status" /></a> <a href="https://github.com/dominictarr/stability#stable"><img src="https://img.shields.io/badge/stability-stable-green.svg" alt="stable" /></a> 
-<a href="https://gitter.im/rtc-io/discuss"><img src="https://badges.gitter.im/rtc-io/discuss.png" alt="Gitter chat" /></a></p>
+<a href="https://gitter.im/rtc-io"><img src="https://badges.gitter.im/rtc-io.png" alt="Gitter chat" /></a></p>
 <h2 id="purpose">Purpose</h2>
-<p>The signaller provides set of client-side tools that assist with the setting up an <code>PeerConnection</code> and helping them communicate. All that is required for the signaller to operate is a suitable messenger.</p>
-<p>A messenger is a simple object that implements node <a href="http://nodejs.org/api/events.html">EventEmitter</a> style <code>on</code> events for <code>open</code>, <code>close</code>, <code>message</code> events, and also a <code>send</code> method by which data will be send &quot;over-the-wire&quot;.</p>
+<p>The signaller provides set of client-side tools that assist with the setting up an <code>PeerConnection</code> and helping them communicate. All that is required for the signaller to operate is a <a href="https://github.com/DamonOehlman/messenger-archetype">suitable messenger</a>.  A messenger is simply a function that is able to create a <a href="https://github.com/dominictarr/pull-stream">pull-stream</a> <code>Source</code> and/or <code>Sink</code>.  From version <code>5.0.0</code> the <code>rtc-signaller</code> package will use pull-streams to ensure robust delivery of messages.</p>
 <p>By using this approach, we can conduct signalling over any number of mechanisms:</p>
 <ul>
-<li>local, in memory message passing</li>
-<li>via WebSockets and higher level abstractions (such as <a href="https://github.com/primus/primus">primus</a>)</li>
-<li>also over WebRTC data-channels (very meta, and admittedly a little complicated).</li>
+<li>local, <a href="https://github.com/DamonOehlman/messenger-memory">in memory</a> message passing</li>
+<li>via <a href="https://github.com/DamonOehlman/messenger-ws">WebSockets</a> and higher level abstractions (such as <a href="https://github.com/primus/primus">primus</a>)</li>
 </ul>
 <h2 id="getting-started">Getting Started</h2>
 <p>While the signaller is capable of communicating by a number of different
@@ -60,20 +58,12 @@ it comes with support for understanding how to connect to an
 <a href="https://github.com/rtc-io/rtc-switchboard">rtc-switchboard</a> out of the box.</p>
 <p>The following code sample demonstrates how:</p>
 <div class="highlight"><pre><span class="c1">// create a new signaller, connecting to the target switchboard</span>
-<span class="kd">var</span> <span class="nx">signaller</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-signaller&#39;</span><span class="p">)(</span><span class="s1">&#39;http://rtc.io/switchboard&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">messenger</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-switchboard-messenger&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">signaller</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-signaller&#39;</span><span class="p">)(</span><span class="nx">messenger</span><span class="p">(</span><span class="s1">&#39;//switchboard.rtc.io/&#39;</span><span class="p">));</span>
 
 <span class="c1">// when a new peer is announced, log it</span>
 <span class="nx">signaller</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer:announce&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;new peer found in room: &#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
-<span class="p">});</span>
-
-<span class="nx">signaller</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer:disconnected&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;peer &#39;</span> <span class="o">+</span> <span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39; has been disconnected&#39;</span><span class="p">);</span>
-<span class="p">});</span>
-
-<span class="c1">// when a peer leaves the switchboard, log it</span>
-<span class="nx">signaller</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer:leave&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;peer &#39;</span> <span class="o">+</span> <span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39; has left the room&#39;</span><span class="p">);</span>
 <span class="p">});</span>
 
 <span class="c1">// for our sanity, pop a message once we are connected</span>
@@ -82,12 +72,12 @@ it comes with support for understanding how to connect to an
 <span class="p">});</span>
 
 <span class="c1">// send through an announce message</span>
-<span class="c1">// this will occur once the primus socket has been opened and active</span>
+<span class="c1">// this will occur once the websocket has been opened and active</span>
 <span class="nx">signaller</span><span class="p">.</span><span class="nx">announce</span><span class="p">({</span> <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;signaller-getting-started&#39;</span> <span class="p">});</span>
 </pre></div>
 
 <h2 id="signaller-events">Signaller Events</h2>
-<p>There is a number of events that are generating throughout the lifecycle of a signaller.  These events are derived from events and states that are generated by the underlying messenger used by the signaller.  In most cases this is a <a href="https://github.com/primus/primus">primus</a> websocket connection (or spark).</p>
+<p>There are a number of events that are generating throughout the lifecycle of a signaller.</p>
 <h3 id="events-regarding-local-state">Events regarding local state</h3>
 <p>The following events are generated by the signaller in response to updates n it&#39;s own state:</p>
 <ul>
@@ -105,15 +95,14 @@ it comes with support for understanding how to connect to an
 <p>The following events relate to information that has been relayed to this signaller about other peers:</p>
 <ul>
 <li><p><code>peer:filter</code></p>
-<p>The <code>peer:filter</code> event is triggered prior to the <code>peer:announce</code> or <code>peer:update</code> events being fired and provides an application the opportunity to reject a peer.  The handler for this event is passed a JS object that contains a <code>data</code> attribute for the announce data, and an <code>allow</code> flag that controls whether the peer is to be accepted.</p>
+<p>The <code>peer:filter</code> event is triggered prior to the <code>peer:announce</code> or <code>peer:update</code> events being fired and provides an application the opportunity to reject a peer.  The handler for this event is passed the id of the peer that has connected to the room and a JS <code>data</code> object for the announce data. This data only differs from the <code>peer:announce</code> (or <code>peer:update</code>) data in that an <code>allow</code> attribute is included and controls whether we will acknowledge the presence of this new peer.</p>
 <p>Due to the way event emitters behave in node, the last handler invoked is the authority on whether the peer is accepted or not (so make sure to check the previous state of the allow flag):</p>
 <div class="highlight"><pre><span class="c1">// only accept connections from Bob</span>
-<span class="nx">signaller</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer:filter&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">evt</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">evt</span><span class="p">.</span><span class="nx">allow</span> <span class="o">=</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">allow</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">evt</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">name</span> <span class="o">===</span> <span class="s1">&#39;Bob&#39;</span><span class="p">);</span>
+<span class="nx">signaller</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer:filter&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">data</span><span class="p">.</span><span class="nx">allow</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">allow</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">name</span> <span class="o">===</span> <span class="s1">&#39;Bob&#39;</span><span class="p">);</span>
 <span class="p">});</span>
 </pre></div>
 
-<p><strong>NOTE:</strong> This event handler does use a different syntax in the handler which provides application developers the opportunity to modify data from the event (in this case the <code>allow</code> attribute).</p>
 </li>
 <li><p><code>peer:connected</code></p>
 <p>If a peer has passed the <code>peer:filter</code> test (either no filtering has been applied, or the allow flag is set to true in the filter events) then a <code>peer:connected</code> event will be emitted:</p>
@@ -122,7 +111,7 @@ it comes with support for understanding how to connect to an
 <span class="p">});</span>
 </pre></div>
 
-<p>The primary use case for this event is if you are updating part of your application UI to flag in response to a <code>peer:disconnected</code> event being fired (which can be due to poor network connectivity), then you can use the <code>peer:connected</code> event to restore UI elements to represent an active connection on receiving this event.</p>
+<p>This event can be useful if you wish to know when a peer has connected to the signalling server, and don&#39;t care whether it is a new peer (generating a <code>peer:announce</code> event) or known peer (generating a <code>peer:update</code> event).</p>
 </li>
 <li><p><code>peer:announce</code></p>
 <p>While the <code>peer:connected</code> event is triggered each time a peer reconnects and announces to the signalling server, a <code>peer:announce</code> event is only emitted by your local signaller if this is considered a new connection from a peer.</p>
@@ -139,23 +128,6 @@ it comes with support for understanding how to connect to an
 <p>An existing peer in the system has been &quot;re-announced&quot; possibly with some data changes:</p>
 <div class="highlight"><pre><span class="nx">signaller</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer:update&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;data update from peer: &#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
-<span class="p">});</span>
-</pre></div>
-
-</li>
-<li><p><code>peer:disconnected</code></p>
-<p>A peer has disconnected from the signalling server, but may reconnect if it manages to re-establish connectivity.</p>
-<div class="highlight"><pre><span class="nx">signaller</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer:disconnected&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;peer &#39;</span> <span class="o">+</span> <span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39; has gone, but they might be back...&#39;</span><span class="p">);</span>
-<span class="p">});</span>
-</pre></div>
-
-</li>
-<li><p><code>peer:leave</code></p>
-<p>This event is triggered when the signaller has previously received a disconnection notification for a peer, and a reconnection has not been made by that peer within a certain time interval.</p>
-<p>The default <code>leaveTimeout</code> is configured in the <a href="https://github.com/rtc-io/rtc-signaller/blob/master/defaults.js">defaults</a> but can be overriden by passing configuration options when creating the signaller.</p>
-<div class="highlight"><pre><span class="nx">signaller</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;peer:leave&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;peer &#39;</span> <span class="o">+</span> <span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39; has left :(&#39;</span><span class="p">);</span>
 <span class="p">});</span>
 </pre></div>
 
@@ -184,6 +156,10 @@ you to communicate with other peers via your messaging network.</p>
 <p>As demonstrated in the getting started guide, you can also pass through
 a string value instead of a messenger instance if you simply want to
 connect to an existing <code>rtc-switchboard</code> instance.</p>
+<h3 id="-signaller-connect-"><code>signaller.connect()</code></h3>
+<p>Manually connect the signaller using the supplied messenger.</p>
+<p><strong>NOTE:</strong> This should never have to be called if the default setting
+for <code>autoconnect</code> is used.</p>
 <h3 id="signaller-send-message-data-">signaller#send(message, data*)</h3>
 <p>Use the send function to send a message to other peers in the current
 signalling scope (if announced in a room this will be a room, otherwise
@@ -281,23 +257,6 @@ communication channel between the two parties:</p>
 <span class="p">);</span>
 </pre></div>
 
-<h3 id="loadprimus-signalhost-opts-callback-">loadPrimus(signalhost, opts?, callback)</h3>
-<p>This is a convenience function that is patched into the signaller to assist
-with loading the <code>primus.js</code> client library from an <code>rtc-switchboard</code>
-signaling server.</p>
-<p>In the case that you wish to load <code>primus.js</code> from a location other than
-the default location of <code>/rtc.io/primus.js</code> you can
-provide an options object which allows for the following customizations:</p>
-<ul>
-<li><p><code>primusPath</code> (default: <code>/rtc.io/primus.js</code>)</p>
-<p>The path at which the <code>primus.js</code> file can be found on the signalhost.</p>
-<p><strong>NOTE:</strong> The above options are passed through when creating a
-signaller object, and thus packages such as
-<a href="https://github.com/rtc-io/rtc-quickconnect">rtc-quickconnect</a>
-will allow you to make the customisation with it&#39;s top level
-options also.</p>
-</li>
-</ul>
 <h3 id="signaller-process-handling">signaller process handling</h3>
 <p>When a signaller&#39;s underling messenger emits a <code>data</code> event this is
 delegated to a simple message parser, which applies the following simple
@@ -321,11 +280,6 @@ If so, then pass the entire message contents onto the registered handler.</p>
 <pre><code>/announce|%metadata%|{&quot;id&quot;: &quot;...&quot;, ... }</code></pre>
 <p>When an announce message is received by the signaller, the attached
 object data is decoded and the signaller emits an <code>announce</code> message.</p>
-<h4 id="leave">leave</h4>
-<pre><code>/leave|{&quot;id&quot;:&quot;...&quot;}</code></pre>
-<p>When a leave message is received from a peer, we check to see if that is
-a peer that we are managing state information for and if we are then the
-peer state is removed.</p>
 <h2 id="license-s-">License(s)</h2>
 <h3 id="apache-2-0">Apache 2.0</h3>
 <p>Copyright 2013 - 2014 National ICT Australia Limited (NICTA)</p>

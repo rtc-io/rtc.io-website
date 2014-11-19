@@ -45,8 +45,7 @@
 <p>The <code>rtc-mesh</code> module provides a way of sharing data between clients using
 <a href="https://github.com/dominictarr/scuttlebutt">scuttlebutt</a>.</p>
 <p><a href="https://nodei.co/npm/rtc-mesh/"><img src="https://nodei.co/npm/rtc-mesh.png" alt="NPM" /></a></p>
-<p><img src="https://img.shields.io/badge/stability-unstable-yellowgreen.svg" alt="unstable" />
-<a href="https://travis-ci.org/rtc-io/rtc-mesh"><img src="https://img.shields.io/travis/rtc-io/rtc-mesh.svg?branch=master" alt="Build Status" /></a></p>
+<p><a href="https://github.com/dominictarr/stability#unstable"><img src="https://img.shields.io/badge/stability-unstable-yellowgreen.svg" alt="unstable" /></a> <a href="https://travis-ci.org/rtc-io/rtc-mesh"><img src="https://img.shields.io/travis/rtc-io/rtc-mesh.svg?branch=master" alt="Build Status" /></a> </p>
 <h2 id="simple-example">Simple Example</h2>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">quickconnect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-quickconnect&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">mesh</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-mesh&#39;</span><span class="p">);</span>
@@ -68,7 +67,10 @@
 </pre></div>
 
 <h2 id="using-scuttlebutt-subclasses">Using Scuttlebutt Subclasses</h2>
-<p>Here&#39;s an example using
+<p>In the case that you would like to use one of the
+<a href="https://github.com/dominictarr/scuttlebutt#subclasses">Scuttlebutt subclasses</a>,
+this can be done quite easily be providing a model instance in the <code>model</code>
+option in the <code>opts</code> argument. Here&#39;s an example using
 <a href="https://github.com/dominictarr/crdt">CRDT</a>:</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">quickconnect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-quickconnect&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">mesh</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-mesh&#39;</span><span class="p">);</span>

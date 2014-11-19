@@ -39,98 +39,98 @@
 <div class="shadow"></div>
 </header>
 <div class="main" role="content"><h1 id="rtc">rtc</h1>
-<p>This is a package that will provide you a &quot;one-stop shop&quot; for building
-WebRTC applications.  It aggregates together a variety of packages (primarily
-from the <a href="https://github.com/rtc-io">rtc.io</a> suite) to deliver a single
-package for building a WebRTC application.</p>
+<p>This is a package that will provide you a &quot;one-stop shop&quot; for building WebRTC applications.  It aggregates together a variety of packages (primarily from the <a href="https://github.com/rtc-io">rtc.io</a> suite) to deliver a single package for building a WebRTC application.</p>
 <p><a href="https://nodei.co/npm/rtc/"><img src="https://nodei.co/npm/rtc.png" alt="NPM" /></a></p>
-<p><a href="https://github.com/dominictarr/stability#experimental"><img src="https://img.shields.io/badge/stability-experimental-red.svg" alt="experimental" /></a></p>
+<p><a href="https://travis-ci.org/rtc-io/rtc"><img src="https://img.shields.io/travis/rtc-io/rtc.svg?branch=master" alt="Build Status" /></a>
+<a href="https://github.com/dominictarr/stability#experimental"><img src="https://img.shields.io/badge/stability-experimental-red.svg" alt="experimental" /></a>
+<a href="https://gitter.im/rtc-io/discuss"><img src="https://badges.gitter.im/rtc-io/discuss.png" alt="Gitter chat" /></a></p>
 <h2 id="getting-started">Getting Started</h2>
-<p>Grab the latest distribution build of rtc at:</p>
-<p><a href="https://cdn.rawgit.com/rtc-io/rtc/5559c185db3793fbc6209a59c12cfec49c9e83b2/dist/rtc.min.js">https://cdn.rawgit.com/rtc-io/rtc/5559c185db3793fbc6209a59c12cfec49c9e83b2/dist/rtc.min.js</a></p>
-<p>Also available via bower:</p>
-<pre><code>  bower install rtc</code></pre>
-<p>Or if you prefer to work directly with the CommonJS module you can install it via npm:</p>
-<pre><code>  npm install rtc --save</code></pre>
-<p>We use <a href="https://browserify.org">browserify</a> to bundle our CommonJS modules for use in the browser.</p>
+<p>Probably the easiest way to get started with <code>RTC</code> is to take it for a testdrive using <a href="http://jsbin.com/dahuka/edit?html,css,js,output">jsbin</a>. This demo uses the minified JS file (and associated sourcemaps for debugging) from:</p>
+<p><code>//cdn.jsdelivr.net/rtc/latest/rtc.min.js</code></p>
+<p>If you wish to use a specific version, then you can replace <code>latest</code> with the version number (from <code>3.0.1</code> onwards):</p>
+<p><code>//cdn.jsdelivr.net/rtc/3.0.1/rtc.min.js</code></p>
+<h3 id="package-managers-ftw-">Package Managers FTW!</h3>
+<p>I&#39;d recommend using a package manager if you aren&#39;t already and here are the relevant instructions for installing <code>RTC</code> from a number of popular options:</p>
+<ul>
+<li><strong>npm</strong>: <code>npm install rtc --save</code></li>
+<li><strong>bower</strong>: <code>bower install rtc-io/rtc</code></li>
+</ul>
 <h2 id="basic-usage">Basic Usage</h2>
 <p>Establish a connection and render local and remote video feeds.</p>
-<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;r-video&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
-<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;l-video&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
-
-<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;/path/to/rtc.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<div class="highlight"><pre><span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;title&gt;</span>rtc.io simple conferencing<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;http://yui.yahooapis.com/pure/0.5.0/pure-min.css&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;layout.css&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body</span> <span class="na">onload=</span><span class="s">&quot;RTC()&quot;</span> <span class="na">class=</span><span class="s">&quot;pure-g&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;pure-u-1-5&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;l-video&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;pure-u-4-5&quot;</span> <span class="na">id=</span><span class="s">&quot;r-video&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;https://cdn.rawgit.com/rtc-io/rtc/v3.0.0/dist/rtc.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
 </pre></div>
 
-<div class="highlight"><pre><span class="c1">// rtc needs a named room and a signalling server location to create a session.</span>
-<span class="c1">// switchboard.rtc.io may be used for testing, or you can host your own signaller</span>
-<span class="c1">// with rtc-switchboard module.</span>
-<span class="kd">var</span> <span class="nx">rtcOpts</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;test-room&#39;</span><span class="p">,</span>
-      <span class="nx">signaller</span><span class="o">:</span> <span class="s1">&#39;//switchboard.rtc.io&#39;</span>
-    <span class="p">};</span>
-<span class="c1">// call RTC module</span>
-<span class="kd">var</span> <span class="nx">rtc</span> <span class="o">=</span> <span class="nx">RTC</span><span class="p">(</span><span class="nx">rtcOpts</span><span class="p">);</span>
-<span class="c1">// A div element to show our local video stream</span>
-<span class="kd">var</span> <span class="nx">localVideo</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;l-video&#39;</span><span class="p">);</span>
-<span class="c1">// A div element to show our remote video streams</span>
-<span class="kd">var</span> <span class="nx">remoteVideo</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;r-video&#39;</span><span class="p">);</span>
+<p>In this example, the <a href="defaultconfig.js">default configuration options</a> are used for configuration, which are displayed below for informational purposes:</p>
+<div class="highlight"><pre><span class="c1">// a default configuration that is used by the rtc package</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="c1">// simple constraints for defaults</span>
+  <span class="nx">constraints</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">video</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">audio</span><span class="o">:</span> <span class="kc">true</span>
+  <span class="p">},</span>
 
-<span class="c1">// Display local and remote video streams</span>
-<span class="nx">localVideo</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">rtc</span><span class="p">.</span><span class="nx">local</span><span class="p">);</span>
-<span class="nx">remoteVideo</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">rtc</span><span class="p">.</span><span class="nx">remote</span><span class="p">);</span>
+  <span class="c1">// use the public switchboard for signalling</span>
+  <span class="nx">signaller</span><span class="o">:</span> <span class="s1">&#39;//switchboard.rtc.io&#39;</span><span class="p">,</span>
+
+  <span class="c1">// no room is defined by default</span>
+  <span class="c1">// rtc-quickconnect will autogenerate using a location.hash</span>
+  <span class="nx">room</span><span class="o">:</span> <span class="kc">undefined</span><span class="p">,</span>
+
+  <span class="c1">// specify ice servers or a generator function to create ice servers</span>
+  <span class="nx">ice</span><span class="o">:</span> <span class="p">[],</span>
+
+  <span class="c1">// any data channels that we want to create for the conference</span>
+  <span class="c1">// by default a chat channel is created, but other channels can be added also</span>
+  <span class="c1">// additionally options can be supplied to customize the data channel config</span>
+  <span class="c1">// see: &lt;http://w3c.github.io/webrtc-pc/#idl-def-RTCDataChannelInit&gt;</span>
+  <span class="nx">channels</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">chat</span><span class="o">:</span> <span class="kc">true</span>
+  <span class="p">},</span>
+
+  <span class="c1">// the selector that will be used to identify the localvideo container</span>
+  <span class="nx">localContainer</span><span class="o">:</span> <span class="s1">&#39;#l-video&#39;</span><span class="p">,</span>
+
+  <span class="c1">// the selector that will be used to identify the remotevideo container</span>
+  <span class="nx">remoteContainer</span><span class="o">:</span> <span class="s1">&#39;#r-video&#39;</span><span class="p">,</span>
+
+  <span class="c1">// should we atempt to load any plugins?</span>
+  <span class="nx">plugins</span><span class="o">:</span> <span class="p">[],</span>
+
+  <span class="c1">// common options overrides that are used across rtc.io packages</span>
+  <span class="nx">options</span><span class="o">:</span> <span class="p">{}</span>
+<span class="p">};</span>
 </pre></div>
 
-<h2 id="sharing-video-audio-and-data-streams">Sharing Video, Audio and Data Streams</h2>
-<p>Add a data channel to share text messages</p>
-<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;messages&quot;</span> <span class="na">contenteditable</span><span class="nt">&gt;&lt;/div&gt;</span>
-<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;r-video&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
-<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;l-video&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
-
-<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;/path/to/rtc.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-</pre></div>
-
-<div class="highlight"><pre><span class="c1">// Set RTC options.</span>
-<span class="kd">var</span> <span class="nx">rtcOpts</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;test-room-2&#39;</span><span class="p">,</span>
-    <span class="nx">signaller</span><span class="o">:</span> <span class="s1">&#39;//switchboard.rtc.io&#39;</span>
-  <span class="p">};</span>
-<span class="c1">// call RTC module</span>
-<span class="kd">var</span> <span class="nx">rtc</span> <span class="o">=</span> <span class="nx">RTC</span><span class="p">(</span><span class="nx">rtcOpts</span><span class="p">);</span>
-<span class="c1">// A contenteditable element to show our messages</span>
-<span class="kd">var</span> <span class="nx">messageWindow</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;messages&#39;</span><span class="p">);</span>
-<span class="c1">// A div element to show our local video stream</span>
-<span class="kd">var</span> <span class="nx">localVideo</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;l-video&#39;</span><span class="p">);</span>
-<span class="c1">// A div element to show our remote video streams</span>
-<span class="kd">var</span> <span class="nx">remoteVideo</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;r-video&#39;</span><span class="p">);</span>
-
-<span class="c1">// Bind to events happening on the data channel</span>
-<span class="kd">function</span> <span class="nx">bindDataChannelEvents</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">channel</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">,</span> <span class="nx">connection</span><span class="p">)</span> <span class="p">{</span>
-
-  <span class="c1">// Receive message</span>
-  <span class="nx">channel</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">evt</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">messageWindow</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
-  <span class="p">};</span>
-
-  <span class="c1">// Send message</span>
-  <span class="nx">messageWindow</span><span class="p">.</span><span class="nx">onkeyup</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-    <span class="nx">channel</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">innerHTML</span><span class="p">);</span>
-  <span class="p">};</span>
-<span class="p">}</span>
-
-<span class="c1">// Start working with the established session</span>
-<span class="kd">function</span> <span class="nx">init</span><span class="p">(</span><span class="nx">session</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">session</span><span class="p">.</span><span class="nx">createDataChannel</span><span class="p">(</span><span class="s1">&#39;chat&#39;</span><span class="p">);</span>
-  <span class="nx">session</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;channel:opened:chat&#39;</span><span class="p">,</span> <span class="nx">bindDataChannelEvents</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="c1">// Display local and remote video streams</span>
-<span class="nx">localVideo</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">rtc</span><span class="p">.</span><span class="nx">local</span><span class="p">);</span>
-<span class="nx">remoteVideo</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">rtc</span><span class="p">.</span><span class="nx">remote</span><span class="p">);</span>
-
-<span class="c1">// Detect when RTC has established a session</span>
-<span class="nx">rtc</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;ready&#39;</span><span class="p">,</span> <span class="nx">init</span><span class="p">);</span>
-</pre></div>
-
+<h2 id="diving-deeper">Diving Deeper</h2>
+<p>If there is a specific application that you are looking to build with <a href="http://rtc.io/">rtc.io</a> feel free to <a href="https://github.com/rtc-io/rtc/issues/new">open an issue</a> and outline a few of your requirements (video, audio, data, etc) and we can give you some advice.  In most cases, the following is a good rule of thumb for working our where you should jump in with rtc.io packages.</p>
+<ul>
+<li><p>Video and/or audio is crucial to my application and I haven&#39;t done a lot of work with <a href="http://browserify.org">browserify</a></p>
+<p><em>Use the <code>rtc</code> distribution files from the CDN, and build your app</em></p>
+</li>
+<li><p>I feel comfortable using browserify, and find it a great way of building apps.</p>
+<p><em>Configure your application using npm, and start by including the rtc package (<code>npm install --save rtc</code>).  If you need more flexibility than what is offered through this package, take something like <a href="https://github.com/rtc-io/rtc-quickconnect"><code>rtc-quickconnect</code></a> for a spin.</em></p>
+</li>
+<li><p>I am building something that isn&#39;t really media related, and just want to play with data channels.</p>
+<p><em>You are going to want to use <a href="https://github.com/rtc-io/rtc-quickconnect"><code>rtc-quickconnect</code></a> and we&#39;d strongly recommend getting comfortable with browserify if you aren&#39;t already as it&#39;s going to make your life a lot easier.</em></p>
+</li>
+</ul>
+<h2 id="other-simple-demos-tutorials">Other Simple Demos / Tutorials</h2>
+<ul>
+<li><a href="http://jsbin.com/rimexe/edit?html,js,output">Data Channels Only Demo</a> - if you really don&#39;t want to go down the <a href="https://github.com/rtc-io/rtc-quickconnect"><code>rtc-quickconnect</code></a> and browserify road.</li>
+</ul>
 <h2 id="license-s-">License(s)</h2>
 <h3 id="apache-2-0">Apache 2.0</h3>
 <p>Copyright 2014 National ICT Australia Limited (NICTA)</p>

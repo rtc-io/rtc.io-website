@@ -47,7 +47,7 @@ configuration you should drill down into lower level components of the
 <a href="https://github.com/rtc-io/rtc">rtc</a>.</p>
 <p><a href="https://nodei.co/npm/rtc-quickconnect/"><img src="https://nodei.co/npm/rtc-quickconnect.png" alt="NPM" /></a></p>
 <p><a href="https://travis-ci.org/rtc-io/rtc-quickconnect"><img src="https://img.shields.io/travis/rtc-io/rtc-quickconnect.svg?branch=master" alt="Build Status" /></a> <a href="https://github.com/dominictarr/stability#unstable"><img src="https://img.shields.io/badge/stability-unstable-yellowgreen.svg" alt="unstable" /></a> 
-<a href="https://gitter.im/rtc-io/discuss"><img src="https://badges.gitter.im/rtc-io/discuss.png" alt="Gitter chat" /></a></p>
+<a href="https://groups.google.com/forum/#!forum/rtc-io"><img src="http://img.shields.io/badge/discuss-rtc.io-blue.svg" alt="rtc.io google group" /></a></p>
 <h2 id="example-usage">Example Usage</h2>
 <p>In the simplest case you simply call quickconnect with a single string
 argument which tells quickconnect which server to use for signaling:</p>
@@ -295,6 +295,8 @@ be emitted by <code>qc</code>.</p>
 <p>The <code>join</code> function is used when <code>manualJoin</code> is set to true when creating
 a quickconnect instance.  Call the <code>join</code> function once you are ready to
 join the signalling server and initiate connections with other people.</p>
+<h4 id="-get-name-"><code>get(name)</code></h4>
+<p>The <code>get</code> function returns the property value for the specified property name.</p>
 <h4 id="reactive-">reactive()</h4>
 <p>Flag that this session will be a reactive connection.</p>
 <h4 id="removestream">removeStream</h4>
