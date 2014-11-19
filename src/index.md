@@ -34,7 +34,7 @@ rtcSession.on('ready', yourInitFunction);
 The full suite of rtc.io modules, including [rtc](module-rtc.html), are available individually via npm and can be included using `require()`. You'll need Browserify (or a similar service) to prepare your CommonJS modules for the browser.
 
 - Install [Node and NPM](https://www.npmjs.org/)
-- Install [Browserify](http://http://browserify.org/)
+- Install [Browserify](http://browserify.org/)
 - `npm install rtc`
 
 ```js
