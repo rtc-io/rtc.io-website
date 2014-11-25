@@ -13,23 +13,17 @@ var File = require('vinyl');
 var through = require('through');
 var indent = require('indent-string');
 
-var packages = [
-  'rtc',
-  'rtc-quickconnect',
-  'rtc-signaller',
-  'rtc-quickconnect',
-  'rtc-tools',
-  'rtc-capture',
-  'rtc-attach',
-  'rtc-mesh',
-  'rtc-dcstream',
-  'rtc-media',
-  'rtc-core',
-  'rtc-audioproc',
-  'rtc-captureconfig',
-  'rtc-videoproc',
-  'rtc-sharedcursor'
-];
+var packages = {
+  entry: [ 'rtc', 'rtc-quickconnect' ],
+  signalling: [ 'rtc-signaller', 'rtc-switchboard' ],
+  media: [ 'rtc-capture', 'rtc-attach' ],
+  data: [ 'rtc-mesh', 'rtc-dcstream' ],
+  utility: [ 'rtc-tools', 'rtc-taskqueue', 'rtc-core' ]
+};
+
+var allPackages = Object.keys(packages).map(function(key) {
+  return packages[key];
+}).reduce(require('whisk/flatten'));
 
 gulp.task('serve', 'Serve the local files using a development server', ['build-pages'], function(cb) {
   var mount = st({
@@ -63,6 +57,7 @@ gulp.task('build-pages', 'Build the pages for the site', function() {
 
 gulp.task('build-packages', 'Fetch the various project readmes from the project sites', function() {
   var stream = new Readable({ objectMode: true });
+  var prelude = '';
 
   function download(package, callback) {
     getit('github://rtc-io/' + package + '/README.md', function(err, data) {
@@ -81,7 +76,7 @@ gulp.task('build-packages', 'Fetch the various project readmes from the project 
     })
   }
 
-  async.forEach(packages, download, function(err) {
+  async.forEach(allPackages, download, function(err) {
     stream.push(null);
   });
 
@@ -89,7 +84,7 @@ gulp.task('build-packages', 'Fetch the various project readmes from the project 
 
   return stream
     .pipe(through(function(entry) {
-      entry.contents = new Buffer(indent(String(entry.contents), ' ', 4));
+      entry.contents = new Buffer(prelude + indent(String(entry.contents), ' ', 4));
       this.queue(entry);
     }))
     .pipe(gulp.dest('./'));
