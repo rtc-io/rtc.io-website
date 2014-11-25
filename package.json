@@ -34,7 +34,8 @@
     "readable-stream": "^1.0.33-1",
     "st": "^0.5.2",
     "through": "^2.3.6",
-    "vinyl": "^0.4.3"
+    "vinyl": "^0.4.3",
+    "whisk": "^1.0.0"
   },
   "dependencies": {}
 }
