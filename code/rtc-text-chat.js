@@ -1,7 +1,7 @@
 // Set RTC options.
 var rtcOpts = {
 	room: 'test-data',
-	signaller: '//switchboard.rtc.io',
+	signaller: 'http://switchboard.rtc.io',
 	capture: false
 };
 
