@@ -1,7 +1,7 @@
 // Set RTC options.
 var rtcOpts = {
     room: 'test-room',
-    signaller: '//switchboard.rtc.io'
+    signaller: 'http://switchboard.rtc.io'
   };
 // call RTC module
 var rtc = RTC(rtcOpts);
