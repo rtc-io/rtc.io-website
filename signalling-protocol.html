@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta http-equiv="X-UA-Compatible" content="chrome=1" />
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="format-detection" content="telephone=no" />
-<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
 <title>rtc.io</title>
-<link rel="stylesheet" type="text/css" href="css/reset.css" />
-<link rel="stylesheet" type="text/css" href="css/main.css" />
+<link rel="stylesheet" type="text/css" href="css/reset.css">
+<link rel="stylesheet" type="text/css" href="css/main.css">
 <!-- responsive -->
-<link rel="stylesheet" media="screen and (max-width: 960px)" href="css/tablet.css" />
-<link rel="stylesheet" media="screen and (max-width: 710px)" href="css/phone.css" />
-<link rel="stylesheet" type="text/css" href="fonts/source-sans/stylesheet.css" />
-<link rel="stylesheet" type="text/css" href="css/code.css" />
+<link rel="stylesheet" media="screen and (max-width: 960px)" href="css/tablet.css">
+<link rel="stylesheet" media="screen and (max-width: 710px)" href="css/phone.css">
+<link rel="stylesheet" type="text/css" href="fonts/source-sans/stylesheet.css">
+<link rel="stylesheet" type="text/css" href="css/code.css">
 </head>
 <body>
 
 <a class="scroll-point pt-top" name="top"></a>
 <header>
-<a href="https://github.com/rtc-io"><img class="fork" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub" /></a>
+<a href="https://github.com/rtc-io"><img class="fork" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub"></a>
 <a class="scroll-point pt-top" name="top"></a>
 <div class="site">
   <div class="mascot">
-    <img src="images/artsio.png" />
+    <img src="images/artsio.png">
   </div>
   <div class="logo" data-subtext="OpenSource WebRTC">
     <a href="index.html">rtc.io</a>
@@ -52,32 +52,32 @@
 <li><p>All signaling clients identify themselves with a unique, <a href="https://github.com/rtc-io/rtc-signaller/issues/10">non-reusable</a> id.</p>
 </li>
 </ul>
-<hr />
+<hr>
 <h2 id="transport-agnostic">Transport Agnostic</h2>
 <p>While the <code>rtc-signaller</code> module provides some default behaviour to connect
 via <a href="http://www.websocket.org/">websockets</a>, it is in fact a transport
 &quot;agnostic&quot; protocol.</p>
 <p>Basically, if you can send text over <em>x</em> then you could use <em>x</em> to send
 <code>rtc-signaller</code> messages.</p>
-<hr />
+<hr>
 <h2 id="sender-metadata">Sender Metadata</h2>
 <p>Sender metadata is injected into a message directly after the command (or initial message part) for all messages.  The only exception is a <code>/to</code> message which has no sender metadata attached as this should be contained within the wrapped message.</p>
 <p>At this stage only the sender id is included in the sender metadata (JSON), but this may be extended in the future to include additional information.</p>
-<hr />
+<hr>
 <h2 id="core-commands">Core Commands</h2>
 <p>There are only a few core commands which make up the rtc-signaller signalling. These core commands should receive &quot;special&quot; treatment from a signalling server, whereas other commands are simply &quot;passed through&quot; to connected clients.</p>
-<hr />
+<hr>
 <h2 id="-announce">/announce</h2>
 <p>The announce command is used to tell a signalling server (and connected peers) that a new client is joining a virtual room.  The payload of the command is JSON and requires <strong>at least</strong> an <code>id</code> and a <code>room</code> attribute to be specified.</p>
 <p>For example, this is what an announce message would typically look like (line breaks added for clarity):</p>
 <pre><code>/announce
 |{&quot;id&quot;:&quot;dc6ac0ae-6e15-409b-b211-228a8f4a43b9&quot;}
 |{&quot;browser&quot;:&quot;node&quot;,&quot;browserVersion&quot;:&quot;?&quot;,&quot;id&quot;:&quot;dc6ac0ae-6e15-409b-b211-228a8f4a43b9&quot;,&quot;agent&quot;:&quot;signaller@0.18.3&quot;,&quot;room&quot;:&quot;test-room&quot;}</code></pre>
-<hr />
+<hr>
 <h2 id="-leave">/leave</h2>
 <p>Unsurprisingly, a <code>/leave</code> message is the counterpart to an <code>/announce</code> message and is sent when a peer is disconnecting from the room.</p>
 <p><strong>NOTE:</strong> As most client leave actions are &quot;hard closes&quot;, i.e. a browser window / tab has been closed, a signalling server should monitor disconnections and issue an appropriate <code>/leave</code> message if the client has not issued one already.</p>
-<hr />
+<hr>
 <h2 id="-to">/to</h2>
 <p>The <code>/to</code> command allows you to direct a message to a particular peer rather than broadcasting it to all peers connected to the same room as you.</p>
 <p>An example <code>/to</code> command might look something like (again line breaks for clarity):</p>
@@ -86,10 +86,10 @@ via <a href="http://www.websocket.org/">websockets</a>, it is in fact a transpor
 |/hello
 |{&quot;id&quot;:&quot;98e17678-a89e-4f91-aee0-5b0d93ad546d&quot;}</code></pre>
 <p>For security reasons a signaling server is encouraged to direct <code>/to</code> messages only the connected peer; however, a client implementing this protocol should drop all &#39;/to&#39; messages that do not match it&#39;s own id.</p>
-<hr />
+<hr>
 <h2 id="that-s-pretty-much-it">That&#39;s Pretty Much It</h2>
 <p>From a &quot;protocol&quot; perspective that&#39;s really all there is to it.</p>
-<hr />
+<hr>
 <h2 id="writing-a-client">Writing a Client</h2>
 <p>The responsibilities of a client are fairly simple:</p>
 <ul>
@@ -101,7 +101,7 @@ via <a href="http://www.websocket.org/">websockets</a>, it is in fact a transpor
 </ul>
 </li>
 </ul>
-<hr />
+<hr>
 <h2 id="writing-a-server">Writing a Server</h2>
 <p>The responsibilities of a server are also simple:</p>
 <ul>
@@ -110,11 +110,11 @@ via <a href="http://www.websocket.org/">websockets</a>, it is in fact a transpor
 <li>Handle client disconnection and <code>/leave</code> messages appropriately, i.e. remove a peer from the logical room.</li>
 <li>Distribute &quot;non <code>/to</code>&quot; messages to all peers in the same room as the peer that the message originated from.</li>
 </ul>
-<hr />
+<hr>
 <h2 id="what-about-authentication-">What About Authentication?</h2>
 <p>While this hasn&#39;t been implemented in any applications to date, encrypted credentials or a session token could be supplied as part of the announce metadata.</p>
 <p>Additionally for per message authentication a session token could be included as part of the sender metadata that is included in each message.  This could be validated by the signaling server and stripped from the message before passing onto connected peers.</p>
-<hr />
+<hr>
 <h2 id="what-about-scaling-">What About Scaling?</h2>
 <p>My intention was to minimally but adequately map out the interation required between peers, ensuring that both broadcast and direct messages were catered for.  The likelihood is that implementing server -&gt; server message passing and routing will require some additional work but this isn&#39;t something the end clients should have to care about.</p>
 </div>
@@ -122,7 +122,7 @@ via <a href="http://www.websocket.org/">websockets</a>, it is in fact a transpor
 <footer>
   <p>
     <a href="http://nicta.com.au">
-      <img src="images/nicta-logo.gif" alt="NICTA logo" />
+      <img src="images/nicta-logo.gif" alt="NICTA logo">
     </a>© NICTA 2013 - 2014
   </p>
   <p class="license">Project source code is licensed under the <a href="https://github.com/rtc-io/rtc/blob/master/LICENSE">Apache 2.0</a>.</p>
