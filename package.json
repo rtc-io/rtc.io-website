@@ -30,10 +30,10 @@
     "rtc-audioproc": "0.0.3",
     "rtc-core": "^4.0.0",
     "rtc-filter-grayscale": "~0.1.0",
-    "rtc-media": "^1.9.0",
+    "rtc-media": "^2.0.1",
     "rtc-quickconnect": "^4.1.2",
     "rtc-signaller": "^5.2.2",
-    "rtc-tools": "^2.3.0",
+    "rtc-tools": "^4.2.2",
     "rtc-videoproc": "^0.11.0"
   },
   "dependencies": {}
