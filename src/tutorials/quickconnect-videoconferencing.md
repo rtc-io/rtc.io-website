@@ -5,7 +5,7 @@ In this tutorial we will start exploring how to use the
 simple video conferencing application.
 
 Prior to completing this example it's recommended that you complete
-the [Creating a simple chat application](tutorial-quickconnect-chat.html) tutorial
+the [Creating a simple chat application](tutorial-rtc-text-chat.html) tutorial
 as it will cover some of the fundamentals of how `rtc-quickconnect` works.
 
 
