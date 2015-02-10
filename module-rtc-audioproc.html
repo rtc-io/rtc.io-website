@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+<title>rtc.io</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css">
+<link rel="stylesheet" type="text/css" href="css/main.css">
+<!-- responsive -->
+<link rel="stylesheet" media="screen and (max-width: 960px)" href="css/tablet.css">
+<link rel="stylesheet" media="screen and (max-width: 710px)" href="css/phone.css">
+<link rel="stylesheet" type="text/css" href="fonts/source-sans/stylesheet.css">
+<link rel="stylesheet" type="text/css" href="css/code.css">
+</head>
+<body>
+
+<a class="scroll-point pt-top" name="top"></a>
+<header>
+<a href="https://github.com/rtc-io/rtc-audioproc"><img class="fork" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub"></a>
+<a class="scroll-point pt-top" name="top"></a>
+<div class="site">
+  <div class="mascot">
+    <img src="images/artsio.png">
+  </div>
+  <div class="logo" data-subtext="OpenSource WebRTC">
+    <a href="index.html">rtc.io</a>
+  </div>
+  <nav>
+    <ul>
+    <li><a href="index.html">About</a></li>
+    <li><a href="tutorials.html">Tutorials</a></li>
+    <li><a href="demos.html">Demos</a></li>
+    <li><a href="modules.html">Modules</a></li>
+    </ul>
+  </nav>
+</div>
+<div class="shadow"></div>
+</header>
+<div class="main" role="content"><h1 id="rtc-audioproc">rtc-audioproc</h1>
+<p>This is a small helper module that allows you to render a canvas
+to visualize audio from an audio or video element, or a getUserMedia
+stream. It uses the Web Audio API. This can be useful to display
+audio visually, or to track down when a video or audio element does
+not behave as you expect.</p>
+<p>BROWSER SUPPORT:</p>
+<ul>
+<li>Chrome is the only browser that has support for Web Audio &amp; WebRTC</li>
+<li>works in Chrome for getUserMedia(), Audio(), audio and video elements</li>
+<li>broken in Chrome for PeerConnection, see <a href="https://code.google.com/p/chromium/issues/detail?id=121673">https://code.google.com/p/chromium/issues/detail?id=121673</a></li>
+</ul>
+<p><a href="https://nodei.co/npm/rtc-audioproc/"><img src="https://nodei.co/npm/rtc-audioproc.png" alt="NPM"></a></p>
+<p><a href="http://github.com/hughsk/stability-badges"><img src="http://hughsk.github.io/stability-badges/dist/unstable.svg" alt="unstable"></a></p>
+<h2 id="usage-with-webrtc">Usage with WebRTC</h2>
+<p>This was primarily written to work with the
+<a href="https://github.com/rtc-io/rtc-media">rtc-media</a> library so here&#39;s an
+example of how it works there:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-media&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">waveform</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-audioproc&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">localvideo</span> <span class="o">=</span> <span class="nx">media</span><span class="p">();</span>
+
+<span class="kd">var</span> <span class="nx">videoElement</span> <span class="o">=</span> <span class="nx">localvideo</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">waveform</span><span class="p">(</span><span class="nx">videoElement</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;stream&quot;</span> <span class="o">:</span> <span class="nx">localvideo</span><span class="p">});</span>
+</pre></div>
+
+<h2 id="usage-with-audio-interface">Usage with Audio interface</h2>
+<p>This example shows how to pipe an audio file into the waveform display.
+The canvas will be added to the body element unless you provide a different
+element to attach it to.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">waveform</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-audioproc&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">audio</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Audio</span><span class="p">(</span><span class="s1">&#39;examples/media/Hydrate-Kenny_Beltrey.ogg&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">waveform</span><span class="p">(</span><span class="nx">audio</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;play&quot;</span> <span class="o">:</span> <span class="kc">true</span><span class="p">});</span>
+
+<span class="nx">audio</span><span class="p">.</span><span class="nx">play</span><span class="p">();</span>
+</pre></div>
+
+<h2 id="usage-with-a-media-element">Usage with a media element</h2>
+<p>This example shows how to create a waveform display for a video element.
+It also shows how to attach the waveform to a separate element.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">waveform</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-audioproc&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">body</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">div</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">video</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;video&#39;</span><span class="p">);</span>
+
+<span class="nx">video</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s1">&#39;examples/media/sintel_trailer.webm&#39;</span><span class="p">;</span>
+<span class="nx">video</span><span class="p">.</span><span class="nx">controls</span> <span class="o">=</span> <span class="s1">&#39;controls&#39;</span><span class="p">;</span>
+
+<span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">div</span><span class="p">);</span>
+<span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">video</span><span class="p">);</span>
+
+
+<span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">waveform</span><span class="p">(</span><span class="nx">video</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;play&quot;</span> <span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="s2">&quot;attach&quot;</span> <span class="o">:</span> <span class="nx">div</span> <span class="p">});</span>
+
+<span class="nx">video</span><span class="p">.</span><span class="nx">play</span><span class="p">();</span>
+</pre></div>
+
+<h2 id="parameters-for-waveform">Parameters for waveform</h2>
+<ul>
+<li>target : media element or Audio instance </li>
+<li>opts:<ul>
+<li>width : the width of the canvas</li>
+<li>height : the height of the canvas</li>
+<li>stream : if you&#39;re using WebRTC, you need to hand in the MediaStream directly</li>
+<li>play : if set to true, also route the audio to the output device</li>
+<li>attach : element to which the canvas will be added as a child</li>
+</ul>
+</li>
+</ul>
+<h2 id="running-the-examples">Running the examples</h2>
+<p>You can use <a href="http://didact.us/beefy/">beefy</a> to run the examples, e.g.</p>
+<p>$ beefy examples/rtc-media.js</p>
+<h2 id="license-s-">License(s)</h2>
+<h3 id="apache-2-0">Apache 2.0</h3>
+<p>Copyright 2014 National ICT Australia Limited (NICTA)</p>
+<p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at</p>
+<pre><code> http://www.apache.org/licenses/LICENSE-2.0</code></pre>
+<p>   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.</p>
+</div>
+
+<footer>
+  <p>
+    <a href="http://nicta.com.au">
+      <img src="images/nicta-logo.gif" alt="NICTA logo">
+    </a>© NICTA 2013 - 2014
+  </p>
+  <p class="license">Project source code is licensed under the <a href="https://github.com/rtc-io/rtc/blob/master/LICENSE">Apache 2.0</a>.</p>
+  <a class="closing" href="#top"></a>
+</footer>
+</body>
+<script src="js/app.js"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-26567546-2', 'rtc.io');
+  ga('send', 'pageview');
+
+</script>
+</html>
+

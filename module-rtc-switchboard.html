@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+<title>rtc.io</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css">
+<link rel="stylesheet" type="text/css" href="css/main.css">
+<!-- responsive -->
+<link rel="stylesheet" media="screen and (max-width: 960px)" href="css/tablet.css">
+<link rel="stylesheet" media="screen and (max-width: 710px)" href="css/phone.css">
+<link rel="stylesheet" type="text/css" href="fonts/source-sans/stylesheet.css">
+<link rel="stylesheet" type="text/css" href="css/code.css">
+</head>
+<body>
+
+<a class="scroll-point pt-top" name="top"></a>
+<header>
+<a href="https://github.com/rtc-io/rtc-switchboard"><img class="fork" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub"></a>
+<a class="scroll-point pt-top" name="top"></a>
+<div class="site">
+  <div class="mascot">
+    <img src="images/artsio.png">
+  </div>
+  <div class="logo" data-subtext="OpenSource WebRTC">
+    <a href="index.html">rtc.io</a>
+  </div>
+  <nav>
+    <ul>
+    <li><a href="index.html">About</a></li>
+    <li><a href="tutorials.html">Tutorials</a></li>
+    <li><a href="demos.html">Demos</a></li>
+    <li><a href="modules.html">Modules</a></li>
+    </ul>
+  </nav>
+</div>
+<div class="shadow"></div>
+</header>
+<div class="main" role="content"><h1 id="rtc-switchboard">rtc-switchboard</h1>
+<p>This is an rtc.io signalling server (counterpart to
+<a href="https://github.com/rtc-io/rtc-signaller">rtc-signaller</a>) that makes use of
+the excellent realtime abstraction library,
+<a href="https://github.com/primus/primus">primus</a>. It has been designed and built
+primarily as a <em>reference implementation</em> for a signalling server and is
+not designed to be deployed at scale.</p>
+<p><a href="https://nodei.co/npm/rtc-switchboard/"><img src="https://nodei.co/npm/rtc-switchboard.png" alt="NPM"></a></p>
+<p><a href="https://travis-ci.org/rtc-io/rtc-switchboard"><img src="https://img.shields.io/travis/rtc-io/rtc-switchboard.svg?branch=master" alt="Build Status"></a> <a href="https://github.com/dominictarr/stability#unstable"><img src="https://img.shields.io/badge/stability-unstable-yellowgreen.svg" alt="unstable"></a> </p>
+<h2 id="try-it-out">Try it out</h2>
+<p>If you would like to our test signalling server (no uptime guaranteed) then
+you can use <a href="https://github.com/rtc-io/rtc-quickconnect">rtc-quickconnect</a>
+and take it for a spin:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">quickconnect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-quickconnect&#39;</span><span class="p">);</span>
+
+<span class="nx">quickconnect</span><span class="p">(</span><span class="s1">&#39;//switchboard.rtc.io/&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">room</span><span class="o">:</span> <span class="s1">&#39;switchboard-test&#39;</span> <span class="p">})</span>
+  <span class="p">.</span><span class="nx">createDataChannel</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;channel:opened:test&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">peerId</span><span class="p">,</span> <span class="nx">dc</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">dc</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">evt</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;received data: &#39;</span><span class="p">,</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+    <span class="p">};</span>
+
+    <span class="nx">dc</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">);</span>
+  <span class="p">});</span>
+</pre></div>
+
+<p>Other examples are available in the <a href="http://guidebook.rtc.io">guidebook</a></p>
+<h2 id="usage-standalone">Usage: Standalone</h2>
+<p>If you wish to use <code>rtc-switchboard</code> on it&#39;s own to test signalling,
+then you can simply clone this repository, install dependencies and start
+the server:</p>
+<pre><code>git clone https://github.com/rtc-io/rtc-switchboard.git
+cd rtc-switchboard
+npm install
+node server.js</code></pre>
+<p>If you wish to run the server on a specific port, then set the <code>NODE_PORT</code>
+environment variable prior to execution:</p>
+<pre><code>NODE_PORT=8997 node server.js</code></pre>
+<h2 id="usage-api">Usage: API</h2>
+<p>To create an application using primus signalling, see the following
+examples:</p>
+<h3 id="pure-node-http">Pure Node HTTP</h3>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">).</span><span class="nx">createServer</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">switchboard</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./&#39;</span><span class="p">)(</span><span class="nx">server</span><span class="p">,</span> <span class="p">{</span> <span class="nx">servelib</span><span class="o">:</span> <span class="kc">true</span> <span class="p">});</span>
+<span class="kd">var</span> <span class="nx">port</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_PORT</span> <span class="o">||</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PORT</span> <span class="o">||</span> <span class="nx">process</span><span class="p">.</span><span class="nx">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">10</span><span class="p">)</span> <span class="o">||</span> <span class="mi">3000</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">replify</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;replify&#39;</span><span class="p">);</span>
+
+<span class="nx">server</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;request&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">url</span> <span class="o">===</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">302</span><span class="p">,</span> <span class="p">{</span>
+      <span class="s1">&#39;Location&#39;</span><span class="o">:</span> <span class="s1">&#39;https://github.com/rtc-io/rtc-switchboard&#39;</span>
+    <span class="p">});</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">&#39;switchboard available from: https://github.com/rtc-io/rtc-switchboard&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="c1">// start the server</span>
+<span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">port</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Encountered error starting server: &#39;</span><span class="p">,</span> <span class="nx">err</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;server running at http://localhost:&#39;</span> <span class="o">+</span> <span class="nx">port</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// add the repl</span>
+<span class="nx">replify</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;switchboard&#39;</span><span class="p">,</span>
+  <span class="nx">app</span><span class="o">:</span> <span class="nx">switchboard</span><span class="p">,</span>
+  <span class="nx">contexts</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">server</span><span class="o">:</span> <span class="nx">server</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="nx">switchboard</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;room:create&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">room</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;room &#39;</span> <span class="o">+</span> <span class="nx">room</span> <span class="o">+</span> <span class="s1">&#39; created, now have &#39;</span> <span class="o">+</span> <span class="nx">switchboard</span><span class="p">.</span><span class="nx">rooms</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="s1">&#39; active rooms&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">switchboard</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;room:destroy&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">room</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;room &#39;</span> <span class="o">+</span> <span class="nx">room</span> <span class="o">+</span> <span class="s1">&#39; destroyed, &#39;</span> <span class="o">+</span> <span class="nx">switchboard</span><span class="p">.</span><span class="nx">rooms</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="s1">&#39; active rooms remain&#39;</span><span class="p">);</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">gc</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;gc&#39;</span><span class="p">);</span>
+    <span class="nx">gc</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3 id="using-express">Using Express</h3>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">).</span><span class="nx">Server</span><span class="p">(</span><span class="nx">app</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">port</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PORT</span> <span class="o">||</span> <span class="mi">3000</span><span class="p">;</span>
+
+<span class="c1">// create the switchboard</span>
+<span class="kd">var</span> <span class="nx">switchboard</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-switchboard&#39;</span><span class="p">)(</span><span class="nx">server</span><span class="p">);</span>
+
+<span class="c1">// we need to expose the primus library</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/rtc.io/primus.js&#39;</span><span class="p">,</span> <span class="nx">switchboard</span><span class="p">.</span><span class="nx">library</span><span class="p">());</span>
+
+<span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">port</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;server listening on port: &#39;</span> <span class="o">+</span> <span class="nx">port</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2 id="including-the-primus-client">Including the Primus Client</h2>
+<p>The <code>rtc-switchboard</code> makes use of the slick WebSockets abstraction library
+<a href="https://github.com/primus/primus">Primus</a>. To work with the server, you
+will need to include the <code>primus.js</code> library in your application prior to
+attempting a websocket connection.</p>
+<p>If you are working with a local standalone server, the following script
+tag will likely do the job:</p>
+<div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://localhost:3000/rtc.io/primus.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+
+<p><strong>NOTE:</strong> A specific call to include primus is not required if you are
+working with particular rtc.io library (such as
+<a href="https://github.com/rtc-io/rtc-glue">rtc-glue</a>), as they will ensure the
+primus library has been included prior to running their internal code.</p>
+<h2 id="usage-docker">Usage: Docker</h2>
+<p>If you are interested in deploying an instance of <code>rtc-switchboard</code> using
+<a href="https://www.docker.com/">docker</a> then the following is a great place to
+start:</p>
+<p><a href="https://github.com/synctree/docker-rtc-switchboard">https://github.com/synctree/docker-rtc-switchboard</a></p>
+<h2 id="writing-custom-command-handlers">Writing Custom Command Handlers</h2>
+<p>When you initialize the switchboard, you are able to provide custom handlers
+for specific commands that you want handled by the switchboard. Imagine
+for instance, that we want our switchboard to do something clever when a
+client sends an <code>/img</code> command.</p>
+<p>We would create our server to include the custom <code>img</code> command handler:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">).</span><span class="nx">createServer</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">Primus</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;primus&#39;</span><span class="p">);</span>
+
+<span class="c1">// create the signaller, providing our own primus instance (using engine.io)</span>
+<span class="kd">var</span> <span class="nx">switchboard</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-switchboard&#39;</span><span class="p">)(</span><span class="nx">server</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">servelib</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="nx">handlers</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">img</span><span class="o">:</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./handlers/img&#39;</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="c1">// start the server</span>
+<span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">3000</span><span class="p">);</span>
+</pre></div>
+
+<p>And then we would write a small module for the handler:</p>
+<div class="highlight"><pre><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">mgr</span><span class="p">,</span> <span class="nx">spark</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">payload</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;received an img command with payload: &#39;</span><span class="p">,</span> <span class="nx">payload</span><span class="p">);</span>
+<span class="p">};</span>
+</pre></div>
+
+<h2 id="logging-and-analytics-using-the-data-event">Logging and Analytics using the <code>data</code> event</h2>
+<p>Every message that flows through the switchboard (whether handled or not)
+can be logged through tapping into the <code>data</code> event.  The example below
+demonstrates how this can be done with a node logging module like
+<a href="https://github.com/trentm/node-bunyan">bunyan</a>:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">).</span><span class="nx">Server</span><span class="p">(</span><span class="nx">app</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">port</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PORT</span> <span class="o">||</span> <span class="mi">3000</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">bunyan</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;bunyan&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">log</span> <span class="o">=</span> <span class="nx">bunyan</span><span class="p">.</span><span class="nx">createLogger</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;rtc-switchboard&#39;</span> <span class="p">});</span>
+
+<span class="c1">// create the switchboard</span>
+<span class="kd">var</span> <span class="nx">switchboard</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;rtc-switchboard&#39;</span><span class="p">)(</span><span class="nx">server</span><span class="p">);</span>
+
+<span class="c1">// we need to expose the primus library</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/rtc.io/primus.js&#39;</span><span class="p">,</span> <span class="nx">switchboard</span><span class="p">.</span><span class="nx">library</span><span class="p">());</span>
+
+<span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">port</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;server running at: http://localhost:&#39;</span> <span class="o">+</span> <span class="nx">port</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">switchboard</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">peerId</span><span class="p">,</span> <span class="nx">spark</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">log</span><span class="p">.</span><span class="nx">info</span><span class="p">({</span> <span class="nx">peer</span><span class="o">:</span> <span class="nx">peerId</span> <span class="p">},</span> <span class="s1">&#39;received: &#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>As can be seen in the example above, the handlers of the <code>data</code> event can
+expect to receive three arguments to the handler function, as per the code
+snippet below:</p>
+<div class="highlight"><pre><span class="nx">switchboard</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">peerId</span><span class="p">,</span> <span class="nx">spark</span><span class="p">)</span> <span class="p">{</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>The <code>data</code> is the raw data of that has been sent from the client, the
+<code>peerId</code> is the id of the peer sending the data (this will be <code>undefined</code> if
+it is a message received prior to an <code>/announce</code> command).  Finally we have
+the raw primus <code>spark</code> that can be examined for additional information.</p>
+<h2 id="reference">Reference</h2>
+<h3 id="switchboard-server-opts-">switchboard(server, opts?)</h3>
+<p>Create the switchboard which uses primus under the hood. By default calling
+this function will create a new <code>Primus</code> instance and use the
+pure <a href="https://github.com/primus/primus#websockets">websockets adapter</a>.</p>
+<h2 id="custom-message-handlers">Custom Message Handlers</h2>
+<p>The socket server is configured to handle some specific rtc.io signaller
+messages.  The handlers are stored in the <code>handlers/</code> folder of the
+repository and have details outlined below.</p>
+<h3 id="announce-handler">announce handler</h3>
+<p>Will handle <code>/announce</code> messages and associate the peer id assigned by
+the client-side signaller with the socket on the server side.</p>
+<p>This will allow routing of messages to the correct receipient when
+<code>/to</code> messages are received.</p>
+<h3 id="ping-handler">ping handler</h3>
+<p>Will handle <code>/ping</code> messages</p>
+<h2 id="license-s-">License(s)</h2>
+<h3 id="apache-2-0">Apache 2.0</h3>
+<p>Copyright 2014 National ICT Australia Limited (NICTA)</p>
+<p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at</p>
+<pre><code> http://www.apache.org/licenses/LICENSE-2.0</code></pre>
+<p>   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.</p>
+</div>
+
+<footer>
+  <p>
+    <a href="http://nicta.com.au">
+      <img src="images/nicta-logo.gif" alt="NICTA logo">
+    </a>© NICTA 2013 - 2014
+  </p>
+  <p class="license">Project source code is licensed under the <a href="https://github.com/rtc-io/rtc/blob/master/LICENSE">Apache 2.0</a>.</p>
+  <a class="closing" href="#top"></a>
+</footer>
+</body>
+<script src="js/app.js"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-26567546-2', 'rtc.io');
+  ga('send', 'pageview');
+
+</script>
+</html>
+
