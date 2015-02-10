@@ -28,11 +28,11 @@
     "injectcode": "~0.2.3",
     "rtc": "^3.2.1",
     "rtc-audioproc": "0.0.3",
-    "rtc-core": "^3.0.0",
+    "rtc-core": "^4.0.0",
     "rtc-filter-grayscale": "~0.1.0",
     "rtc-media": "^1.9.0",
     "rtc-quickconnect": "^4.1.2",
-    "rtc-signaller": "^2.3.0",
+    "rtc-signaller": "^5.2.2",
     "rtc-tools": "^2.3.0",
     "rtc-videoproc": "^0.11.0"
   },
