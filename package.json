@@ -25,7 +25,7 @@
     "cog": "^1.0.0",
     "crel": "^2.1.8",
     "demo-console": "^1.5.0",
-    "injectcode": "^0.2.5",
+    "injectcode": "^1.1.1",
     "rtc": "^3.2.1",
     "rtc-audioproc": "0.0.3",
     "rtc-core": "^4.0.0",
