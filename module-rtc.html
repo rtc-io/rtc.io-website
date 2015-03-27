@@ -42,13 +42,14 @@
 <p>This is a package that will provide you a &quot;one-stop shop&quot; for building WebRTC applications.  It aggregates together a variety of packages (primarily from the <a href="https://github.com/rtc-io">rtc.io</a> suite) to deliver a single package for building a WebRTC application.</p>
 <p><a href="https://nodei.co/npm/rtc/"><img src="https://nodei.co/npm/rtc.png" alt="NPM"></a></p>
 <p><a href="https://travis-ci.org/rtc-io/rtc"><img src="https://img.shields.io/travis/rtc-io/rtc.svg?branch=master" alt="Build Status"></a>
-<a href="https://github.com/dominictarr/stability#experimental"><img src="https://img.shields.io/badge/stability-experimental-red.svg" alt="experimental"></a>
+<a href="https://github.com/dominictarr/stability#unstable"><img src="https://img.shields.io/badge/stability-unstable-yellowgreen.svg" alt="unstable"></a>
+<a href="https://www.bithound.io/github/rtc-io/rtc"><img src="https://www.bithound.io/github/rtc-io/rtc/badges/score.svg" alt="bitHound Score"></a>
 <a href="https://gitter.im/rtc-io/discuss"><img src="https://badges.gitter.im/rtc-io/discuss.png" alt="Gitter chat"></a></p>
 <h2 id="getting-started">Getting Started</h2>
 <p>Probably the easiest way to get started with <code>RTC</code> is to take it for a testdrive using <a href="http://jsbin.com/dahuka/edit?html,css,js,output">jsbin</a>. This demo uses the minified JS file (and associated sourcemaps for debugging) from:</p>
 <p><code>//cdn.jsdelivr.net/rtc/latest/rtc.min.js</code></p>
 <p>If you wish to use a specific version, then you can replace <code>latest</code> with the version number (from <code>3.0.1</code> onwards):</p>
-<p><code>//cdn.jsdelivr.net/rtc/3.0.1/rtc.min.js</code></p>
+<p><code>//cdn.jsdelivr.net/rtc/3.2.3/rtc.min.js</code></p>
 <h3 id="package-managers-ftw-">Package Managers FTW!</h3>
 <p>I&#39;d recommend using a package manager if you aren&#39;t already and here are the relevant instructions for installing <code>RTC</code> from a number of popular options:</p>
 <ul>
@@ -68,7 +69,7 @@
         <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;l-video&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
     <span class="nt">&lt;/div&gt;</span>
     <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;pure-u-4-5&quot;</span> <span class="na">id=</span><span class="s">&quot;r-video&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
-<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;https://cdn.rawgit.com/rtc-io/rtc/v3.0.0/dist/rtc.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;https://cdn.jsdelivr.net/rtc/latest/rtc.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
 <span class="nt">&lt;/body&gt;</span>
 <span class="nt">&lt;/html&gt;</span>
 </pre></div>
@@ -83,7 +84,7 @@
   <span class="p">},</span>
 
   <span class="c1">// use the public switchboard for signalling</span>
-  <span class="nx">signaller</span><span class="o">:</span> <span class="s1">&#39;//switchboard.rtc.io&#39;</span><span class="p">,</span>
+  <span class="nx">signaller</span><span class="o">:</span> <span class="s1">&#39;https://switchboard.rtc.io&#39;</span><span class="p">,</span>
 
   <span class="c1">// no room is defined by default</span>
   <span class="c1">// rtc-quickconnect will autogenerate using a location.hash</span>
@@ -133,7 +134,7 @@
 </ul>
 <h2 id="license-s-">License(s)</h2>
 <h3 id="apache-2-0">Apache 2.0</h3>
-<p>Copyright 2014 National ICT Australia Limited (NICTA)</p>
+<p>Copyright 2014-2015 National ICT Australia Limited (NICTA)</p>
 <p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at</p>

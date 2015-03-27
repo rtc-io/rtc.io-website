@@ -43,7 +43,7 @@
 implementation will cater for current data size limits in the WebRTC
 data channels.</p>
 <p><a href="https://nodei.co/npm/rtc-dcstream/"><img src="https://nodei.co/npm/rtc-dcstream.png" alt="NPM"></a></p>
-<p><a href="https://travis-ci.org/rtc-io/rtc-dcstream"><img src="https://img.shields.io/travis/rtc-io/rtc-dcstream.svg?branch=master" alt="Build Status"></a> <a href="https://github.com/dominictarr/stability#unstable"><img src="https://img.shields.io/badge/stability-unstable-yellowgreen.svg" alt="unstable"></a> <a href="https://david-dm.org/rtc-io/rtc-dcstream"><img src="https://david-dm.org/rtc-io/rtc-dcstream.svg" alt="Dependency Status"></a> </p>
+<p><a href="https://github.com/dominictarr/stability#unstable"><img src="https://img.shields.io/badge/stability-unstable-yellowgreen.svg" alt="unstable"></a> <a href="https://travis-ci.org/rtc-io/rtc-dcstream"><img src="https://img.shields.io/travis/rtc-io/rtc-dcstream.svg?branch=master" alt="Build Status"></a> <a href="https://www.bithound.io/github/rtc-io/rtc-dcstream"><img src="https://www.bithound.io/github/rtc-io/rtc-dcstream/badges/score.svg" alt="bitHound Score"></a> </p>
 <h2 id="example-usage">Example Usage</h2>
 <p>The example below shows how to use the <code>rtc-dcstream</code> module to stream data
 via a datachannel to <em>n</em> remote participants.  In this case we are using
@@ -63,11 +63,10 @@ channel:</p>
 <span class="kd">function</span> <span class="nx">prepStream</span><span class="p">(</span><span class="nx">dc</span><span class="p">,</span> <span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">plex</span> <span class="o">=</span> <span class="nx">multiplex</span><span class="p">();</span>
 
-  <span class="nx">plex</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">createDataStream</span><span class="p">(</span><span class="nx">dc</span><span class="p">)).</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">multiplex</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">,</span> <span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;received new stream: &#39;</span> <span class="o">+</span> <span class="nx">id</span><span class="p">);</span>
+  <span class="nx">plex</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">createDataStream</span><span class="p">(</span><span class="nx">dc</span><span class="p">)).</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">multiplex</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">,</span> <span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">stream</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">fileReceiver</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
       <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">crel</span><span class="p">(</span><span class="s1">&#39;img&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">src</span><span class="o">:</span> <span class="nx">URL</span><span class="p">.</span><span class="nx">createObjectURL</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">}));</span>
-    <span class="p">}));</span>
+    <span class="p">},</span> <span class="p">{</span> <span class="nx">type</span><span class="o">:</span> <span class="nx">type</span> <span class="p">}));</span>
   <span class="p">}));</span>
 
   <span class="k">return</span> <span class="nx">plex</span><span class="p">;</span>
@@ -108,7 +107,7 @@ WebRTC data channel communication via a node streaming interface:</p>
 <p>To be completed.</p>
 <h2 id="license-s-">License(s)</h2>
 <h3 id="apache-2-0">Apache 2.0</h3>
-<p>Copyright 2014 National ICT Australia Limited (NICTA)</p>
+<p>Copyright 2015 National ICT Australia Limited (NICTA)</p>
 <p>   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at</p>
