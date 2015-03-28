@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+<title>rtc.io</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css">
+<link rel="stylesheet" type="text/css" href="css/main.css">
+<!-- responsive -->
+<link rel="stylesheet" media="screen and (max-width: 960px)" href="css/tablet.css">
+<link rel="stylesheet" media="screen and (max-width: 710px)" href="css/phone.css">
+<link rel="stylesheet" type="text/css" href="fonts/source-sans/stylesheet.css">
+<link rel="stylesheet" type="text/css" href="css/code.css">
+</head>
+<body>
+
+<a class="scroll-point pt-top" name="top"></a>
+<header>
+<a href="https://github.com/rtc-io"><img class="fork" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub"></a>
+<a class="scroll-point pt-top" name="top"></a>
+<div class="site">
+  <div class="mascot">
+    <img src="images/artsio.png">
+  </div>
+  <div class="logo" data-subtext="OpenSource WebRTC">
+    <a href="index.html">rtc.io</a>
+  </div>
+  <nav>
+    <ul>
+    <li><a href="index.html">About</a></li>
+    <li><a href="tutorials.html">Tutorials</a></li>
+    <li><a href="demos.html">Demos</a></li>
+    <li><a href="modules.html">Modules</a></li>
+    </ul>
+  </nav>
+</div>
+<div class="shadow"></div>
+</header>
+<div class="main" role="content"><h1 id="rtc-io-module-reference">rtc.io Module Reference</h1>
+<p>The rtc.io suite is made up of a number of modules, which cater for different needs.</p>
+<h2 id="browser-modules">Browser Modules</h2>
+<p>The following is a list of modules that are designed for use within a browser.  Each of these modules (unless otherwise specified) is designed to be built into an application using <a href="http://browserify.org/">browserify</a>. In our experience, using browserify in conjunction with <a href="https://npmjs.org/">npm</a> provides a very smooth development experience.</p>
+<h3 id="-rtc-module-rtc-html-"><a href="module-rtc.html">rtc</a></h3>
+<p>Bundled module for getting a your WebRTC app up and running quickly.</p>
+<h3 id="-rtc-quickconnect-module-rtc-quickconnect-html-"><a href="module-rtc-quickconnect.html">rtc-quickconnect</a></h3>
+<p>Provides a high level wrapper around the lower-level client libraries and is designed to get you building WebRTC applications very quickly.</p>
+<h3 id="-rtc-dcstream-module-rtc-dcstream-html-"><a href="module-rtc-dcstream.html">rtc-dcstream</a></h3>
+<p>This is a node compatible stream (streams2) module for working with WebRTC data channels.  As per <code>rtc-mesh</code> this module has been tested against Chrome 32+ and Firefox 26 and shown excellent interoperability.</p>
+<h3 id="-rtc-tools-module-rtc-tools-html-"><a href="module-rtc-tools.html">rtc-tools</a></h3>
+<p>The <code>rtc-tools</code> module is a collection of reusable functions that assist developers wanting to work with WebRTC at a lower level.  It is designed to assist with some of the repetitive tasks that are associated with developing WebRTC applications.</p>
+<h3 id="-rtc-signaller-module-rtc-signaller-html-"><a href="module-rtc-signaller.html">rtc-signaller</a></h3>
+<p>Signalling is a big part of any WebRTC application.  The <code>rtc-signaller</code> module is the rtc.io suites signalling layer, and is designed as a &quot;transport agnostic&quot; signalling mechanism.</p>
+<p>While in almost all our WebRTC implementations we have used websockets for signalling, the <code>rtc-signaller</code> module is capable of signalling and coordinating connections over any bi-directional communication channel that supports sending text messages.</p>
+<h3 id="-rtc-core-module-rtc-core-html-"><a href="module-rtc-core.html">rtc-core</a></h3>
+<p>The <code>rtc-core</code> module contains some lower-level, shared functionality that is used by most of the above client-side libraries.  It assists with cross-browser detection of <code>RTCPeerConnection</code> classes and other similar functions.</p>
+<h2 id="rtc-quickconnect-plugins">rtc-quickconnect plugins</h2>
+<h3 id="-rtc-mesh-module-rtc-mesh-html-"><a href="module-rtc-mesh.html">rtc-mesh</a></h3>
+<p>This plugin provides a simple way to use WebRTC data channels to provide synchronized client state using <a href="https://github.com/dominictarr/scuttlebutt">ScuttleButt</a> and it&#39;s derivatives.</p>
+<h3 id="-rtc-sharedcursor-module-rtc-sharedcursor-html-"><a href="module-rtc-sharedcursor.html">rtc-sharedcursor</a></h3>
+<p>This module provides a simple way to implement cursor sharing in a WebRTC application.
+The module is designed to work in conjuction with <code>rtc-quickconnect</code> sends small (48-bit) payloads of relative
+mouse (or touch) changes via a WebRTC data channel to connected peers.</p>
+<h2 id="browser-utility-modules">Browser Utility Modules</h2>
+<h3 id="-rtc-captureconfig-module-rtc-captureconfig-html-"><a href="module-rtc-captureconfig.html">rtc-captureconfig</a></h3>
+<p>The <code>rtc-captureconfig</code> module is used in <code>rtc</code> to convert simple string based attributes to valid WebRTC constraints that can be used in for media capture.</p>
+<h2 id="browser-processing-modules">Browser Processing Modules</h2>
+<p>Once you are capturing realtime video and audio in the browser, there is a lot that can be done in terms of video and audio analysis. Listed below are modules that assist doing exactly that:</p>
+<h3 id="-rtc-videoproc-module-rtc-videoproc-html-"><a href="module-rtc-videoproc.html">rtc-videoproc</a></h3>
+<p>The video processing module allows you to replace a standard video element with a simulated video element using a HTML5 canvas.  This custom canvas provides a video processing pipeline that permits analysis and optional modification of the pixel data that is being drawn to the canvas.</p>
+<h3 id="-rtc-audioproc-module-rtc-audioproc-html-"><a href="module-rtc-audioproc.html">rtc-audioproc</a></h3>
+<p>The audio processing module allows you to render a canvas to visualize audio from an audio or video element, or a getUserMedia stream. It uses the Web Audio API. This can be useful to display audio visually, or to track down when a video or audio element does not behave as you expect.</p>
+<h2 id="server-modules">Server Modules</h2>
+<p>While the clientside modules make up 85% of the rtc.io suite, we do have some server-side node modules that are designed to work with our client side modules when building applications.</p>
+<h3 id="-rtc-switchboard-module-rtc-switchboard-html-"><a href="module-rtc-switchboard.html">rtc-switchboard</a></h3>
+<p>This is the server-side companion to the <code>rtc-signaller</code> module.  If you are looking to host a simple in-memory signalling server this is an excellent place to start.</p>
+<p>It has been constructed using <a href="https://github.com/primus/primus">primus</a> for the websocket communication layer, which means that different node websocket implementations can be used in your applications.</p>
+<p>The switchboard can either be incorporated into your node server application code, or hosted separately - whatever best suits your application architecture.</p>
+</div>
+
+<footer>
+  <p>
+    <a href="http://nicta.com.au">
+      <img src="images/nicta-logo.gif" alt="NICTA logo">
+    </a>© NICTA 2013 - 2014
+  </p>
+  <p class="license">Project source code is licensed under the <a href="https://github.com/rtc-io/rtc/blob/master/LICENSE">Apache 2.0</a>.</p>
+  <a class="closing" href="#top"></a>
+</footer>
+</body>
+<script src="js/app.js"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-26567546-2', 'rtc.io');
+  ga('send', 'pageview');
+
+</script>
+</html>
+
