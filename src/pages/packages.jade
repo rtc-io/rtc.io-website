@@ -1,0 +1,113 @@
+extends ../layout
+
+block content
+	h1 rtc.io Package List
+	
+	p Displayed below is a list of packages that make up the rtc.io suite of packages.
+	| While there are a lot, don't worry too much about those but the top couple (at least while you are getting started).
+	
+	div.packages
+		:markdown
+			## Top Level Packages
+			
+			The following are packages that have been created as good entry points for
+			working with rtc.io as they make it easy to get a functioning app up and
+			running quite quickly.
+			
+			### [`rtc`](https://github.com/rtc-io/rtc)
+			
+			The `rtc` package is a complete solution for implementing a WebRTC app,
+			and can be used as a standalone browser ready JS file in addition to being
+			[browserify](https://github.com/substack/node-browserify) ready.
+			The example below shows how to the latest, bundled version of the `rtc`
+			package can be served from [jsDelivr](http://www.jsdelivr.com/) and used
+			directly in a HTML page:
+			
+			<<< samples/rtc-demo.html
+			
+			### [`rtc-quickconnect`](https://github.com/rtc-io/rtc-quickconnect)
+			
+			While the `rtc` package includes everything (including media capture and
+			rendering), `rtc-quickconnect` provides fundamental code for connecting
+			with other peers using WebRTC.  It doesn't make an assumption that your
+			application is going to be a video conferencing application, just that you
+			want to make P2P connections with others using WebRTC:
+			
+			<<< samples/simpledc.js
+			
+			## rtc-quickconnect plugins
+			
+			The following plugins can be used to extend the functionality of `rtc-quickconnect`
+			
+			### [`rtc-mesh`](https://github.com/rtc-io/rtc-mesh)
+			
+			This is an incredibly useful package as it uses [scuttlebutt](https://github.com/dominictarr/scuttlebutt)
+			to persist a shared store across peers in a WebRTC mesh configuration.
+			
+			<<< samples/simplemesh.js
+			
+			## Media Capture and Screensharing
+			
+			### [`rtc-capture`](https://github.com/rtc-io/rtc-capture)
+			
+			Used for invoking `getUserMedia` media capture in supporting browsers and
+			also via rtc.io plugins.
+			
+			### [`rtc-attach`](https://github.com/rtc-io/rtc-attach)
+			
+			Used to attach a media stream to a video element for display.
+			
+			### [`rtc-screen`](https://github.com/rtc-io/rtc-screen)
+			
+			A unified API for invoking screensharing capabilities in browsers.
+			
+			### [`rtc-screenshare`](https://github.com/rtc-io/rtc-screenshare)
+			
+			Used by the `rtc-screen` package for communicating with browser extensions
+			that are required for screensharing in most situations.
+			
+			## Integration
+			
+			The packages in this section are designed to provide additional functionality
+			on top of `rtc-quickconnect` and provide integration pathways to other
+			packages outside rtc.io.
+
+			### [`rtc-dcstream`](https://github.com/rtc-io/rtc-dcstream)
+			
+			The `rtc-dcstream` package provides a Duplex stream implementation that uses
+			a WebRTC data channel as the data transport layer.  By wrapping a `RTCDataChannel`
+			instance with `rtc-dcstream` it is possible to tap into the rich node
+			streams ecosystem for distributing data with peers via WebRTC.
+			
+			## Digging Deeper
+			
+			At this point, we start digging beyond the top-level packages to find out
+			what else makes rtc.io tick.  The packages listed below are likely to be
+			useful in their own right (depending on your needs), but it is recommended
+			that you start off using one of the above packages first.
+			
+			### [`rtc-tools`](https://github.com/rtc-io/rtc-tools)
+			
+			The `rtc-tools` package is the utility belt of rtc.io and requires
+			everything a developer will require if they want to create `RTCPeerConnection`
+			objects themself and couple them together using an `rtc-signaller`
+			compatible signaller.
+			
+			### [`rtc-signaller`](https://github.com/rtc-io/rtc-signaller)
+			
+			This package is used to coordinate communication with a signalling server.
+			Signalling is a major part of coordinating P2P connectivity using WebRTC
+			and involves sending information about each peer to every other peer to
+			help peers locate each other.
+			
+			## Utility Packages
+			
+			The following is a list of utility packages that have very specific tasks
+			to do.  If you have a very specific need, then some of these packages may
+			be of use.
+			
+			### [`rtc-taskqueue`](https://github.com/rtc-io/rtc-taskqueue)
+			
+			A priority queue for ensuring that signalling messages get delivered in
+			the correct order to an `RTCPeerConnection` object.
+		
