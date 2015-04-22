@@ -1,0 +1,65 @@
+:root {
+  --fontSize: 1rem;
+  --bgColor: #e3e2db;
+  --headerColor: #484537;
+}
+
+body {
+  background: var(--bgColor);
+  color: var(--headerColor);
+  margin: 0;
+  font-family: 'Source Sans Pro', sans-serif;
+  width: 100%;
+}
+
+header {
+  background: var(--headerColor);
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+ul.nav-user {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 1rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+ul.nav-user a {
+  color: var(--bgColor);
+  text-decoration: none;
+  font-size: 1.2rem;
+  margin: 0 1rem;
+}
+
+.logo {
+  margin: 1.5rem auto 0.5rem;
+  max-width: 80%;
+}
+
+.logo img {
+  max-width: 100%;
+}
+
+#body {
+  font-size: 1.2rem;
+}
+
+.content-container {
+  max-width: 80%;
+  margin: 0 auto;
+}
+
+.hljs {
+  background: rgba(0,0,0,0.05);
+  padding: 1rem 1.5rem;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 0.5rem;
+}
+
+div.packages h3 a {
+  color: var(--headerColor);
+  text-decoration: underline;
+}
