@@ -51,9 +51,7 @@ gulp.task('css', function() {
 
 gulp.task('build-pages', 'Build the pages for the site', function() {
   return gulp.src([
-    'src/pages/*.jade',
-    'src/pages/about/*.jade',
-    'src/pages/packages/*.jade'
+    'src/pages/*.jade'
   ], { base: 'src/pages' })
   .pipe(data(function(file, callback) {
     var content = fm(String(file.contents));
