@@ -1,10 +1,12 @@
 var gulp = require('gulp-help')(require('gulp'));
 var async = require('async');
 var getit = require('getit');
+var injectcode = require('injectcode');
 var data = require('gulp-data');
 var fm = require('front-matter');
 var jade = require('gulp-jade');
 var gutil = require('gulp-util');
+var cssnext = require('gulp-cssnext');
 var st = require('st');
 var http = require('http');
 var port = process.env.PORT || 3000;
@@ -25,7 +27,7 @@ var allPackages = Object.keys(packages).map(function(key) {
   return packages[key];
 }).reduce(require('whisk/flatten'));
 
-gulp.task('serve', 'Serve the local files using a development server', ['build-pages'], function(cb) {
+gulp.task('serve', 'Serve the local files using a development server', ['build-pages', 'css'], function(cb) {
   var mount = st({
     path: process.cwd(),
     index: 'index.html',
@@ -41,23 +43,46 @@ gulp.task('serve', 'Serve the local files using a development server', ['build-p
   });
 });
 
+gulp.task('css', function() {
+  gulp.src('src/css/index.css')
+    .pipe(cssnext({ compress: true }))
+    .pipe(gulp.dest("./css/"))
+});
+
 gulp.task('build-pages', 'Build the pages for the site', function() {
   return gulp.src([
     'src/pages/*.jade',
-    'src/pages/about/*.jade'
+    'src/pages/about/*.jade',
+    'src/pages/packages/*.jade'
   ], { base: 'src/pages' })
-  .pipe(data(function(file) {
+  .pipe(data(function(file, callback) {
     var content = fm(String(file.contents));
-    file.contents = new Buffer(content.body);
-    return content.attributes;
+
+    injectcode(content.body, { cwd: __dirname }, function(err, output) {
+      if (err) {
+        return console.error(err);
+      }
+
+      file.contents = new Buffer(output);
+      callback(null, content.attributes);
+    });
   }))
   .pipe(jade())
+  .on('error', function(err) {
+    console.error(err);
+  })
   .pipe(gulp.dest('./'));
 });
 
 gulp.task('build-packages', 'Fetch the various project readmes from the project sites', function() {
   var stream = new Readable({ objectMode: true });
-  var prelude = '';
+  var prelude = [
+    'extends ../../layout',
+    '',
+    'block content',
+    '  :markdown',
+    ''
+  ].join('\n');
 
   function download(package, callback) {
     getit('github://rtc-io/' + package + '/README.md', function(err, data) {
@@ -68,7 +93,7 @@ gulp.task('build-packages', 'Fetch the various project readmes from the project 
       stream.push(new File({
         cwd: '/',
         base: 'src/pages',
-        path: 'src/pages/packages/' + package + '.md',
+        path: 'src/pages/packages/' + package + '.jade',
         contents: new Buffer(data)
       }));
 
@@ -87,5 +112,5 @@ gulp.task('build-packages', 'Fetch the various project readmes from the project 
       entry.contents = new Buffer(prelude + indent(String(entry.contents), ' ', 4));
       this.queue(entry);
     }))
-    .pipe(gulp.dest('./'));
+    .pipe(gulp.dest('./src/pages/'));
 });
