@@ -1,0 +1,46 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>rtc.io</title><link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon"><link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet"><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/styles/tomorrow.min.css" rel="stylesheet"><link href="/css/index.css" rel="stylesheet"></head><body ng-app="build"><header><div class="logo"><a href="/"><img src="images/rtcio.svg"></a></div><nav role="navigation" class="site-nav"><ul class="nav-user"><li><a href="/">About</a></li><li><a href="/packages.html">Packages</a></li></ul></nav></header><div id="body" class="content-container"><h1 id="easier-webrtc-with-rtc-io">Easier WebRTC with rtc.io</h1>
+<p>The design goals of rtc.io are:</p>
+<ol>
+<li>Make building a WebRTC application feel symmetrical (there is no concept of a call &quot;initiator&quot;).</li>
+<li>Do not abstract away the core browser WebRTC objects (<code>RTCPeerConnection</code>, <code>RTCDataChannel</code>, etc).</li>
+<li>Provide a reusable set of packages for building WebRTC applications. You can start with some high level
+packages and then dive in and use smaller packages to do very specific things.</li>
+</ol>
+<h2 id="using-rtc-io">Using rtc.io</h2>
+<p>When developing an application with rtc.io we recommend familiarity with the following tools for maximum enjoyment:</p>
+<ul>
+<li><a href="https://npmjs.org">npm</a></li>
+<li><a href="https://github.com/substack/node-browserify">browserify</a></li>
+<li><a href="https://github.com/chrisdickinson/beefy">beefy</a></li>
+</ul>
+<h2 id="show-me-some-code">Show me some code</h2>
+<p>The following code gives you an idea of how little code is required to open a datachannel with any number of peers that connect to the same room:</p>
+<pre><code class="lang-js">// firstly, require quickconnect (browserify will take care of that for us)
+var quickconnect = require(&#39;rtc-quickconnect&#39;);
+
+// now create a new &quot;conference&quot; using switchboard.rtc.io for signalling
+var conf = quickconnect(&#39;https://switchboard.rtc.io&#39;, {
+  // a room name that we will join on the signalling server
+  // we will connect to other people who join the same room
+  room: &#39;rtcio:dctest&#39;,
+
+  // specify that we want some ice servers to assist with STUN connectivity
+  // freeice is a package that will provide us some random known servers
+  iceServers: require(&#39;freeice&#39;)()
+});
+
+// tell quickconnect we want a datachannel for each connection
+conf.createDataChannel(&#39;test&#39;);
+
+// when each data channel is opened, send a message
+conf.on(&#39;channel:opened:test&#39;, function(id, dc) {
+  // dc is a plain old RTCDataChannel object, so just hook into the browser events
+  dc.addEventListener(&#39;message&#39;, function(evt) {
+    console.log(&#39;received data: &#39;, evt.data + &#39; from peer: &#39; + id);
+  });
+
+  // now just send a simple message
+  dc.send(&#39;hello&#39;);
+});
+</code></pre>
+</div><footer class="page-footer content-container"><div class="container"><div class="row"><div class="column-2"><div class="content"><p>&copy; NICTA 2013-2015</p><p><a href="http://nicta.com.au/privacy">Privacy</a> | <a href="http://groups.google.com/d/forum/build-rtc-io">Discussion and Support</a></p></div></div><div class="column-2"><div class="content"><p class="license">Project source code is licensed under the&nbsp;<a href="https://github.com/rtc-io/rtc/blob/master/LICENSE">Apache 2.0</a></p></div></div></div></div></footer><script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();</script></body></html>

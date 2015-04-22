@@ -1,0 +1,126 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>rtc.io</title><link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon"><link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet"><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/styles/tomorrow.min.css" rel="stylesheet"><link href="/css/index.css" rel="stylesheet"></head><body ng-app="build"><header><div class="logo"><a href="/"><img src="images/rtcio.svg"></a></div><nav role="navigation" class="site-nav"><ul class="nav-user"><li><a href="/">About</a></li><li><a href="/packages.html">Packages</a></li></ul></nav></header><div id="body" class="content-container"><h1>rtc.io Package List</h1><p>Displayed below is a list of packages that make up the rtc.io suite of packages.</p>While there are a lot, don't worry too much about those but the top couple (at least while you are getting started).<div class="packages"><h2 id="top-level-packages">Top Level Packages</h2>
+<p>The following are packages that have been created as good entry points for
+working with rtc.io as they make it easy to get a functioning app up and
+running quite quickly.</p>
+<h3 id="-rtc-https-github-com-rtc-io-rtc-"><a href="https://github.com/rtc-io/rtc"><code>rtc</code></a></h3>
+<p>The <code>rtc</code> package is a complete solution for implementing a WebRTC app,
+and can be used as a standalone browser ready JS file in addition to being
+<a href="https://github.com/substack/node-browserify">browserify</a> ready.
+The example below shows how to the latest, bundled version of the <code>rtc</code>
+package can be served from <a href="http://www.jsdelivr.com/">jsDelivr</a> and used
+directly in a HTML page:</p>
+<pre><code class="lang-html">&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;rtc.io simple conferencing&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;http://yui.yahooapis.com/pure/0.5.0/pure-min.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;layout.css&quot;&gt;
+&lt;/head&gt;
+&lt;body onload=&quot;RTC()&quot; class=&quot;pure-g&quot;&gt;
+    &lt;div class=&quot;pure-u-1-5&quot;&gt;
+        &lt;div id=&quot;l-video&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;pure-u-4-5&quot; id=&quot;r-video&quot;&gt;&lt;/div&gt;
+&lt;script src=&quot;https://cdn.jsdelivr.net/rtc/latest/rtc.min.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h3 id="-rtc-quickconnect-https-github-com-rtc-io-rtc-quickconnect-"><a href="https://github.com/rtc-io/rtc-quickconnect"><code>rtc-quickconnect</code></a></h3>
+<p>While the <code>rtc</code> package includes everything (including media capture and
+rendering), <code>rtc-quickconnect</code> provides fundamental code for connecting
+with other peers using WebRTC.  It doesn&#39;t make an assumption that your
+application is going to be a video conferencing application, just that you
+want to make P2P connections with others using WebRTC:</p>
+<pre><code class="lang-js">// firstly, require quickconnect (browserify will take care of that for us)
+var quickconnect = require(&#39;rtc-quickconnect&#39;);
+
+// now create a new &quot;conference&quot; using switchboard.rtc.io for signalling
+var conf = quickconnect(&#39;https://switchboard.rtc.io&#39;, {
+  // a room name that we will join on the signalling server
+  // we will connect to other people who join the same room
+  room: &#39;rtcio:dctest&#39;,
+
+  // specify that we want some ice servers to assist with STUN connectivity
+  // freeice is a package that will provide us some random known servers
+  iceServers: require(&#39;freeice&#39;)()
+});
+
+// tell quickconnect we want a datachannel for each connection
+conf.createDataChannel(&#39;test&#39;);
+
+// when each data channel is opened, send a message
+conf.on(&#39;channel:opened:test&#39;, function(id, dc) {
+  // dc is a plain old RTCDataChannel object, so just hook into the browser events
+  dc.addEventListener(&#39;message&#39;, function(evt) {
+    console.log(&#39;received data: &#39;, evt.data + &#39; from peer: &#39; + id);
+  });
+
+  // now just send a simple message
+  dc.send(&#39;hello&#39;);
+});
+</code></pre>
+<h2 id="rtc-quickconnect-plugins">rtc-quickconnect plugins</h2>
+<p>The following plugins can be used to extend the functionality of <code>rtc-quickconnect</code></p>
+<h3 id="-rtc-mesh-https-github-com-rtc-io-rtc-mesh-"><a href="https://github.com/rtc-io/rtc-mesh"><code>rtc-mesh</code></a></h3>
+<p>This is an incredibly useful package as it uses <a href="https://github.com/dominictarr/scuttlebutt">scuttlebutt</a>
+to persist a shared store across peers in a WebRTC mesh configuration.</p>
+<pre><code class="lang-js">var quickconnect = require(&#39;rtc-quickconnect&#39;);
+var mesh = require(&#39;rtc-mesh&#39;);
+
+// initialise the connection
+var qc = quickconnect(&#39;https://switchboard.rtc.io/&#39;, {
+  room: &#39;meshdemo-simple&#39;
+});
+
+// create the model
+var model = mesh(qc);
+
+// report data change events
+model.on(&#39;change&#39;, function(key, value) {
+  console.log(&#39;captured change key: &quot;&#39; + key + &#39;&quot; set to &#39;, value);
+});
+
+model.set(&#39;lastjoin&#39;, Date.now());
+</code></pre>
+<h2 id="media-capture-and-screensharing">Media Capture and Screensharing</h2>
+<h3 id="-rtc-capture-https-github-com-rtc-io-rtc-capture-"><a href="https://github.com/rtc-io/rtc-capture"><code>rtc-capture</code></a></h3>
+<p>Used for invoking <code>getUserMedia</code> media capture in supporting browsers and
+also via rtc.io plugins.</p>
+<h3 id="-rtc-attach-https-github-com-rtc-io-rtc-attach-"><a href="https://github.com/rtc-io/rtc-attach"><code>rtc-attach</code></a></h3>
+<p>Used to attach a media stream to a video element for display.</p>
+<h3 id="-rtc-screen-https-github-com-rtc-io-rtc-screen-"><a href="https://github.com/rtc-io/rtc-screen"><code>rtc-screen</code></a></h3>
+<p>A unified API for invoking screensharing capabilities in browsers.</p>
+<h3 id="-rtc-screenshare-https-github-com-rtc-io-rtc-screenshare-"><a href="https://github.com/rtc-io/rtc-screenshare"><code>rtc-screenshare</code></a></h3>
+<p>Used by the <code>rtc-screen</code> package for communicating with browser extensions
+that are required for screensharing in most situations.</p>
+<h2 id="integration">Integration</h2>
+<p>The packages in this section are designed to provide additional functionality
+on top of <code>rtc-quickconnect</code> and provide integration pathways to other
+packages outside rtc.io.</p>
+<h3 id="-rtc-dcstream-https-github-com-rtc-io-rtc-dcstream-"><a href="https://github.com/rtc-io/rtc-dcstream"><code>rtc-dcstream</code></a></h3>
+<p>The <code>rtc-dcstream</code> package provides a Duplex stream implementation that uses
+a WebRTC data channel as the data transport layer.  By wrapping a <code>RTCDataChannel</code>
+instance with <code>rtc-dcstream</code> it is possible to tap into the rich node
+streams ecosystem for distributing data with peers via WebRTC.</p>
+<h2 id="digging-deeper">Digging Deeper</h2>
+<p>At this point, we start digging beyond the top-level packages to find out
+what else makes rtc.io tick.  The packages listed below are likely to be
+useful in their own right (depending on your needs), but it is recommended
+that you start off using one of the above packages first.</p>
+<h3 id="-rtc-tools-https-github-com-rtc-io-rtc-tools-"><a href="https://github.com/rtc-io/rtc-tools"><code>rtc-tools</code></a></h3>
+<p>The <code>rtc-tools</code> package is the utility belt of rtc.io and requires
+everything a developer will require if they want to create <code>RTCPeerConnection</code>
+objects themself and couple them together using an <code>rtc-signaller</code>
+compatible signaller.</p>
+<h3 id="-rtc-signaller-https-github-com-rtc-io-rtc-signaller-"><a href="https://github.com/rtc-io/rtc-signaller"><code>rtc-signaller</code></a></h3>
+<p>This package is used to coordinate communication with a signalling server.
+Signalling is a major part of coordinating P2P connectivity using WebRTC
+and involves sending information about each peer to every other peer to
+help peers locate each other.</p>
+<h2 id="utility-packages">Utility Packages</h2>
+<p>The following is a list of utility packages that have very specific tasks
+to do.  If you have a very specific need, then some of these packages may
+be of use.</p>
+<h3 id="-rtc-taskqueue-https-github-com-rtc-io-rtc-taskqueue-"><a href="https://github.com/rtc-io/rtc-taskqueue"><code>rtc-taskqueue</code></a></h3>
+<p>A priority queue for ensuring that signalling messages get delivered in
+the correct order to an <code>RTCPeerConnection</code> object.</p>
+</div></div><footer class="page-footer content-container"><div class="container"><div class="row"><div class="column-2"><div class="content"><p>&copy; NICTA 2013-2015</p><p><a href="http://nicta.com.au/privacy">Privacy</a> | <a href="http://groups.google.com/d/forum/build-rtc-io">Discussion and Support</a></p></div></div><div class="column-2"><div class="content"><p class="license">Project source code is licensed under the&nbsp;<a href="https://github.com/rtc-io/rtc/blob/master/LICENSE">Apache 2.0</a></p></div></div></div></div></footer><script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();</script></body></html>
