@@ -1,4 +1,26 @@
 extends ../layout
 
 block content
-	p Hello
+	:markdown
+		# Easier WebRTC with rtc.io
+
+		The design goals of rtc.io are:
+		
+		1. Make building a WebRTC application feel symmetrical (there is no concept of a call "initiator").
+		2. Do not abstract away the core browser WebRTC objects (`RTCPeerConnection`, `RTCDataChannel`, etc).
+		3. Provide a reusable set of packages for building WebRTC applications. You can start with some high level
+		   packages and then dive in and use smaller packages to do very specific things.
+		
+		## Using rtc.io
+		
+		When developing an application with rtc.io we recommend familiarity with the following tools for maximum enjoyment:
+		
+		- [npm](https://npmjs.org)
+		- [browserify](https://github.com/substack/node-browserify)
+		- [beefy](https://github.com/chrisdickinson/beefy)
+		
+		## Show me some code
+		
+		The following code gives you an idea of how little code is required to open a datachannel with any number of peers that connect to the same room:
+		
+		<<< samples/simpledc.js
