@@ -9,30 +9,27 @@ html
 
 		title= title || 'rtc.io'
 		link(rel="shortcut icon", href="/images/favicon.ico", type="image/x-icon")
+		link(href="http://fonts.googleapis.com/css?family=Source+Sans+Pro", rel="stylesheet")
+		link(href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/styles/tomorrow.min.css", rel="stylesheet")
 		link(href="/css/index.css", rel="stylesheet")
 
 		block css
 		block head
 
-	//- HTML BODY
 	body(ng-app="build")
 
-		//- HEADER
-		header.site-header: nav(role="navigation").site-nav
-			ul.nav-user
-				li.logo: a(href='/') rtc.<strong>io</strong>
-				li: a(href="/getting-started.html") Getting Started
-				li: a(href="/packages") Packages
-			ul.nav-general
+		header
+			div.logo: a(href='/'): img(src="images/rtcio.svg")
+			nav(role="navigation").site-nav
+				ul.nav-user
+					li: a(href='/') About
+					li: a(href="/packages.html") Packages
 
-		//- BODY
-		#body
-
+		#body.content-container
 			block intro
 			block content
 
-		//- FOOTER
-		footer.page-footer
+		footer.page-footer.content-container
 			.container
 				.row
 					.column-2
@@ -43,5 +40,8 @@ html
 						.content
 							.contact
 
-		//- Include template-specific javascript files by extending the js block
+		
+		script(src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js")
+		script.
+			hljs.initHighlightingOnLoad();
 		block js
