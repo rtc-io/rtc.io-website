@@ -63,3 +63,11 @@ div.packages h3 a {
   color: var(--headerColor);
   text-decoration: underline;
 }
+
+a[title="demo"], a[title="source"] {
+  background: var(--headerColor);
+  color: var(--bgColor);
+  padding: 2px 8px;
+  text-decoration: none;
+  border-radius: 4px;
+}
