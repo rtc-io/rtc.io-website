@@ -10,5 +10,5 @@ This site is generated using [blockdown](https://www.npmjs.org/package/blockdown
 - Find the relevant `.md` file in the src directory and make any necessary changes
 - run `make` in the rtc.io-website directory to build the updated `.html` pages
 - Make a pull request for your changes.
-
+- give us valuable feedback 
 Thanks for helping us to maintain rtc.io!
