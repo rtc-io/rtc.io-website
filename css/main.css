@@ -3,6 +3,8 @@ body {
   font-family: 'SourceSans';
   -webkit-font-smoothing: subpixel-antialiased;
   color: #4d4d4d;
+  font-weight:lighter;
+  border:2px black;
 }
 
 a {
@@ -22,6 +24,8 @@ header {
   top: 0;
   z-index: 100;
   background: #f8f8f8;
+  text-decoration:underline;
+  text-align:left;
 }
 
 header .shadow {
